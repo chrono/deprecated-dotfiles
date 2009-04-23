@@ -1,0 +1,2 @@
+source /sw/bin/init.sh
+export PATH=/usr/local/texlive/2007/bin/i386-darwin:/usr/local/php5/bin/:$PATH:/usr/local/git/bin/

@@ -17,6 +17,59 @@
 
 # 040714 start gimp with german interface
   alias gimp='LC_ALL=de_DE@euro gimp'
+# global aliases (use aliases even if they are not the first word on the command line)
+  alias -g L="| less"
+  alias -g ED="export DISPLAY=:0.0"
+  alias -g D="DISPLAY=:0.0"
+# WARNING: global aliases are evil.  Use with caution.
+# These do not have to be at the beginning of the command line.
+
+# For screwed up keyboards missing pipe
+  alias -g PIPE='|'
+
+# Paging with more / most / less / head / tail
+  alias -g M='|more'
+  alias -g MM='|most'
+  alias -g L='| less'
+  alias -g LS='| less -S'
+  alias -g EL='|& less'
+  alias -g ELS='|& less -S'
+
+  alias -g H='| head'
+  alias -g HL='| head -20'
+  alias -g EH='|& head'
+  alias -g HL='|& head -20'
+
+  alias -g T='| tail'
+  alias -g TL='| tail -20'
+  alias -g ET='|& tail'
+  alias -g ETL='|& tail -20'
+
+# Sorting / counting
+  alias -g C='| wc -l'
+  alias -g S='| sort'
+  alias -g US='| sort -u'
+  alias -g NS='| sort -n'
+  alias -g RNS='| sort -nr'
+
+# Common filenames
+  alias -g DN=/dev/null
+  alias -g VM=/var/log/messages
+
+# grep, xargs
+  alias -g G='| egrep'
+  alias -g EG='|& egrep'
+ # alias -g X='| xargs'
+  alias -g X0='| xargs -0'
+  alias -g XG='| xargs egrep'
+  alias -g X0G='| xargs -0 egrep'
+  alias -g _SVN='| grep -v svn'
+  alias -g NO='| grep -v'
+
+  alias utar="tar zxfv"
+  alias z='vim ~/.zshrc'
+  alias s='vim ~/.slrnrc'
+  alias v='vim ~/.vimrc'
 
 # 040701 fix permissions for subversion-repositories
   function svn () {
