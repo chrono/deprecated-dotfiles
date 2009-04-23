@@ -307,6 +307,17 @@ fi
         source $ZSHDIR/zsh_qnx
       fi
       ;;
+    darwin)
+      if [[ -d $ZSHDIR ]]; then
+        source $ZSHDIR/zsh_alias
+        source $ZSHDIR/zsh_keybindings
+        source $ZSHDIR/zsh_path
+        source $ZSHDIR/zsh_func
+        source $ZSHDIR/zsh_completition
+        source $ZSHDIR/zsh_limits
+        source $ZSHDIR/zsh_darwin
+      fi
+    ;;
   esac
 #fi
 # }}}
