@@ -1,6 +1,8 @@
 #!/bin/sh
+# This script creates the symlinks in the home dir, pointing to the actual versioned files
 
-DIR=dotfiles
+DIR=dotfiles.git
+#DIR=dotfiles
 cd
 ln -s $DIR/.vimrc
 ln -s $DIR/.vim
