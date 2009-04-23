@@ -1,0 +1,18 @@
+# http://tersesystems.com/post/3000059.jhtml
+
+# Hit insert, have the text pasted from the Windows clipboard into a Zsh window.
+
+# Create a widget from the function paste-from clipboard.
+# Note that /dev/clipboard will give you access to the clipboard 
+# if you are on cygwin.
+paste-from-clipboard() {
+    CLIPOUT=`cat /dev/clipboard`
+    BUFFER=$LBUFFER$CLIPOUT$RBUFFER
+}
+
+# Bind a widget with the same name as the function
+zle -N paste-from-clipboard paste-from-clipboard
+
+# Make insert paste from clipboard by binding it to the widget.
+# If you hit ctrl-v and then the key, it shows you the extended code to use.
+bindkey "\e[2~" paste-from-clipboard

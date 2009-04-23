@@ -1,0 +1,161 @@
+# Filename: $HOME/.zsh/zsh_prompt_small
+# Purpose:  config-file for zsh: prompt-layout
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Son Apr 18 16:56:22 CEST 2004
+################################################################################
+# History:
+# 040418 initial version
+################################################################################
+
+# The "prompt" of the shell.
+# See:  $ man zshmisc | less -p "^PROMPT EXPANSION"
+# %B    Bold ON
+# %n    $USERNAME.
+# %b    Bold OFF
+# @     literal '@'
+# %m    machine name.
+# :     literal ':'
+# %Nc   "relative path", ie last N components of $PWD.
+# >     literal '>'
+
+ alias _PS1="PS1='%B%n%b@%m:%4c>'"                   # mika@tweety:~>
+# PS1=$'%{\e[1;31m%}%B%n%b@%m:%4c %! $ %{\e[0m%}'    # mika@tweety:~ 3 $
+# PS1=$'%{\e[1;31m%}%B%n%b@%m:%4c $ %{\e[0m%}'       # mika@tweety:~ $ 
+
+function precmd {
+
+local TERMWIDTH L_USERHOST L_TTY L_HISTLINE L_PATH L_EXITCODE
+(( TERMWIDTH = ${COLUMNS} - 1 ))
+     L_USERHOST="%n@%m"
+     L_TTY="%y"
+     #L_HISTLINE="[%!]"
+     L_HISTLINE="(%!)"
+     L_PATH="%~"
+     L_EXITCODE="%(?..%? )"
+
+###
+# See if we can use colors.
+# Must have the zsh/termcap, zsh/terminfo module loaded for this
+# on QNX this does not work but due to colors are supported use workaround:
+if [[ $terminfo[colors] -ge 8 ]] || [[ `uname` == "QNX" ]] ; then
+    local RED="%{[1;31m%}"
+    local LIGHT_RED="%{[0;31m%}"
+    local CYAN="%{[1;36m%}"
+    local LIGHT_CYAN="%{[0;36m%}"
+    local BLUE="%{[1;34m%}"
+    local LIGHT_BLUE="%{[0;34m%}"
+    local GREEN="%{[1;32m%}"
+    local LIGHT_GREEN="%{[0;32m%}"
+    local MAGENTA="%{[1;35m%}"
+    local LIGHT_MAGENTA="%{[0;35m%}"
+    local YELLOW="%{[1;33m%}"
+    local LIGHT_YELLOW="%{[0;33m%}"
+    local GRAY="%{[1;30m%}"
+    local LIGHT_GRAY="%{[0;37m%}"
+    local WHITE="%{[1;37m%}"
+    local NO_COLOUR="%{[0m%}"
+    local BEGINNING_OF_LINE="%{[80D%}"
+else
+    local RED=""
+    local LIGHT_RED=""
+    local CYAN=""
+    local LIGHT_CYAN=""
+    local BLUE=""
+    local LIGHT_BLUE=""
+    local GREEN=""
+    local LIGHT_GREEN=""
+    local MAGENTA=""
+    local LIGHT_MAGENTA=""
+    local YELLOW=""
+    local LIGHT_YELLOW=""
+    local GRAY=""
+    local LIGHT_GRAY=""
+    local WHITE=""
+    local NO_COLOUR=""
+    local BEGINNING_OF_LINE=""
+fi
+
+###
+# Decide whether to set a screen title
+if [[ "$STY" != "" ]]; then
+    local STITLE='%{kzsh\%}'
+else
+    local STITLE=''
+fi
+
+###
+# Decide if we need to set titlebar text.
+case $TERM in
+    xterm*)
+	local TITLEBAR='%{]0;%n@%m:%~%}'
+	;;
+#    screen)
+#	local TITLEBAR='%{]0;screen  (t) %n@%m:%~%}'
+#	;;
+    *)
+	local TITLEBAR=""
+	;;
+esac
+
+###
+# See if we can use extended characters to look nicer.
+# 
+# case $TERM in
+#     linux|xterm*)
+# 	local SHIFT_IN='%{%}'
+# 	local SHIFT_OUT='%{%}'
+# 	local HBAR='q'
+# 	local ULCORNER='l'
+# 	local LLCORNER='m'
+# 	local LRCORNER='j'
+# 	local URCORNER='k'
+# 	;;
+#     *)
+# 	local SHIFT_IN=""
+# 	local SHIFT_OUT=""
+# 	local HBAR='-'
+# 	local ULCORNER='-'
+# 	local LLCORNER='-'
+# 	local LRCORNER='-'
+# 	local URCORNER='-'
+# 	;;
+# esac
+
+###
+# Truncate the path if it's to long.
+# local fill=""
+# local pwdlen=""
+# 
+# let local promptsize=$(print -Pn -- "--(%n@%m:%l)---()--" | wc -c | tr -d " ")
+# let local pwdsize=$(print -Pn -- "%~" | wc -c | tr -d " ")
+# 
+# if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
+#    let pwdlen="$TERMWIDTH - $promptsize"
+# else
+#    let fillsize="$TERMWIDTH - ($promptsize + $pwdsize)"
+#    while [[ $fillsize -gt 0 ]] 
+#    do 
+#       fill="${fill}$HBAR"
+#       let fillsize=${fillsize}-1
+#    done
+# fi
+
+###
+# Finally, the prompt.
+# looks e.g.:
+# [mika@grml(500): ~]% 
+# PROMPT="$STITLE$TITLEBAR$RED$L_EXITCODE%B[$RED%b%n$LIGHT_RED@%b%m: $YELLOW${L_PATH}$RED]$NO_COLOUR%# "
+  PROMPT="$STITLE$TITLEBAR$RED$L_EXITCODE%B[$RED%b%n$LIGHT_RED@%b%m$BLUE(%!): $YELLOW${L_PATH}$RED]$NO_COLOUR%# "
+
+# right side of prompt - shows :( if echo $? is not 0:
+  RPROMPT="%(?..:()%"
+}
+
+preexec () {
+    if [[ "$STY" != "" ]]; then
+	local CMD=`echo $1 | sed 's/^sudo //; s/ .*//'`
+	echo -n "k$CMD\\"
+    fi
+}
+
+######## END OF FILE ###########################################################

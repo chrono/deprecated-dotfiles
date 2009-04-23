@@ -1,0 +1,290 @@
+# Filename: $HOME/.zsh/zsh_func
+# Purpose:  functions stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Die Aug 03 15:56:50 CEST 2004
+################################################################################
+# History:
+# 040803 added memusage, ctime, starttime, rfcdate
+# 040730 added getkernel
+# 040726 added run-help
+# 040719 added _sig
+# 040629 added mysvn
+# 040620 added mp3cut + eca_mp3cut
+# 040613 improved google-function(s)
+# 040521 renamed simple-extract to my-extract
+# 040418 initial version
+################################################################################
+
+# 040629
+function mysvn () {
+ svn co svn+ssh://dufo.tugraz.at/repos/$1
+}
+
+function cvsd () { cvs diff -N $* |& $PAGER }
+function cvsl () { cvs log $* |& $PAGER }
+function cvsr () { rcs2log $* | $PAGER }
+function cvss () { cvs status -v $* }
+function cvsq () { cvs -nq update }
+
+# Print the binary equivalent of a word (and back)
+function bew() { perl -e 'print unpack "B*","'$1'"' ; perl -e 'print "\n"' }
+function web() { perl -e 'print pack "B*","'$1'"' ; perl -e 'print "\n"' }
+
+# Print the hex equivalent of a word (and back)
+function hew() { perl -e 'print unpack "H*","'$1'"' ; perl -e 'print "\n"' }
+function weh() { perl -e 'print pack "H*","'$1'"' ; perl -e 'print "\n"' }
+
+# A life without 'diff'? Unimaginably!!!!11!
+function mdiff() { diff -udrP "$1" "$2" > diff.`date "+%Y-%m-%d"`."$1" }
+function udiff() { diff -urd $* | egrep -v "^Only in |^Binary files " }
+function cdiff() { diff -crd $* | egrep -v "^Only in |^Binary files " }
+
+# List / Search / Browse in a archive without unpack
+function lynxbzgrep() { lynx -force_html -dump =(bzip2 -cd $1) | grep -i $2 }
+function browse-archive() { lynx -force_html <( gzip -cd $1 ) }
+
+# 040308 Usage: my-extract <file>
+# Description: extracts archived files (maybe)
+
+# Replaces:
+# function shzip() { unzip -l $1 | $PAGER }
+# function shtgz() { tar -ztf $1 | $PAGER }
+# function shtar() { gunzip -c $1 | tar -tf - -- | $PAGER }
+
+my-extract () {
+    if [ -f $1 ]; then
+        case $1 in
+            *.tar.bz2)  tar -xvjf $1         ;;
+            *.tar.gz)   tar -xvzf $1        ;;
+            *.bz2)      bzip2 -d $1         ;;
+            *.gz)       gunzip -d $1        ;;
+            *.tar)      tar -xvf $1         ;;
+            *.tgz)      tar -xvzf $1        ;;
+            *.zip)      unzip $1            ;;
+            *.Z)        uncompress $1       ;;
+            *)          echo "'$1' Error. Please go away" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# mkdir && cd
+function mcd() { mkdir "$@"; cd "$@" }
+
+# cd && ls
+function cl() { cd $1 && ls -a }
+
+# Display current directory as a 'tree'.
+# Nice replacement would be: http://strcat.neessen.net/hacks/tree
+function tree() { find . | sed -e 's/[^\/]*\//|----/g' -e 's/---- |/    |/g' | $PAGER }
+
+# Use vim to convert plaintext to HTML
+function 2html() { vim -n -c ':so $VIMRUNTIME/syntax/2html.vim' -c ':wqa' $1 > /dev/null 2> /dev/null }
+
+# Often needed (if i rape '$LS_COLORS' again *g*)
+function _cols()
+{
+ esc="\033["
+ echo -e "\t 40\t 41\t 42\t 43\t 44\t 45\t 46\t 47"
+ for fore in 30 31 32 33 34 35 36 37; do
+   line1="$fore  "
+   line2="    "
+   for back in 40 41 42 43 44 45 46 47; do
+     line1="${line1}${esc}${back};${fore}m Normal  ${esc}0m"
+     line2="${line2}${esc}${back};${fore};1m Bold    ${esc}0m"
+   done
+   echo -e "$line1\n$line2"
+ done
+}
+
+# Use 'view' to read manpages, if u want colors, regex - search, ...
+# like vi(m).
+# It's shameless stolen from <http://www.vim.org/tips/tip.php?tip_id=167>
+  function vman() { command man $* | col -b | /usr/local/bin/view -c 'set ft=man nomod nolist' - }
+
+# Searching for keyword(s)
+# $ google foobar 
+# $ google "foobar 42"
+# $ google "foobar <email@foo.bar>"
+# $ google foo+bar+42
+  function google () { $BROWSER "http://www.google.com/search?q=$*" }
+
+# Searching for keywords in Newsgroups
+# $ ggogle foobar 
+  function ggogle () { $BROWSER "http://groups.google.com/groups?q=$*"; }
+
+# Search for Posting from <Message-ID>
+# $ mggogle "2003-07-01T15-17-41@bofh.my-fqdn.de"
+  function mggogle () { $BROWSER "http://groups.google.com/groups?selm=$*" ; }
+
+# Search Postings from <Author>
+# $ agoogle "John J. Rambo"
+# $ agoogle strcat@gmx.net
+  function agoogle () { $BROWSER "http://groups.google.com/groups?as_uauthors=$*" ; }
+
+# make screenshot of current desktop (use 'import' from ImageMagic)
+# See man date(1) and man import(1) for details.
+# Note: If you don't have 'import', install ImageMagick and stop
+#       crying.
+  function sshot () { cd ~/shots && sleep 5; import -window root `date "+%Y-%m-%d%--%H:%M:%S"`.jpg }
+
+# Some often needed and (for me) useful Oneliner in Perl
+  function getlinks () { perl -ne 'while ( m/"((www|ftp|http):\/\/.*?)"/gc ) { print $1, "\n"; }' $* }
+  function gethrefs () { perl -ne 'while ( m/href="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+  function getanames () { perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+  function getforms () { perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
+  function getstrings () { perl -ne 'while ( m/"(.*?)"/gc ) { print $1, "\n"; }' $*}
+  function getanchors () { perl -ne 'while ( m/«([^«»\n]+)»/gc ) { print $1, "\n"; }' $* }
+  function showINC () { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
+
+# find all suid files
+  function suidfind() { ls -latg /usr/bin/* /sbin/* /usr/sbin/* /usr/local/bin/* | grep '^...s' }
+
+# See above but this is /better/ ... anywise ..
+#  Note: Add $USER and 'find' with "NOPASSWD" in your /etc/sudoers or run it
+#        as root (UID == 0)
+  function findsuid()
+  {
+   sudo find / -type f \( -perm -4000 -o -perm -2000 \) -ls > ~/.suid/suidfiles.`date "+%Y-%m-%d"`.out 2>&1
+   sudo find / -type d \( -perm -4000 -o -perm -2000 \) -ls > ~/.suid/suiddirs.`date "+%Y-%m-%d"`.out 2>&1
+   sudo find / -type f \( -perm -2 -o -perm -20 \) -ls > ~/.suid/writefiles.`date "+%Y-%m-%d"`.out 2>&1
+   sudo find / -type d \( -perm -2 -o -perm -20 \) -ls > ~/.suid/writedirs.`date "+%Y-%m-%d"`.out 2>&1
+  }
+
+# 040620 cut mp3s - credits: Matthias Kopfermann
+  function eca_mp3cut() {
+        if [[ $ARGC < 3 ]] ; then
+         echo "Usage: $0 inputfile outputfile skip length"
+         echo "e.g.:  $0 input.mp3 output.mp3 0:00:20 0:00:40 128"
+         return
+        fi
+        file=${(q)1}
+        outfile=${(q)2}
+        skip=$3
+        skip=(  ${(s,:,)skip}  )
+        skip=$[ $skip[1]*60*60 + $skip[2]*60 + $skip[3] ]
+        echo $skip
+
+        length=$4
+        length=( ${(s,:,)length}  )
+        length=$[ $length[1]*60*60 + $length[2]*60 + $length[3] ]
+        echo $length
+
+        ecasound -i:$file -o:$outfile  -y:$skip -t:$length
+} 
+
+  function mp3cut () {
+        if [[ $ARGC < 4 ]] ; then
+         echo "Usage: $0 inputfile outputfile skip length [kb/s]"
+         echo "e.g.:  $0 input.mp3 output.mp3 0:00:20 0:00:40 128"
+         return
+        fi
+        file=${(q)1}
+        outfile=${(q)2}
+        samplerate=${5:=128}
+        bs=$(( ($samplerate*1000)/8 ))
+
+        skip=$3
+        skip=(  ${(s,:,)skip}  )
+        skip=$[ $skip[1]*60*60 + $skip[2]*60 + $skip[3] ]
+        echo $skip
+
+        length=$4
+        length=( ${(s,:,)length}  )
+        length=$[ $length[1]*60*60 + $length[2]*60 + $length[3] ]
+        echo $length
+
+        dd if=$file of=$outfile bs=$bs skip=$skip count=$length
+}
+
+# 040719 grep for keyword in signature-file
+  function _sig() {
+    agrep -d '^-- $' "$*" ~/.Signature
+  }
+
+# 040726 run-help (default: <esc>-h) and use help-files generated via
+# $ man zshall | colcrt - | $DIR_TO_ZSH_SOURCE/zsh/zsh-4.2.0/Util/helpfiles
+  run-help() {
+    typeset zhelp=~/.zsh/zsh_help          # or wherever
+    [[ $1 = . ]] && 1=dot
+    [[ $1 = : ]] && 1=colon
+    if [[ $1 = compctl ]]; then
+       command man zshcompctl
+    elif [[ -f $zhelp/$1 ]]; then
+       ${=PAGER:-more} $zhelp/$1
+    else
+       command man $*
+    fi
+  }
+
+
+# 040730 
+  function getkernel() {
+    if [ $# -ne 3 ] ; then
+      echo "Usage:"
+      echo "$0 MAJOR MINOR SUBMINOR"
+      echo ""
+      echo "eg:"
+      echo "   $0 2 6 7"
+#    finger @finger.kernel.org
+#    http://www.kernel.org/kdist/finger_banner
+      latest=`echo -e "GET /kdist/finger_banner HTTP/1.0\n" | netcat www.kernel.org 80 | sed -ne "/^$/,//p"`
+
+      echo ""
+      echo "current versions: $latest"
+      echo ""
+
+      echo -n 'Used release is: '
+      uname -r
+
+    else
+      cd $DATADIR/linux/ &&
+      SERVER=http://www.at.kernel.org/pub/linux/kernel/
+      KERNEL=$SERVER/v$1.$2/linux-$1.$2.$3.tar.bz2
+      SIGN=$SERVER/v$1.$2/linux-$1.$2.$3.tar.bz2.sign
+      echo 'starting download'
+      wget -c $KERNEL &&
+      wget -c $SIGN   &&
+      echo 'done'
+      echo 'checking signature:'
+      gpg --verify `basename $SIGN $KERNEL` &&
+      echo 'done'
+    fi
+#    bzip2 -dc linux-$1.$2.$3.tar.bz2 | tar x #&&   ### of course 'tar xvfj' would also work..
+}
+
+# 040803 memory-usage
+# http://www.livejournal.com/users/keybuk/14206.html
+  memusage () {
+     ps aux | awk '{if (NR > 1) print $5; if (NR > 2) print "+"} END { print "p" }' | dc
+  }
+
+  # Print the current or argument time in standard format
+  function ctime {
+    local time=${1:-$EPOCHSECONDS}
+    strftime "%a %b %e %H:%M:%S %Y" $time
+  }
+
+  # Print the time this shell was started
+  # (doesn't work if SECONDS has been reset)
+  function starttime {
+    typeset -i SECONDS=$SECONDS  # No floating point
+    ctime $((EPOCHSECONDS - SECONDS))
+  }
+
+  # Like GNU "date -R"
+  # %z is a common extension to strftime(), which gives the off-set
+  # numerically. e.g.:   %Z CEST       %z +0200
+  # The %z is not part of POSIX!
+  # see: http://www.zsh.org/mla/users//2003/msg00788.html
+  # so use workaround because it does not work without a version of
+  # strftime that supports the nonstandard "%z"
+  function rfcdate {
+    if [[ ${(%):-"%D{%z}"} == [-+]<-> ]]
+    then strftime "%a, %e %b %Y %H:%M:%S %z" $EPOCHSECONDS
+    else strftime "%a, %e %b %Y %H:%M:%S %Z" $EPOCHSECONDS
+    fi
+  }
+
+################ END OF FILE ###################################################

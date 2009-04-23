@@ -1,0 +1,36 @@
+# $Id: ignores,v 1.10 2000/12/31 17:10:08 seymour Exp $
+#
+# boring headers
+ignore Delivered-To: Apparently-To: X-Job: X-Authentication-Warning:
+ignore X-Help-Page-Location: X-Envelope-Sender: X-Accept-Language: X-Sender:
+ignore X-Loop: X-Mailing-List: Precedence: Priority: Resent- In-reply-to:
+ignore Organization: Mail-Followup-To: X-Priority: X-Attribution: X-MIMETrack:
+ignore X-MSMail-Priority: X-MimeOLE: Importance: X-Sent: X-Trace: X-Apparently-To:
+ignore Original-Sender: X-MIME-Autoconverted: X-Complaints-To: Old-Return-Path:
+ignore X-Originating-IP: X-OriginalArrivalTime: Mailing-List: List-Unsubscribe:
+ignore X-eGroups- List- X-BeenThere: X-Mailman-Version: Errors-To: X-Lotus-FromDomain:
+ignore X-BadReturnPath: Originator: X-UnityID: X-UnityUser: Thread-Index: X-list:
+ignore X-Mailer-Version: X-Dispatcher: Authorized-User: IP-Address: X-listar-version:
+ignore Disposition-Notification-To: X-UIDL: X-lyris-type: X-Bulkmail: X-original-sender:
+ignore X-Virus-Scanned: X-GUUG-PR-
+
+# stupid custom headers
+ignore X-Debian-GNU-Linux: X-URL: X-face: X-image-url: Comments: X-No-Archive:
+ignore X-Stardate: X-NO-SPAM: X-Debian: Mail-Copies-To: X-Kuro5hin-cabal:
+ignore Private-Web-Page: Company-Web-Page: X-Organization: X-Home-Address:
+ignore X-Home-Web-Site: X-Work-Web-Site: X-Work-Address: X-Disclaimer:
+ignore X-Editor: X-Keyboard: X-Copywrong: X-GSM: X-BOFH: X-Flames-To: X-Spammers:
+ignore X-Jihad: X-Spammer-Kill-Ratio: X-cuse: X-X: X-Cat: X-Go-Away:
+
+# alternate method
+#ignore *
+#unignore From:
+#unignore To
+#unignore Date
+#unignore Subject
+#unignore Cc
+#unignore Reply-To
+#unignore Apparently-To
+#unignore X-Mailer 
+#unignore X-Http-User-Agent
+#unignore User-Agent

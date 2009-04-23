@@ -1,0 +1,234 @@
+# Filename: $HOME/.zsh/zsh_completition
+# Purpose:  completition stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Mon Jul 26 23:11:52 CEST 2004
+################################################################################
+# Useful:
+# $ man zshcompsys
+# $ compinstall
+# $ <C-x h>
+# Web: http://www.zshwiki.org/cgi-bin/wiki.pl?ZshCompletionTips
+#
+# History:
+# 040620 added some comments
+# 040523 added version check for zstyle completition system
+# 040426 improved completition of ssh/scp
+# 040418 updated fileinformation
+################################################################################
+
+if [[ $ZSH_VERSION > 3.9 ]]; then
+# zstyle ':completion:*' completer \
+#    _expand _oldlist _complete _match _correct _complete:-extended _prefix
+  zstyle ':completion:*' ambiguous true
+  zstyle ':completion:*' glob true
+  zstyle ':completion:*' word true
+  zstyle ':completion:*' completer _complete _correct _approximate
+
+  zstyle ':completion:*:(all-|)files' ignored-patterns \
+         '(|*/)CVS' # prevent CVS files/directories from being completed
+  zstyle ':completion:all-matches:*' completer _all_matches
+  zstyle ':completion:all-matches:*' old-matches only
+  zstyle ':completion:*:approximate:*' max-errors 2 numeric
+  zstyle ':completion:*:correct:*' insert-unambiguous true
+  zstyle ':completion:*:correct:*' max-errors 2 numeric
+  zstyle ':completion:*:correct:*' original true
+  zstyle ':completion:*:expand:*' group-order all-expansions expansions
+  zstyle ':completion:*:functions' ignored-patterns \
+         '(_*|pre(cmd|exec))' # ignore completion functions for commands you don't have
+  zstyle ':completion:lamatch:*' completer _all_matches
+  zstyle ':completion:lamatch:*' old-matches only
+  zstyle ':completion:lappr:*:approximate:*' max-errors 3 numeric
+  zstyle ':completion:lappr:*' completer _approximate
+  zstyle ':completion:lhist:*' completer _history
+  zstyle ':completion:*:match:*' match-original non-empty-value
+  zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*~' '\#*\#' '*.zwc'
+  zstyle ':completion:*:-subscript-:*' tag-order indexes parameters
+  zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
+
+  zstyle ':completion:*:complete-extended:*' matcher-list \
+         'm:{a-z}={A-Z}' 'r:|[+._-]=*' # lowercase matches uppercase, 
+  #       'm:{a-z}={A-Z}' 
+  #       'm:{a-z}={A-Z}' 'l:|=* r:|=*'
+  #       'm:{a-z}={A-Z}' 'r:|[._-]=*' 'l:|=* r:|=*'
+  
+  zstyle ':completion:*:history-words' stop yes
+  zstyle ':completion:*:history-words' remove-all-dups yes
+  zstyle ':completion:*:history-words' list false
+  zstyle ':completion:*:history-words' menu yes
+  
+# in recent zsh 4.1.x only: complete the names of parameters we have special
+# completions for in parameter assignments:
+  if [[ $ZSH_VERSION > '4.0' ]]; then
+    zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-};
+  fi
+
+# If you end up using a directory as argument, this will remove the
+# trailing slash (usefull in ln)
+  zstyle ':completion:*' squeeze-slashes true
+
+# I use the _expand completer before _complete in my main completer but
+# it is nice to have _match and _all_matches available on other key bindings: 
+  zstyle ':completion:all-matches::::' completer _all_matches _complete 
+  zstyle ':completion:all-matches:*' old-matches true 
+  zstyle ':completion:all-matches:*' insert true 
+  zstyle ':completion:match-word::::' completer _all_matches _match _ignored 
+  zstyle ':completion:match-word:*' insert-unambiguous true 
+  zstyle ':completion:match-word:*' match-original both 
+  zle -C all-matches complete-word _generic 
+  zle -C match-word complete-word _generic 
+  bindkey '^Xx' all-matches 
+  bindkey '\e*' match-word
+  
+  zstyle ':completion:*' menu select=2 select=long search
+  zstyle ':completion::*' list-colors ${(s.:.)ZLS_COLORS} 
+#  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  zstyle ':completion:*' group-name ''
+  zstyle ':completion:*' ignore-parents pwd parent ..
+  zstyle ':completion:*' remove-all-dups true
+  zstyle ':completion:*' select-scroll -1
+  zstyle ':completion:*' special-dirs '..'
+  zstyle ':completion:*' use-cache yes
+#  zstyle ':completion:*' cache-path $ZDOTDIR/cache
+  zstyle ':completion::complete:*' cache-path $ZSHDIR/cache/$HOST
+  zstyle ':completion:*' insert-unambiguous true
+  zstyle ':completion:*' range 200:20
+  zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
+  zstyle ':completion:*' keep-prefix changed
+  
+# completition for programs
+# check out "_$PROGRAM"-files in $fpath
+  zstyle ':completion:*:man:*' separate-sections true
+  zstyle ':completion:*:mplayer:*:bookmark' mplayer-bookmark $ZDOTDIR/mplayer-bookmark
+  zstyle ':completion:*:urls' urls $ZDOTDIR/urls
+  zstyle ':completion:*:*:(g|)vim:*' menu yes select
+  zstyle ':completion:*:*:t:*' menu yes select
+  zstyle ':completion:*:ssh:*' group-order 'users' 'hosts'
+  zstyle ':completion:*:cd:*' tag-order \
+         local-directories directory-stack named-directories path-directories
+  zstyle ':completion:*:cd:*' ignored-patterns \
+         '(*/)#CVS' # crevent CVS files/directories from being completed
+  zstyle ':completion:*:*:rm:*' file-patterns '(*~|\\#*\\#):backup-files' \
+         '*.zwc:zsh\ bytecompiled\ files' 'core(|.*):core\ files' '*:all-files'
+  zstyle ':completion:*:rm:*' ignore-line true
+  zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+  zstyle ':completion:*:kill:*' insert-ids single
+  zstyle ':completion:*:*:kill:*' menu yes select
+  zstyle ':completion:*:kill:*' force-list always
+  #zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+  zstyle ':completion:*:*:less:*' menu yes select
+  zstyle ':completion:*:*:mutt:*' menu yes select
+
+  if [[ -f ~/.mutt/mail_aliases ]]; then
+    zstyle ':completion:*:mutt:*' users \
+        ${${${(f)"$(<~/.mutt/mail_aliases)"}#alias[[:space:]]}%%[[:space:]]*}
+#  else
+#    echo "warning: no mutt-aliases (~/.mutt/mail_aliases) found."
+  fi
+  
+  zstyle ':completion:*:ping:*' hosts 129.27.2.3 www.tugraz.at \
+      10.16.17.1{{7..9},}
+
+  zstyle ':completion:*:*:mpg123:*' file-patterns \
+  '*.(mp3|MP3):mp3\ files *(-/):directories'
+
+  zstyle ':completion:*:*:ogg123:*' file-patterns \
+  '*.(ogg|OGG):ogg\ files *(-/):directories'
+
+  zstyle ':completion:*:*:mp3blaster:*' file-patterns \
+  '*.(mp3|ogg):mp3\ files *(-/):directories'
+
+  ## on processes completion complete all user processes
+  zstyle ':completion:*:processes' command 'ps -au$USER'
+
+# ssh/scp-completion
+  zstyle ':completion:*:scp:*' tag-order \
+          'hosts:-host hosts:-domain:domain hosts:-ipaddr:IP\ address *'
+  zstyle ':completion:*:scp:*' group-order \
+          users files all-files hosts-domain hosts-host hosts-ipaddr
+  zstyle ':completion:*:ssh:*' tag-order \
+          users 'hosts:-host hosts:-domain:domain hosts:-ipaddr:IP\ address *'
+  zstyle ':completion:*:ssh:*' group-order \
+          hosts-domain hosts-host users hosts-ipaddr
+  zstyle ':completion:*:(ssh|scp):*:hosts-host' ignored-patterns \
+          '*.*' loopback localhost
+  zstyle ':completion:*:(ssh|scp):*:hosts-domain' ignored-patterns \
+          '<->.<->.<->.<->' '^*.*' '*@*'
+  zstyle ':completion:*:(ssh|scp):*:hosts-ipaddr' ignored-patterns \
+          '^<->.<->.<->.<->' '127.0.0.<->'
+  zstyle ':completion:*:(ssh|scp):*:users' ignored-patterns \
+          adm bin daemon halt lp named shutdown sync
+  zstyle -e ':completion:*:(ssh|scp):*' hosts 'reply=(
+          ${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) \
+                          /dev/null)"}%%[# ]*}//,/ }
+          ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
+          ${${${(M)${(s:# :)${(zj:# :)${(Lf)"$([[ -f ~/.ssh/config ]] && <~/.ssh/config)"}%%\#*}}##host(|name) *}#host(|name) }/\*}
+          )'
+#          ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
+
+  # Bart Schaefer's variant:
+  # [ -f ~/.ssh/config ] && : ${(A)ssh_config_hosts:=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
+  # [ -f ~/.ssh/known_hosts ] && : ${(A)ssh_known_hosts:=${${${(f)"$(<$HOME/.ssh/known_hosts)"}%%\ *}%%,*}}
+  # zstyle ':completion:*:*:*' hosts $ssh_config_hosts $ssh_known_hosts
+
+  #zstyle ':completion:*:(ssh|scp):*:my-accounts' users-hosts \
+  #        my.secret.account@student.uu.se
+  #zstyle ':completion:*' users-hosts mika@localhost mika@mika \
+  #    mika@imika \
+  
+# format of menu & CO
+  zstyle ':completion:*:descriptions' format \
+      $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+  zstyle ':completion:*:corrections' format $'%{\e[0;31m%}%d (errors: %e)%}'
+  zstyle ':completion:*' verbose yes
+  zstyle ':completion:*:messages' format '%d'
+  zstyle ':completion:*:warnings' format \
+      $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'
+  zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+fi # if [[ $ZSH_VERSION > 3.9 ]]
+
+# compctl - the old completition system of zsh - don't use it
+# anymore in current versions [>3.9] of zsh!
+#
+# only java files for javac
+#  compctl -g "*.java" + -g "*(-/) .*(-/)" javac
+# pdf for xpdf/acroread
+compctl -g "*.pdf" + -g "*(-/) .*(-/)" xpdf acroread evince
+# tar files
+#  compctl -g "*.tar *.tgz *.tz *.tar.Z *.tar.bz2 *.tZ *.tar.gz" + -g "*(-/) .*(-/)" tar
+# latex to the fullest
+#  compctl -g "*.tex" + -g "*(-/) .*(-/)" tex latex pdftex pdflatex bibtex latex2html
+# for printing
+#  compctl -g "*.dvi" + -g "*(-/) .*(-/)" xdvi dvips
+
+## generic completions for programs which understand GNU long options(--help)
+#  compdef _gnu_generic cp mv gpg df du stow uname ipacsum fetchipac slrnpull
+#  compdef _man pman
+
+# print out info about defined completitions:
+# compctl -k '(`command`)'
+
+# generic help for programs
+# optfind() {
+#     reply=() extra= helptxt=
+#     read -c command rest
+#     [[ $command = gcc ]] && extra=-v     # special case for gcc
+# 
+#     for h in --help -h -\? --help; do
+#         helptxt=$($command $h $extra < /dev/null 2>&1) && break
+#     done
+# 
+#     set -A reply $(echo $helptxt |sed \
+#     's/^\(--\{0,1\}[+$=a-zA-Z0-9][-:+$=<>_a-zA-Z0-9]*\)/\
+# \1\
+# /g
+# s/[^a-zA-Z0-9]\(--\{0,1\}[+$=a-zA-Z0-9][-:+$=<>_a-zA-Z0-9]*\)/\
+# \1\
+# /g' | egrep '^--?[+$=a-zA-Z0-9][-:+$=<>_a-zA-Z0-9]*' | sort | uniq)
+# }
+# 
+# complete options for any command
+#   compctl -T -x 'S[-]' -K optfind
+
+# TODO
+# mutt -> maildir/mbox
+############ END OF FILE #######################################################

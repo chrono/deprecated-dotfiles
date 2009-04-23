@@ -1,0 +1,140 @@
+# Filename: $HOME/.zsh/zsh_bsd
+# Purpose:  os-independent aliases for zsh
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Fre Jul 30 09:14:42 CEST 2004
+################################################################################
+# History:
+# 040730 lsnew
+# 040727 added _N
+# 040714 added alias gimp
+# 040712 added ssh-wrappers, mpconfig
+# 040701 added svn
+# 040621 added _prompt
+# 040515 added regcheck
+# 040509 added vms-logis
+# 040425 initial version
+################################################################################
+
+# 040714 start gimp with german interface
+  alias gimp='LC_ALL=de_DE@euro gimp'
+
+# 040701 fix permissions for subversion-repositories
+  function svn () {
+    umask 002
+    LC_ALL=C command svn "$@"
+    if [[ "$1" == "up" || "$1" == "commit" || "$1" == "ci" ]]; then
+      if [[ -f SYMFONY ]] || [[ -f symfony ]]; then
+        if [[ -f symfony ]]; then
+          ./symfony cc
+        else
+          symfony cc
+        fi
+      fi
+    fi
+ }
+
+# 040712 get config via svn
+  alias mpconfig='svn co svn+ssh://dufo.tugraz.at/repos/mpconf'
+
+# 040621 fallback to default prompt
+ alias _prompt='source ~/.zsh/func/prompt_smart_setup'
+
+# fake user-agent of wget
+ alias wget-ua='wget --user-agent="Mozilla/4.0 (compatible; DAU 9.0; Wixdows NT 5.5; DT)"'
+ alias mirror="wget --mirror --no-parent --convert-links"
+ alias mirror2="wget -m -p -np"
+
+# personal-stuff
+# 040317 palcal - calendar for commandline
+  alias myday='pal -d `date +%d`'
+  alias mydays='pal -r 20'
+  alias ccal='ccal -e -m=50'
+
+# uVAX 3100/80 under OpenVMS 
+# alias vms='telnet manson.vistech.net'
+# DEC Alpha 600/333 under OpenVMS [Fastest machine in the cluster]
+  alias vms='telnet dahmer.vistech.net'
+
+# 040515 zsh with perl-regex - check it; e.g.:
+# regcheck '\s\d\.\d{3}\.\d{3} Euro' ' 1.000.000 Euro'
+  function regcheck() {
+    zmodload -i zsh/pcre
+    pcre_compile $1 && \
+    pcre_match $2 && echo "regex matches" || echo "regex does not match"
+  }
+# 040515 list files which have been modified within the last x days
+  function new() {
+    print -l *(m-$1)
+  }
+
+# print -l *(a1)
+# lists file which have been accessed within the last day
+
+# print -l *(@) 
+# list links
+
+# ls -doF *(/)
+# list only directories
+
+# chmod 640 *(W)
+# change mode only at files *everyone* may *write*
+
+# 040523 grep the history
+  function greph () { history 0 | grep $1 }
+
+# 040523 mispelling / fipptehler
+  alias sl='fortune bofh-excuses'
+
+# 040612 useful tcpdump settings
+# tcpdump -nXvSs 0 ip and host 192.168.1.101 -w sploit_log
+# tcpdump -r sploit_log -nXvSs 0 |more
+
+# 040612 play tetris with zsh
+  alias zsh-tetris='autoload -U tetris; zle -N tetris; bindkey '...' ; echo "press ... for playing tennis"'
+
+  alias mv='nocorrect mv'       # no spelling correction on mv
+  alias cp='nocorrect cp'       # no spelling correction on cp
+  alias mkdir='nocorrect mkdir' # no spelling correction on mkdir
+  alias j=jobs
+  alias pu=pushd
+  alias po=popd
+  alias d='dirs -v'
+  alias h=history
+
+# List only directories and symbolic
+# links that point to directories
+  alias lsd='ls -ld *(-/DN)'
+
+# List only file beginning with "."
+  alias lsa='ls -ld .*'
+
+# 040730 list 10 newest files
+  alias lsnew='ls -dl *(om[1,10])'
+
+# Global aliases -- These do not have to be
+# at the beginning of the command line.
+  alias -g M='|more'
+  alias -g H='|head'
+  alias -g T='|tail'
+
+# 040727 check for new mails
+  alias _N='ls -l ~/mail/**/new(F) | grep "/new:" | sed "s#/new:##"'
+
+# 040728 run backup
+# rsync -avze ssh /home/mika/ mika@mari:/Backup/mika/
+
+# print currently used shell:
+# ps -o comm= -p "$$"
+# ps -o args= -p "$$"
+# http://groups.google.de/groups?ie=UTF-8&oe=UTF-8&hl=de&as_umsgid=slrnc1tl6j.42.stephane.chazelas%40spam.is.invalid
+
+  alias src='source ~/.zshrc'
+  if [ -f $HOME/.ssh/config ]; then
+    for host in $(grep -E '^Host +\w+$' $HOME/.ssh/config | awk '{print $2}'); do
+        alias $host="ssh $host"
+    done
+  fi
+  alias vp='vim +Project'
+  alias t='vim -t $1'
+  alias mc='env -i TERM=xterm-color mc'
+  alias get='aria2c --http-proxy=www.tu-freiberg.de:80 -s 5 --http-proxy-method=get'

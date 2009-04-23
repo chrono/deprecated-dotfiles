@@ -1,0 +1,9 @@
+<tskel:before>
+let b:tskelidxcol = input("name of index column: ")
+</tskel:before>
+<tskel:after>
+unlet b:tskelidxcol
+</tskel:after>
+<index name="<+b:tskelidxcol+>_index">
+    <index-column name="<+b:tskelidxcol+>"/>
+</index>

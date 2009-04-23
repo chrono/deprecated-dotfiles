@@ -1,0 +1,5 @@
+XTerm*font:	10x20
+XTerm*VT100*background: black
+XTerm*VT100*foreground: wheat
+XTerm*ScrollBar: off
+XTerm*cursorColor: green

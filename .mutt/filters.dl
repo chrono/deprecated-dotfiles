@@ -1,0 +1,135 @@
+# -*- perl -*-
+#
+# Configuration file for display_filter
+#
+# (c) Hugo Haas 2002
+#
+# License: GPL v2
+
+# Main fliters
+$FILTERS = [
+# -grep: condition
+# -lineFilter: line filter
+#	Argument: hash to store context
+# -preBodyFilter: pre-line-filtering body filter
+#	Argument: body
+# -postBodyFilter: post-line-filtering body filter
+#	Argument: body
+	    { 
+		-grep => { 'From' => 'bad-quoter@example\.org' },
+		# Fix his weird quoting habit
+		-lineFilter => sub { s/^-->  /> /; }
+	    },
+	    {
+		# Do further fixing for quote fixing certain users
+		-grep => { 'From' => '(bad-quoter|bq)@example\.org' },
+		-postBodyFilter => sub {
+		    my ($body) = @_;
+
+		    # Fix weird quoting (due to filtering)
+		    # Transforms empty lines into quoted lines if appropriate
+		    my $i = 0;
+		    while (++$i < $#$body) {
+			next if (@$body[$i-1] !~ m/^>/);
+			my $j = 0;
+			while ($j < ($#$body-$i)) {
+			    last if (@$body[$i+$j] ne "\n");
+			    $j++;
+			}
+			next if ($j == 0);
+			last if ($j+$i == $#$body);
+			if (@$body[$i+$j] !~ m/^>/) {
+			    $i += $j-1;
+			    next;
+			}
+			while ($j > 0) {
+			    @$body[$i+--$j] = ">\n";
+			}
+		    }
+		}
+	    },
+	    {
+		# Fix broken MUAs wrapped quoted text
+                # What t-prot call Kammquoting
+		-postBodyFilter => sub {
+		    my ($body) = @_;
+
+		    my $i = 0;
+		    while (++$i <= $#$body) {
+			# Previous line quoted, and current isn't
+			next if ((@$body[$i-1] !~ m/^>/) ||
+				 (@$body[$i] =~ m/^>/));
+			if (# Current line is empty or start with a space
+			    (@$body[$i] =~ m/^($|\s)/) ||
+			    (($i < $#$body) && (@$body[$i+1] !~ m/^(\s*$|>)/))
+			    # Next line is not text
+			    || (@$body[$i] !~ m/^(\S+\s*){1,3}?$/)
+			    # No more than 3 words
+			    ) {
+			    # Abort
+			    $i++;
+			    next;
+			}
+			@$body[$i-1] .= ' '.@$body[$i];
+			splice(@$body, $i, 1);
+		    }
+		}
+	    },
+	    {
+		# Signature fixing
+		-preBodyFilter => sub {
+		    my ($body) = @_;
+
+		    for ($i = $#$body; $i >= 0; $i--) {
+			@$body[$i] =~ s/^--$/-- /;
+			last if (@$body[$i] =~ m/^-- $/);
+		    }
+		}
+	    }
+	    ];
+
+# Hide TOFU
+$HIDE_TOFU = [ # MS TOFU
+	       { -filter => '(^|\n)(\s*)-+\s?(Original Message)\s?-+\s*\n(\s*)From:.*' },
+	       # Over quoting, keep signature
+	       { -keepSignature => 1,
+		 -filter => '((^|\n)>[^\n]*?){2,}(\n(>[^\n]*?|\s*))+$' }
+	      ];
+
+# Footer separators
+$HIDE_FOOTERS = [
+'
+------------------------ Yahoo! Groups Sponsor ---------------------~-->
+.*',
+'
+-- 
+To UNSUBSCRIBE, email to debian-(.*?)-request@lists\.debian\.org.*',
+'
+-- 
+Please respect the privacy of this mailing list\.
+
+Archive: file:\/\/master\.debian\.org\/~debian\/archive\/debian-private\/
+
+To UNSUBSCRIBE, use the web form at <http:\/\/db\.debian\.org\/>\..*',
+'__________________________________________________
+Do You Yahoo!\?
+.*',
+"Le présent message ne peut être reproduit sans l'accord de son auteur\.
+La BertiListe ... http:\/\/www\.bertiliste\.com 
+.*",
+'Acc.dez au courrier .lectronique de La Poste : www\.laposte\.net ; 3615 LAPOSTENET.*',
+'_______________________________________________
+Lug-dd maillist  -  Lug-dd@schlittermann.de
+http://mailman.schlittermann.de/mailman/listinfo/lug-dd',
+'_______________________________________________
+Typo3-english mailing list
+Typo3-english@lists.netfielders.de
+http://lists.netfielders.de/cgi-bin/mailman/listinfo/typo3-english',
+'_______________________________________________
+Typo3-german mailing list
+Typo3-german@lists.netfielders.de
+http://lists.netfielders.de/cgi-bin/mailman/listinfo/typo3-german',
+'---------------------------------------------------------------------
+To unsubscribe, e-mail: discuss-unsubscribe@camp.ccc.de
+For additional commands, e-mail: discuss-help@camp.ccc.de'
+		 ];

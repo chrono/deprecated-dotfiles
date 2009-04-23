@@ -1,0 +1,15 @@
+postinst() {
+	pager /var/lib/dpkg/info/$1.postinst
+}
+
+preinst() {
+	pager /var/lib/dpkg/info/$1.preinst
+}
+
+postrm() {
+	pager /var/lib/dpkg/info/$1.postrm
+}
+
+prerm() {
+	pager /var/lib/dpkg/info/$1.prerm
+}

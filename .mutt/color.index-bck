@@ -1,0 +1,408 @@
+## ========================================================================
+## File:          $HOME/.mutt.color.index
+## Purpose:       Setup file for the Mail program "Mutt"
+## Latest change: Tue Dec 17 19:00:00 MET 2002
+## ========================================================================
+## Author:        Sven Guckes guckes-mutt@math.fu-berlin.de
+## Availability:  This file is available as
+##       <URL:http://www.math.fu-berlin.de/~guckes/mutt/mutt.color.index>
+##              Comments are very very welcome - please send an email!
+## Size:        ca 15K
+## ========================================================================
+
+## ========================================================================
+## Remember:    Order counts!  The last matching rule "wins".
+## ========================================================================
+
+## ==================================================
+## COLOR for both the Folder INDEX *and* the PAGER
+## ==================================================
+
+#        error messages
+   color error        red    black
+
+#  "message" - informational messages
+#  such as the incremental count at startup.
+#  It is nice to see on startup that
+#  color actually works.  :-)
+   color message      white  blue
+
+## ==================================================
+## Special COLORs for the Folder INDEX
+## ==================================================
+
+#  The  "indicator" for the "current message" -
+#  whether it is an arrow or an "inverse line":
+   color indicator    white  red
+
+#        "status" lines in the folder index.
+#        used for the mini-help line.
+   color status       white  blue
+
+#  The  "tree" display of threads within the folder index.
+   color tree         red    black
+
+## ==================================================
+## COLOR for some special messages.
+## ==================================================
+
+#  021026
+#  bounced messages - as indicated by "Resent" headers.
+   color index brightyellow blue "~h resent- ! ~h resent-by.*forw"
+
+#  000828
+#  Deleted Mails - use dark color
+#  as these are already "dealt with".
+   color index blue black "~D"
+
+#  000823
+#  Mails with no obvious addresses
+#  (empty To: and Cc: lines)
+   color index blue black "! ~C ."
+
+#  Flagged Messages are important!
+   color index brightred   black "~F"
+#  I use the flag to indicate that
+#  I should reply to these soon.
+
+#  mail from myself *and* to myself (TODO items):
+   color index black  brightyellow       '~f ringehahn ~p'
+#  the pattern "~p" means "from myself" - but alas
+#  there is no pattern for "*from* myself"  :-(
+
+#  mail to myself (personal mail):
+#  color index brightgreen        black  '~p'
+#  Commented out as most mail is for me - except SPAM.
+
+#  mail NOT to myself (unpersonal mail):
+#  color index green        black  '! ~p'
+
+#  "DONE mails" ie those I have already replied to.
+   color index blue         black  '~Q'
+
+#  MailList - these messages have been sent to
+#  a known mailing list.  What do these do in my mailbox??
+   folder-hook \\! 'color index white blue  ~l'
+# only show this for the mailbox -
+# not in other inboxes, of course.
+
+## ==================================================
+## Mails FROM special addresses
+## ==================================================
+#  mail from important people (like myself ;-):
+   color index cyan         black  '~f ringehahn'
+#
+#  The author of Vim - Bram Moolenaar:
+   color index brightred    black   "~f eisenreich"
+
+## ==================================================
+## Mails TO   special addresses
+## ==================================================
+
+#  Public Announcements on local domain
+#  "To: studi-replies" etc
+   color index magenta      black  '~C -replies@math.fu-berlin.de'
+
+#  CCs from posts on Usenet:
+   color index brightred    black  '~C guckes-usenet-cc'
+
+#  SLRN Maintenance
+#  color index brightblue  white    '~C guckes@slrn.org'
+#  color index white  brightblue    '~C guckes@slrn.org'
+
+#  VIM  Maintenance
+#  color index brightgreen white    '~C guckes@vim.org'
+   folder-hook \! 'color index green       black    "~C guckes@vim.org"'
+
+#  local mail aliases:
+#  color index yellow       black  '~t ^(all\|hackers\|key\|studi)'
+
+# [010806] replies without "re:" in the Subject line:
+  color index white green "(~h 'in-reply-to .' | ~x . ) ! ~s re:"
+
+# 2002-12-01
+# CCs from Usenet
+  color index brightmagenta default '~C guckes-usenet ~h Newsgroups:'
+  color index brightmagenta default '~C guckes-usenet ~h Posted-To:'
+
+## ==================================================
+## SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM SPAM
+## ==================================================
+
+# 021217:
+# non-multipart mails which are tex/html almost always are spam:
+  color index brightmagenta white "~h 'Content-Type: text/html'"
+
+# 011215:
+# X-Mailer line consisting of "Hex gibberish with two dots"
+# this gave me some 189 matches out of 20050 in my spam folder.
+# examples:
+# X-Mailer: 3C0337A3.6E0B59EC.71ff3cbd41150678dc108a815c0a4836
+# X-Mailer: 3C8FBD7A.3618CAB1.07dde1392bfb375daf7d0be27840724c
+# X-Mailer: 3CBF6D96.29270584.ba5e73b253594ee8140a256648143127
+# X-Mailer: 3CDCD698.3A9397B7.450beda8d47820443a0f6e3fc320adfa
+# X-Mailer: 3F3294D3.1548A4F6.ba2d55e63b07870f139aed8db45f14be
+# X-Mailer: 3F58504A.1BE6AFA8.765e11ca8e976f689689734781ee6ebe
+# X-Mailer: 3FC0B18.5C84A237.c50bce966ab480cb8f2a727d2025e190
+   color index  green  magenta \
+"X-Mailer: [0-9][A-Z0-9]*.[A-Z0-9]*.[.0-9A-Za-z]*$"
+
+#  Addresses lines (To:, Cc:, Bcc:, Delivered-To:)
+#
+#  Definite SPAM:
+#  I *never* use my "inf" address to send any mail - for *years* now!
+   color index magenta     black '~C guckes@inf.fu-berlin.de'
+   color index magenta     black '~h "Delivered-To: .*guckes@inf.fu-berlin.de"'
+#
+#  and my inbox.as address was *never* used for sending, anyway:
+   color index magenta     black '~C sven@inbox.as'
+#
+#  I have not posted to Usenet with a hostname in my address for years.
+#  so an address like "guckes@host.math.fu-berlin.de" is *invalid*!
+   color index magenta     black    '~C guckes@[a-z]+.math.fu-berlin.de'
+#  color index magenta     black    '~h "Delivered-To: .*guckes@[a-z]+.math.fu-berlin.de"'
+
+#  Possible SPAM:
+#  Mails which were not sent to a known mailing list
+#  (tell mutt about them with the "lists" command)
+#  and which have not been "Copied to" 'guckes'
+#  and yet have been "Delivered-To:" 'guckes'.
+#  [ Too bad you cannot use "~p" here. :-( ]
+#  color index white magenta  "! ~l ! ~C guckes ~h 'Delivered-To: .*guckes-'"
+#
+#  SPAM indicators in To: or Cc: line ("~C"):
+#
+#  Sent to "Undisclosed Recipients":
+   color index white      magenta  '~C Undisclosed.*Recipients'
+#
+#  Mails sent from ("~f") free mail services:
+#  [All commented as I get mails from sensible people, too.]
+#  color index magenta      black  '! ~p ~f @(aol\|hotmail\|msn\|prodigy\|yahoo)\.(com'
+#  color index magenta      black '~f @(aol\|hotmail\|msn\|prodigy\|yahoo)\.(com\|net)'
+#  color index magenta      black  '! ~p ~f @compulink.nlrs.com'
+#  color index magenta      black  '! ~p ~f free'
+#  color index magenta      black  '! ~p ~f funtime'
+#  color index magenta      black  '! ~p ~f gmx'
+#  color index magenta      black  '! ~p ~f worldnet.att.net'
+
+#  SPAM indicators within the Message-ID: line (pattern ~i):
+#  The Message-ID (aka MID) is often broken in many ways.
+#  Spam seldomly has a correct MID; mostly the FQDN is invalid.
+#
+#    Usual characters in MID:  [-0-9a-zA-Z<>$@._+%]
+#  Unusual characters in MID:  [:%#|/]
+#
+#  Message-ID values should not contain these characters:
+#  color index yellow black "~i [{:%#|/]"
+#  Are any of the "unusual characters" forbidden by the RFC?
+#  (Gotta check that..)
+#
+#  Message-IDs contains at least one '@' character, so
+#  Message-IDs without a '@' are invalid:
+   color index yellow black "! ~i @"
+#
+#  Message-IDs are enclosed in angle brackets,
+#  so an '<' should not be missing:
+   color index yellow black "! ~i <"
+#
+#  Message-IDs must not be empty:
+   color index yellow black "~i <>"
+#
+#  Message-IDs' FQDN must not be empty:
+   color index yellow black "~i @>"
+#
+#  Message-IDs' FQDN contain at least one dot:
+   color index yellow black "! ~i @.+[.].+>"
+#
+#  Message-IDs FQDN does not end with a dot,
+#  ie there must be at least a top level domain:
+   color index yellow black "~i [.]>"
+#
+#  Message-IDs do not contain spaces.
+   color index yellow black "~i '<.* .*>'"
+#
+#  Message-IDs should not contain "localhost".
+#  color index yellow black "~i localhost"
+#  commented because a LOT of people cannot
+#  change this because of their crappy mail system.  *sigh*
+#
+#  Message-IDs should not contain "localdomain".
+   color index yellow black "~i localdomain"
+#
+#  Message-IDs with more than one angel bracket:
+   color index yellow black "~i <.*<"
+#
+#  Message-IDs with a strange domain name,
+#  ie either one letter - or four and more:
+   color index yellow black "~i [.][a-z]>"
+   color index yellow black "~i [.][a-z]{4,}>"
+#
+#  Message-IDs added by mail relays:
+   color index yellow black "~i @mail.chemie.fu-berlin.de>"
+#  color index yellow black "~i @zedat.fu-berlin.de>"
+   color index yellow black "~i Mail.ZEDAT.FU-Berlin.DE>"
+   color index yellow black "~i @arbi.informatik.uni-oldenburg.de>"
+   color index yellow black "~i @arbi.informatik.uni-oldenburg.de>"
+#
+
+# [010617] Possible SPAM
+# Mails sent to "guckes-word" - but the
+# address lines do not contain my first name.
+# This is usually a copied address.
+#  color index blue magenta "~C guckes- ! ~C sven"
+#
+# Mail received through inf.fu-berlin.de:
+   color index red  magenta '~h "Received:.* inf.fu-berlin.de" ! ~h Delivered-To:'
+#
+# No letters in the Subject line at all:
+   color index green magenta "! ~s [a-z] ~h 'Delivered-To:.*guckes'"
+
+# 001230
+#  When the Subject indicates a reply (with ":re")
+#  then there *must* be a reference to the previous message!
+#  So if there is neither an In-Reply-To nor a References line
+#  then it must have been sent with a crappy mailer....
+   color index yellow magenta "~s re: ! ~x . ! ~h 'in-reply-to: '"
+#  Guilty Mailers:
+#  X-Mailer: Internet Mail Service (5.5.2650.21)
+#  X-Mailer: MIME-tools 4.104 (Entity 4.116)
+#  X-Mailer: USANET web-mailer (34WB1.4A.01)
+
+#  SPAM SPAM SPAM
+#  Address lines contain only local addresses
+#  ie without an '@' character.
+   color index white magenta "! ~C @"
+
+#  SPAM indicators in mail body ("~b")
+#
+#  "Dollars and Percentages"
+#  Example:  "95% of Internet traffic ..."
+#        and "Normally, we charge $500 per keyword"
+   color index white magenta "~b [1-9][0-9]% ~b [0-9]{3,}\$"
+#
+#  Silly stuff:
+   color index white magenta "~b 'This is not a Spam!'"
+#  Yeah, right.  ;-)
+#
+#  No characters in body -> SPAM!
+   color index black black   "! ~b ."
+
+
+#  SPAM indicators within the Subject: line ("~s"):
+#
+#  Empty Subject line - "not a single character"!
+   color index white magenta "! ~s ."
+#
+#  Subject line contains figures in dollar:
+# "Subject: Make $50,000 in 90 Days"
+   color index white magenta "~s '\\$[0-9]+[0-9]+'"
+#
+# 020303
+   color index blue  magenta '~s \\(none\\)'
+   color index blue  magenta '~s "ad(v)?:"'
+   color index blue  magenta '~s "adv\.[ ]"'
+   color index blue  magenta '~s "To help your business succeed"'
+   color index blue  magenta '~s "Have You Heard of Age Reversal"'
+   color index blue  magenta '~s "Analyst.s Pick"'
+   color index blue  magenta '~s "LOW risk, HIGH yield"'
+   color index blue  magenta '~s "123 Inkjets"'
+   color index blue  magenta '~s "150 FREE Business Cards"'
+   color index blue  magenta '~s "Register to win your Dream Vacation"'
+   color index blue  magenta '~s "Free Pics"'
+   color index blue  magenta '~s "Mortgage For 30 Yr. Fixed Term"'
+   color index blue  magenta '~s "TARGETED EMAIL ADDRESSES"'
+   color index blue  magenta '~s "INCREASE PORTFOLIO VALUE"'
+   color index blue  magenta '~s "Congratulations, You Won"'
+   color index blue  magenta '~s "RAPID EXPANSION"'
+   color index blue  magenta '~s "Take Control of Your Financial Security"'
+   color index blue  magenta '~s "Work at Home . Make Great Money"'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+
+#  "Get ...!"
+#   Subject: Get $100 FREE NOW from Golden Comps Casino
+#   Subject: Get 250 full-color business cards F R E E !
+#   Subject: Get 3 free CDs with free shipping (details inside)
+#   Subject: Get A Dozen Sweetheart Roses & A FREE Vase--LIMITED TIME!
+#   Subject: Get Cash Fast!
+#   Subject: Get FREE DVD movies, Download software!
+#   Subject: Get Instant Term Life Quotes for FREE
+#   Subject: Get Paid $10 to Play Games and Win Much More!!
+#   Subject: Get Paid to Shop! Get Paid to Eat Out!
+#   Subject: Get a Collateralized Investment Opportunity!
+#   Subject: Get a U.n.i.v.e.r.s.i.t.y D.i.p.l.o.m.a - Easily.
+#   Subject: Get a new mortgage loan on your terms!
+#   Subject: Get into that summer look
+#   Subject: Get paid cash every time you receive email!
+#   Subject: Get your site listed!
+   color index blue  magenta '~s "Get.*!"'
+
+# URGENT
+#   Subject: URGENT
+#   Subject: URGENT AND CONFIDENTIAL
+#   Subject: URGENT AND CONFIDENTIAL.
+#   Subject: URGENT BUSINESS
+#   Subject: URGENT BUSINESS PROPOSAL
+#   Subject: URGENT NOTICE:  Feds Cut Interest Rates Again ...
+#   Subject: URGENT REPLY
+   color index blue  magenta '~s "URGENT"'
+
+# I cannot read/view Japanese (ISO-2022)
+# or Russian (koi8-r).  Sorry!
+   color index blue  magenta '~s "=\\?(big5|iso-2022|koi8-r|ks_c_5601)"'
+
+# Windows?  eek!
+   color index blue  magenta '~s "windows-125[1234]"'
+
+   color index blue  magenta "~h 'Return-Path.*\.tw\>'"
+
+#  SPAM indicators - special header lines.
+#
+#  HTML attachments
+   color index green magenta "~h 'Content-Type: text/html'"
+
+   color index black blue "~h 'X-Spam-Status: Yes'"
+
+## ==================================================
+## "Coloring by Reference"
+## ==================================================
+
+# status:  experimental
+
+#  Show mails with "References" lines in the header.
+#  This uses a rainbow scheme - the darker the color,
+#  the more entries in the References line.
+#
+#  color index brightyellow black  "~h 'References: +<.+>'"
+#  color index yellow       black  "~h 'References: +<.+> +<.+>'"
+#  color index brightred    black  "~h 'References: +<.+> +<.+> +<.+>'"
+#  color index red          black  "~h 'References: +<.+> +<.+> +<.+> +<.+>'"
+#  color index blue         black  "~h 'References: +<.+> +<.+> +<.+> +<.+> +<.+>'"
+#  color index green        black  "~h 'References: +<.+> +<.+> +<.+> +<.+> +<.+> +<.+>'"
+
+# Replies to my mails - indicated by an "in-reply-to" line
+# including my local domain.
+# color index brightyellow black   "~h 'in-reply-to: .*math.fu-berlin.de'"
+# color index brightyellow black   "~h  'references: .*math.fu-berlin.de'"
+  color index brightyellow black   "~x          guckes@math.fu-berlin.de'"
+
+# ======================
+# PAGER stuff
+# ======================
+#       "search" - matches found with search
+#        within the internal pager.
+   color search       white  blue
+
+#  The  "markers" indicate a wrapped line
+#  when showing messages with looong lines.
+   color markers      red    black
+
+# ======================
+# TEST
+# ======================
+# User-Agent: slrn/0.9.7.4 (SunOS)
+  color index white blue "~h '^User-Agent:.*slrn'"
+
+#EOF  vim: tw=999 ft=muttrc

@@ -1,0 +1,32 @@
+# $Id: formats,v 1.8 2000/12/05 10:06:54 seymour Exp $
+#
+## Formats
+
+## defaults
+#set alias_format=""%2n %t %-10a   %r"
+#set attach_format="%u%D%t%2n %T%.40d%> [%.7m/%.10M, %.6e, %s] "
+#set date_format="!%a, %b %d, %Y at %I:%M:%S%p %Z"
+#set folder_format="%N %F %2l %-8.8u %-8.8g %8s %d %f"
+#set forward_format="[%a: %s]"
+#set index_format="%4C %Z %{%b %d} %-15.15L (%4l) %s"
+#set message_format="%s"
+#set pager_format="-%S- %C/%m: %-20.20n   %s"
+#set status_format="-%r-Mutt: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? \
+#  Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)---"
+
+## custom
+set folder_format="%N %8s bytes - %d %f"
+#set hdr_format="%3C %Z %[%b %d %H:%M] - %-22.22n %s"
+set pager_format="-%S- [%C/%m] %n (%c) %s"
+#set attribution="Thus wrote %n (%a) [%(%y.%m.%d %H:%M)]:"
+#set attribution="%n (%a) wrote:"
+set attribution="Moin %v!\n\n%n schrieb am %{%A, den %d. %B %Y}:\n"
+#set status_format="-[%f=]%>-[ %b Boxes ]-[ %m Messages ]-[ %n New ]-"
+#set status_format="-(%v)--( %f= )%>-( Boxes:%b )-( Msgs:%m )-( New:%n )-(%P)"
+set status_format="-(%v)--( %f= )%>-( Msgs:%m )-( New:%n )-( Old:%o )-(%P)-"
+#set status_format="-(%v)--( %f= )%>-( M:%M O:%o N:%n D:%d)-(%P)-"
+#set index_format="%3C. %Z %[%b %e] %30.30n %-35.35t (%4l) %s"
+
+folder-hook . 'set index_format="%3C %Z %[%b %d %H:%M] - %-15.15F (%3l) %s"'
+folder-hook marp-scores 'set index_format="%3C %Z %[%b %d %H:%M] - %s"'
+folder-hook mozilla 'set index_format="%3C %Z %[%b %d %H:%M] - %s"'

@@ -1,0 +1,10 @@
+<tskel:before>
+let b:tskelforeignTable = input("name of table: ")
+</tskel:before>
+<tskel:after>
+unlet b:tskelforeignTable
+</tskel:after>
+<foreign-key foreignTable="<+b:tskelforeignTable+>">
+    <reference local="<+b:tskelforeignTable+><+CURSOR+>_id" foreign="id<++>"/>
+</foreign-key>
+<++>

@@ -1,0 +1,68 @@
+## Wolfram Schlich <wolfram@schlich.org>
+activity "activity in %n (%t)"
+autodetach on
+bell "bell in %n (%t)"
+caption splitonly "%2n %t"
+crlf off
+debug off
+defbce on
+defhstatus "screen: ^En (^Et)"
+deflogin off
+defmonitor off
+defscrollback 8192
+escape ^Aa
+fit
+hardcopy_append on
+hardcopydir ~/.screen
+hardstatus alwayslastline "%{=b}%{bw} %{.w}%D%{.c}%Y-%m-%d %{.y}%0c %{-b}%{ck} %-Lw%{+b}%{gw} %n%f* %t%? (%u)%? %{-}%{-b}%+Lw %{=b}%{bw} %= %{.w}%H %{.c}[%l] "
+msgminwait 1
+msgwait 2
+pow_detach_msg "ALL YOUR SCREEN ARE BELONG TO US"
+# setenv PROMPT_COMMAND 'echo -n -e "\033k\033\134"'
+# shell -${SHELL}
+shell ${SHELL}
+#shelltitle '$ |bash:'
+silencewait 5
+sorendition =b ry
+startup_message off
+#termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
+vbell on
+vbell_msg " WHAT YOU SAY!! "
+vbellwait 1
+verbose off
+zombie ^D^C
+
+## internal functions
+bind \# source "${HOME}/.screenrc"
+bind O copy
+bind P paste .
+bind X lockscreen
+bind . number
+bind l lastmsg
+bind w windowlist -b
+bind s select
+bind r resize
+bind = resize =
+bind + resize +5
+bind - resize -5
+bind _ resize max
+
+## external programs
+#bind A screen -t "abook" abook
+bind C screen -t "cicq" 2 centericq
+bind I screen -t "irssi" 3 irssi
+bind L screen -t "links" links
+bind M screen -t "mutt" 1 mutt
+#bind N screen -t "ncftp" 6 ncftp
+bind S screen -t "syslog" 30 env SHELL=/bin/false sudo less +F /var/log/allmessages
+bind T screen -t "top" 31 sudo top -s
+bind V screen -t "vim" 4 vim
+bind G screen -t "guckst" 2 ssh -C guckst
+# bind C screen -t "chrono" 3 ssh -C -t sshproxy ssh chrono@139.20.167.96
+bind U screen -t "merkur" 6 ssh -C -t sshproxy ssh merkur
+#bind Y screen -t "yafc" 5 yafc
+#term xterm-color
+## show version on startup
+version
+#termcapinfo xterm* 'bc@:bs@'
+#termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007

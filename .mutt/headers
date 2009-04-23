@@ -1,0 +1,10 @@
+# $Id: headers,v 1.10 2000/12/31 17:10:08 seymour Exp $
+#
+# Personal headers
+my_hdr From: Chris Gushue <chris@blackplasma.net>
+
+my_hdr X-Operating-System: Linux/`uname -r` (`uname -m`)
+
+#my_hdr X-Crypto: GnuPG/1.0.4 http://www.gnupg.org
+#my_hdr X-GPG-Key: http://www.blackplasma.net/gpg-public-key.txt
+#my_hdr X-GPG-Fingerprint: EDB8 240A 2355 FD97 BA1C  4442 3192 E12C 1048 A2E9

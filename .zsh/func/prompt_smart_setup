@@ -1,0 +1,151 @@
+# Filename: $HOME/.zsh/func/prompt_smart_setup
+# Purpose:  smart prompt theme for zsh
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Mon Jul 12 01:37:06 CEST 2004
+################################################################################
+# How to use this file:
+# - put this file in your $fpath (e.g. $ZSHDIR/func/ in my setup)
+# - run "autoload promptinit && promptinit" to initialise the prompt-feature
+# - see "prompt -h" for more information
+# 
+# Some notes:
+# I noticed a quite interesting behaviour of some prompt-themes.
+# Check it out on your own:
+# 
+# $ zsh -f                             # start up zsh without config-files
+# $ echo $PROMPT                       # print out value of $PROMPT
+# $ vared fpath                        # edit $fpath if necessary
+# $ autoload promptinit && promptinit  # now initialise the prompt-feature
+# $ prompt -p                          # print out preview of available prompts
+# $ echo $PROMPT                       # print out value of $PROMPT
+#
+# See what I mean?
+#
+# History:
+# 040712 changed bold user/host color to fg_no_bold
+# 040627 improved preexec()
+# 040624 changed color for host; change 'ssh host' to 'host' in screen
+# 040620 initial version
+################################################################################
+
+setpromptsmart () {
+  unset PS1 PS2 PS3 PS4 PROMPT RPROMPT # try to fix strange behaviour
+                                       # (see header of this file)
+# define colors if not set by user
+  local brackets=${1:-'red'}
+  local background=${2:-'black'}
+  local at=${3:-'red'}
+  local user=${4:-'yellow'}
+  local host=${5:-'yellow'}
+  local history=${6:-'blue'}
+  local cwd=${7:-'yellow'}
+  local exit=${8:-'red'}
+
+# define colors
+  local C_AT="%{$reset_color$fg[$at]$bg[$background]%}"
+  local C_BRACKETS="%{$bold_color$fg[$brackets]$bg[$background]%}"
+  local C_CWD="%{$bold_color$fg[$cwd]$bg[$background]%}"
+  local C_EXIT="%{$bold_color$fg[$exit]$bg[$background]%}"
+  local C_EXIT="%{$bold_color$fg[$exit]$bg[$background]%}"
+  local C_HISTORY="%{$bold_color$fg[$history]$bg[$background]%}"
+  local C_HOST="%{$bold_color$fg[$host]$bg[$background]%}"
+#  local C_HOST="%{$fg_no_bold[$host]$bg[$background]%}"
+  local C_RESET="%{$reset_color%}"
+  local C_USER="%{$bold_color$fg[$user]$bg[$background]%}"
+  local BRACKET_L='['
+  local BRACKET_R=']'
+  local EXITCODE="%(?..%?%1v )"
+
+  case $TERM in
+    xterm*)
+        local TITLEBAR='%{]0;%n@%m:%~%}'
+        ;;
+    *)
+        local TITLEBAR=""
+        ;;
+  esac
+
+  # define prompt
+  if [[ "$TERM" != "dumb" ]]; then
+    PROMPT="$SCREENTITLE$TITLEBAR$C_EXIT$EXITCODE$C_BRACKETS$BRACKET_L$C_USER%n$C_AT@$C_HOST%m$C_HISTORY(%!): $C_CWD%~$C_BRACKETS$BRACKET_R$C_RESET$ "
+    # right side of prompt - shows :( if echo $? is not 0:
+    RPROMPT="%(?..:()%"
+  else
+    PROMPT="%(?..[%?] )%n@%m:%~> "
+  fi
+}
+
+# preexec() is run after you press enter on your command but before the command is run.
+# use preexec to define title of screen
+preexec () {
+#    if [[ "$STY" != "" ]]; then
+#        # replace 'ssh host' with 'host'
+#        local CMD=`echo $1 | sed 's/^ssh //; s/ .*//'`
+#        echo -n "k$CMD\\"
+#    fi
+
+# set screen window title if running in a screen
+# get the name of the program currently running
+
+# "Subscripts for arrays can have flags that affect their behavior,
+# just like variables can. The '(w)' flag causes a regular variable to
+# be treated as an array, with each element of the array being a
+# whitespace-separated word of the variable's value. The '(r)' flag
+# changes the way the index works. It returns the first element of the
+# array that matches the pattern supplied as the index. In the pattern
+# (which uses extended globbing), '^' negates it, so I get the first
+# element that doesn't match. It skips variable assignment, 'sudo',
+# and program options."
+#   -- http://aperiodic.net/phil/prompt/
+
+    if [[ "$TERM" == "screen" ]]; then
+        local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
+        echo -ne "\ek$CMD\e\\"
+    fi
+
+# set the screen title to "zsh" when sitting at a command prompt:
+    if [[ "$TERM" == "screen" ]]; then
+         SCREENTITLE=$'%{\ekzsh\e\\%}'
+    else
+         SCREENTITLE=''
+    fi
+}
+
+# print information when user runs 'prompt -h smart'
+prompt_smart_help () {
+  cat <<EOH
+This prompt is color-scheme-able.  You can invoke it thus:
+
+  prompt smart [<brackets> [<background> [<at> [<user> [<history> [<cwd>]]]]]]
+
+  defaults are \`red black red yellow yellow blue yellow red'
+EOH
+}
+
+prompt_smart_setup () {
+  precmd () { setopt promptsubst; prompt_smart_precmd; setpromptsmart }
+# preexec () { }
+}
+
+prompt_smart_preview () {
+  if (( ! $#* )); then
+    prompt_preview_theme smart
+    print
+    prompt_preview_theme smart red blue red yellow yellow blue yellow red
+  else
+    prompt_preview_theme smart "$@"
+  fi
+}
+
+prompt_smart_precmd () {
+  setopt noxtrace localoptions
+  local exitstatus=$?
+
+  [[ $exitstatus -ge 128 ]] && psvar[1]=" $signals[$exitstatus-127]" ||
+       psvar[1]=""
+
+  [[ -o interactive ]] && jobs -l
+}
+
+prompt_smart_setup "$@"
+######## END OF FILE ###########################################################

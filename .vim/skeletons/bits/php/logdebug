@@ -1,0 +1,1 @@
+sfContext::getInstance()->getLogger()->debug('<+CURSOR+>');

@@ -1,0 +1,42 @@
+eca_mp3cut() {
+        if [[ $ARGC < 3 ]] ; then
+         echo "Usage: $0 inputfile outputfile skip length"
+         return
+        fi
+        file=${(q)1}
+        outfile=${(q)2}
+        skip=$3
+        skip=(  ${(s,:,)skip}  )
+        skip=$[ $skip[1]*60*60 + $skip[2]*60 + $skip[3] ]
+        echo $skip
+
+        length=$4
+        length=( ${(s,:,)length}  )
+        length=$[ $length[1]*60*60 + $length[2]*60 + $length[3] ]
+        echo $length
+
+        ecasound -i:$file -o:$outfile  -y:$skip -t:$length
+} 
+
+mp3cut () {
+        if [[ $ARGC < 4 ]] ; then
+         echo "Usage: $0 inputfile outputfile skip length [kb/s]"
+         return
+        fi
+        file=${(q)1}
+        outfile=${(q)2}
+        samplerate=${5:=128}
+        bs=$(( ($samplerate*1000)/8 ))
+
+        skip=$3
+        skip=(  ${(s,:,)skip}  )
+        skip=$[ $skip[1]*60*60 + $skip[2]*60 + $skip[3] ]
+        echo $skip
+
+        length=$4
+        length=( ${(s,:,)length}  )
+        length=$[ $length[1]*60*60 + $length[2]*60 + $length[3] ]
+        echo $length
+
+        dd if=$file of=$outfile bs=$bs skip=$skip count=$length
+}

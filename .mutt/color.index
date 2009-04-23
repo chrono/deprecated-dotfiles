@@ -1,0 +1,148 @@
+## ========================================================================
+## File:          $HOME/.mutt.color.index
+## Purpose:       Setup file for the Mail program "Mutt"
+## Latest change: Tue Dec 17 19:00:00 MET 2002
+## ========================================================================
+## Author:        Sven Guckes guckes-mutt@math.fu-berlin.de
+## Availability:  This file is available as
+##       <URL:http://www.math.fu-berlin.de/~guckes/mutt/mutt.color.index>
+##              Comments are very very welcome - please send an email!
+## Size:        ca 15K
+## ========================================================================
+
+## ========================================================================
+## Remember:    Order counts!  The last matching rule "wins".
+## ========================================================================
+
+## ==================================================
+## COLOR for both the Folder INDEX *and* the PAGER
+## ==================================================
+
+#        error messages
+   color error        red    black
+
+#  "message" - informational messages
+#  such as the incremental count at startup.
+#  It is nice to see on startup that
+#  color actually works.  :-)
+   color message      white  blue
+
+## ==================================================
+## Special COLORs for the Folder INDEX
+## ==================================================
+
+#  The  "indicator" for the "current message" -
+#  whether it is an arrow or an "inverse line":
+   color indicator    white  red
+
+#        "status" lines in the folder index.
+#        used for the mini-help line.
+   color status       white  blue
+
+#  The  "tree" display of threads within the folder index.
+   color tree         red    black
+
+#  000828
+#  Deleted Mails - use dark color
+#  as these are already "dealt with".
+   color index blue black "~D"
+
+#  Flagged Messages are important!
+   color index brightred   black "~F"
+#  I use the flag to indicate that
+#  I should reply to these soon.
+
+#  mail from myself *and* to myself (TODO items):
+   color index black  brightyellow       '~f ringehahn ~p'
+#  the pattern "~p" means "from myself" - but alas
+#  there is no pattern for "*from* myself"  :-(
+
+#  mail to myself (personal mail):
+#  color index brightgreen        black  '~p'
+#  Commented out as most mail is for me - except SPAM.
+
+#  mail NOT to myself (unpersonal mail):
+#  color index green        black  '! ~p'
+
+#  "DONE mails" ie those I have already replied to.
+   color index blue         black  '~Q'
+## ==================================================
+## Mails FROM special addresses
+## ==================================================
+#  mail from important people (like myself ;-):
+   color index cyan         black  '~f ringehahn'
+#
+#  The author of Vim - Bram Moolenaar:
+   color index brightred    black   "~f eisenreich"
+
+# !!!!!!!!!!11 ~h holt messages
+
+#  SPAM indicators within the Subject: line ("~s"):
+#
+#  Empty Subject line - "not a single character"!
+   color index white magenta "! ~s ."
+#
+#  Subject line contains figures in dollar:
+# "Subject: Make $50,000 in 90 Days"
+   color index white magenta "~s '\\$[0-9]+[0-9]+'"
+#
+# 020303
+   color index blue  magenta '~s \\(none\\)'
+   color index blue  magenta '~s "ad(v)?:"'
+   color index blue  magenta '~s "adv\.[ ]"'
+   color index blue  magenta '~s "To help your business succeed"'
+   color index blue  magenta '~s "Have You Heard of Age Reversal"'
+   color index blue  magenta '~s "Analyst.s Pick"'
+   color index blue  magenta '~s "LOW risk, HIGH yield"'
+   color index blue  magenta '~s "123 Inkjets"'
+   color index blue  magenta '~s "150 FREE Business Cards"'
+   color index blue  magenta '~s "Register to win your Dream Vacation"'
+   color index blue  magenta '~s "Free Pics"'
+   color index blue  magenta '~s "Mortgage For 30 Yr. Fixed Term"'
+   color index blue  magenta '~s "TARGETED EMAIL ADDRESSES"'
+   color index blue  magenta '~s "INCREASE PORTFOLIO VALUE"'
+   color index blue  magenta '~s "Congratulations, You Won"'
+   color index blue  magenta '~s "RAPID EXPANSION"'
+   color index blue  magenta '~s "Take Control of Your Financial Security"'
+   color index blue  magenta '~s "Work at Home . Make Great Money"'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+#  color index blue  magenta '~s ""'
+
+#  "Get ...!"
+#   Subject: Get $100 FREE NOW from Golden Comps Casino
+#   Subject: Get 250 full-color business cards F R E E !
+#   Subject: Get 3 free CDs with free shipping (details inside)
+#   Subject: Get A Dozen Sweetheart Roses & A FREE Vase--LIMITED TIME!
+#   Subject: Get Cash Fast!
+#   Subject: Get FREE DVD movies, Download software!
+#   Subject: Get Instant Term Life Quotes for FREE
+#   Subject: Get Paid $10 to Play Games and Win Much More!!
+#   Subject: Get Paid to Shop! Get Paid to Eat Out!
+#   Subject: Get a Collateralized Investment Opportunity!
+#   Subject: Get a U.n.i.v.e.r.s.i.t.y D.i.p.l.o.m.a - Easily.
+#   Subject: Get a new mortgage loan on your terms!
+#   Subject: Get into that summer look
+#   Subject: Get paid cash every time you receive email!
+#   Subject: Get your site listed!
+   color index blue  magenta '~s "Get.*!"'
+
+# URGENT
+#   Subject: URGENT
+#   Subject: URGENT AND CONFIDENTIAL
+#   Subject: URGENT AND CONFIDENTIAL.
+#   Subject: URGENT BUSINESS
+#   Subject: URGENT BUSINESS PROPOSAL
+#   Subject: URGENT NOTICE:  Feds Cut Interest Rates Again ...
+#   Subject: URGENT REPLY
+   color index blue  magenta '~s "URGENT"'
+
+# I cannot read/view Japanese (ISO-2022)
+# or Russian (koi8-r).  Sorry!
+   color index blue  magenta '~s "=\\?(big5|iso-2022|koi8-r|ks_c_5601)"'
+
+# Windows?  eek!
+   color index blue  magenta '~s "windows-125[1234]"'
+
+#EOF  vim: tw=999 ft=muttrc

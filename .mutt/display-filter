@@ -1,0 +1,238 @@
+#!/usr/bin/perl -w
+#
+# Generic display filter for use in Mutt.
+# (c) Hugo Haas 2002
+# with help of Eric Prud'hommeaux, chocolate martini and margharita
+# Hmmm... actually martinis and margharitas didn't help that much
+#
+# License: GPL v2
+#
+# $Id: display-filter,v 1.27 2002/04/18 11:42:24 hugo Exp $
+#
+# A few (very few things are left, I think) came from t-prot
+# by Jochen Striepe <t-prot@tolot.escape.de>
+# Copyright (c) 2001, 2002 Jochen Striepe.
+
+use strict;
+use Mail::Internet;
+use vars qw($FILTERS $HIDE_TOFU $HIDE_FOOTERS);
+
+sub configure(@) {
+    my @conffiles = @_;
+    my @read = ();
+    foreach (@conffiles) { 
+	-r or next; 
+	do $_ or die("$@\n");
+	push @read, $_;
+    }
+    @read or die("No configuration files\n");
+}
+
+# Generic filters
+
+sub snipped {
+    my ($message, $type, $chars) = @_;
+
+    push (@$message, "[---=| $type snipped ($chars chars) |=---]");
+}
+
+# Remove TOFU:
+# remove quoted lines and verbatim original messages
+sub hideTofu {
+    my ($body) = @_;
+    local $/;
+    undef $/;
+    my $found = 0;
+
+    $_ = join("\n", @$body)."\n";
+
+    my (@keep, @nokeep);
+    my $signature;
+
+    # Sort filters
+    foreach my $entry (@$HIDE_TOFU) {
+	if ($entry->{-keepSignature}) {
+	    push (@keep, $entry->{-filter});
+	} else {
+	    push (@nokeep, $entry->{-filter});
+	}
+    }
+
+    # Do filters that don't keep the signature first
+    if ($#nokeep >=0) {
+	my $expr = join('|', @nokeep);
+	if (s/$expr//s) {
+	    $found = length($&);
+	}
+    }
+    if (!$found) {
+	# None worked; try the ones that preserve the signature
+	if ($#keep >=0) {
+	    # Detach signature
+	    if (s/\n-- \n.*//s) {
+		@$signature = split("\n", $&);
+	    }
+	    my $expr = join('|', @keep);
+	    if (s/$expr//s) {
+		$found = length($&);
+	    }
+	}
+    }
+
+    if ($found) {
+	@$body = split("\n");
+	&snipped($body, 'TOFU', $found);
+	if ($signature) {
+	    push (@$body, @$signature);
+	}
+    }
+
+    return($found);
+}
+
+# Hide footers
+sub hideFooters {
+    my ($body) = @_;
+    local $/;
+    undef $/;
+
+    my $text = join("\n", @$body)."\n";
+    my $expr = join('|', @$HIDE_FOOTERS);
+
+    if ($text =~ s/$expr//s) {
+	@$body = split("\n", $text);
+	return(length($&));
+    }
+
+    return(0);
+}
+
+# Processing code
+
+sub push_code {
+    my ($array, $code) = @_;
+
+    return if (!defined($code));
+    push(@$array, $code);
+}
+
+sub getFilters {
+    my ($hs, $fs, $lfs, $pbfs, $Pbfs) = @_;
+    
+    foreach my $filter (@$fs) {
+	my $apply = 1;
+        foreach my $filterKey (keys %{$filter->{-grep}}) {
+	    my $matched = 0;
+            my $lookFor = $filter->{-grep}{$filterKey};
+            if ($hs->{$filterKey}) {
+		foreach my $headerEntry (@{$hs->{$filterKey}}) {
+		    if ($headerEntry =~ m/$lookFor/) {
+			$matched = 1;
+			last;
+		    }
+		}
+	    }
+	    if (!$matched) {
+		$apply = 0;
+		last;
+	    }
+        }
+	next if (!$apply);
+        &push_code($lfs, $filter->{-lineFilter});
+        &push_code($pbfs, $filter->{-preBodyFilter});
+        &push_code($Pbfs, $filter->{-postBodyFilter});
+    }
+}
+
+sub applyFilters {
+    my $filters = shift;
+
+    foreach my $filter (@$filters) {
+	&$filter(@_);
+    }
+}
+
+sub processMsg {
+    my ($mail, $filters) = @_;
+
+    # Check that there is a body
+    if ($#{$mail->body()} < 0) {
+	return;
+    }
+
+    # For now, we only handle text/plain emails
+    # Will work on MIME stuff
+    my $headers = $mail->head()->header_hashref();
+
+    # This is the general code which would be used if we were given the
+    # real message...
+#    if ($headers->{'Content-Type'} &&
+#	(join(' ', @{$headers->{'Content-Type'}}) !~ m|text/plain|i)) {
+#	# Here, should check if MIME and work on text/plain part
+#	return;
+#    }
+
+    # ... however, Mutt's display_filter has a modified input
+    # so we will stop after the first attachment
+
+    # Remove line feeds from body array
+    $mail->body(split("\n", join('', @{$mail->body()})));
+    my $message = $mail->body();
+    my @att;
+    my $x = 0;
+    # Regexp from t-prot
+    my $attach = '^[^>[]*\[-- Attachment #\d+(: .*)? --\]\s*$';
+    if (@$message[0] =~ m/$attach/) {
+	while(++$x < $#$message) {
+	    last if (@$message[$x] =~ m/$attach/);
+	}
+    }
+    # Found other attachments? Don't process them
+    if ($x > 0 && $x < $#$message) {
+	@att = @$message[$x..$#$message];
+	splice(@$message, $x);
+    }
+
+    # Do the filtering
+
+    # Get rid of footers
+    my $footers = 0;
+    if (defined($HIDE_FOOTERS)) {
+	$footers = &hideFooters($message);
+    }
+
+    my ($lineFilters, $preBodyFilters, $postBodyFilters) =
+	([ ], [ ], [ ]);
+    &getFilters($headers, $filters,
+		$lineFilters, $preBodyFilters, $postBodyFilters);
+    &applyFilters($preBodyFilters, $message);
+    my $context = {};
+    for (@{$message}) {
+	&applyFilters($lineFilters, $context);
+    }
+    &applyFilters($postBodyFilters, $message);
+
+    # TOFU processing
+    if ($HIDE_TOFU) {
+	&hideTofu($message);
+    }
+
+    # Did we have footers?
+    if ($footers) {
+	&snipped($message, 'Footers', $footers);
+    }
+    # Put the attachments back
+    push(@$message, @att);
+    
+    # Put line feeds back in body
+    for(@$message) {
+	s/$/\n/;
+    }
+}
+
+&configure("$ENV{HOME}/.mutt/filters.dl");
+my $mail = Mail::Internet->new(\*STDIN, Modify => 0);
+
+# Do our processing
+&processMsg($mail, $FILTERS);
+print($mail->as_string());

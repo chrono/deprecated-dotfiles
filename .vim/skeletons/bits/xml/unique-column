@@ -1,0 +1,9 @@
+<tskel:before>
+let b:tskelidxcol = input("name of unique column: ")
+</tskel:before>
+<tskel:after>
+unlet b:tskelidxcol
+</tskel:after>
+<unique name="unique_<+b:tskelidxcol+>">
+    <unique-column name="<+b:tskelidxcol+>"/>
+</unique>

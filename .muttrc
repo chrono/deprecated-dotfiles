@@ -1,0 +1,112 @@
+set nobeep
+
+source ~/.mutt/accounts
+
+set locale="de_DE.ISO8859-15"
+set sort=threads
+subscribe flux@stunet.tu-freiberg.de
+subscribe lug-dd@schlittermann.de
+subscribe typo3-english@lists.netfielders.de
+subscribe machackers@lists.ccc.de
+subscribe kismac@freelists.org
+mailboxes !
+mailboxes =.`date "+%Y.%m"`.ringehahn
+mailboxes =.`date "+%Y.%m"`.flux
+mailboxes =.`date "+%Y.%m"`.otrs-de
+mailboxes =.`date "+%Y.%m"`.full-disclosure
+mailboxes =.`date "+%Y.%m"`.axolant
+mailboxes =.`date "+%Y.%m"`.dashboard
+mailboxes =.`date "+%Y.%m"`.lugdd
+mailboxes =.`date "+%Y.%m"`.typo3
+mailboxes =.`date "+%Y.%m"`.typo3-de
+mailboxes =.`date "+%Y.%m"`.gmxde
+mailboxes =.`date "+%Y.%m"`.gmxde.jobs
+mailboxes =.`date "+%Y.%m"`.teamsynergy
+mailboxes =.`date "+%Y.%m"`.cronmessages
+mailboxes =.`date "+%Y.%m"`.gmxnet
+mailboxes =.`date "+%Y.%m"`.kismac
+mailboxes =.`date "+%Y.%m"`.machackers
+mailboxes =.`date "+%Y.%m"`.freebsd
+mailboxes =.`date "+%Y.%m"`.Inbox
+#mailboxes =.spam
+#mailboxes =.spam-learn
+set copy # saves outgoing msg to $record
+set fcc_clear
+#set record="~/Maildir/Gesendete Objekte/"
+set mask=^.[^.]
+set editor="vim -c 'set tw=72'"
+set edit_headers
+
+set alias_file=~/.mutt/aliases		# add the Aliases here
+source ~/.mutt/aliases			# and include all existing aliases
+
+set include                             # Include the message in replies.
+
+
+ignore X-Flags
+ignore Delivered-To
+ignore X-Priority
+ignore Importance
+ignore X-GMX
+ignore X-MimeOLE X-MS X-Loop Precedence
+ignore *
+unignore Subject From To Date
+
+source ~/.mutt/color.body
+source ~/.mutt/color.index
+
+set certificate_file = ~/.mutt/certs
+
+#mark all as read
+macro index .c "T.\n;WN^T.\n" "Mark all messages as read"
+
+bind index <tab> next-unread
+
+unhdr_order *                   # reset header order
+hdr_order From: Subject: To: Cc: Bcc:
+
+set pager_index_lines=5
+unset autoedit
+
+set from=""             # From: address (see send-hook my_hdr From)
+set default_hook="~C %s"
+
+folder-hook gmxde	'my_hdr From: Martin Ringehahn <chrono@gmx.de>'
+folder-hook gmxnet	'my_hdr From: Martin Ringehahn <chrono@gmx.net>'
+folder-hook ringehahn	'my_hdr From: Martin Ringehahn <martin@ringehahn.de>'
+folder-hook ringehahn   'my_hdr Bcc: Martin Ringehahn <martin@ringehahn.de>'
+folder-hook flux	'my_hdr From: Martin Ringehahn <martin@ringehahn.de>'
+folder-hook typo3	'my_hdr From: Martin Ringehahn <martin@ringehahn.de>'
+auto_view application/wordperfect5.1
+auto_view application/msword
+source ~/.mutt/mutt-gpg
+source ~/.mutt/formats
+
+#display-filter for tofu 
+#quelle: http://larve.net/people/hugo/2002/04/mutt-display-filter
+set display_filter = '$HOME/.mutt/display-filter'
+macro generic \e0 ":unset display_filter\n" "Display filter off"
+macro generic \e1 `printf "\":set display_filter='%s'\\\n\"" '$HOME/.mutt/display-filter'` "Display filter on"
+macro pager \e0 ":unset display_filter; exec exit\n:exec display-message\n" "Display filter off"
+macro pager \e1 `printf "\":set display_filter='%s'; exec exit\\\n:exec display-message\\\n\"" '$HOME/.mutt/display-filter'` "Display filter on"
+color body      brightmagenta   default "^\\[---\=[|].*"
+
+## addressdatenbank
+set query_command = "lbdbq '%s'"
+
+## pgp
+#set pgp_autosign
+
+## shortcut ^T ersatz
+bind editor \e1 complete-query
+
+set beep_new = yes
+set ispell = aspell
+set mark_old = no
+set pager_context = 3
+# set charset=utf-8
+macro	index	\eH		"|sa-learn --ham --no-rebuild"
+macro	index	S		";s=.spam-learn/\n\n"
+folder-hook spam-learn "push '!sa-learn --spam ~/Maildir/.spam-learn/*/*\nT.\n;s=.spam.old\n\n'"
+
+set header_cache = ~/.mutt/headercache/

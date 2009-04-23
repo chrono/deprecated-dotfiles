@@ -1,0 +1,93 @@
+# Filename: $HOME/.zsh/zsh_bsd
+# Purpose:  QNX-specific stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Son Apr 18 16:56:40 CEST 2004
+################################################################################
+# History:
+# 040418 initial version
+################################################################################
+
+# 040319 vim has problems with $TERM set to "screen"
+  export TERM=xterm
+
+# 040319 whoami does not exist ;)
+  alias whoami="id | sed -e 's/uid=.*(//' -e 's/)$//'"
+
+# 040320 ls-stuff
+  alias la="ls  -alsF"
+  alias dir="ls -lSrah"
+
+  export PATH=$HOME/bin:/bin/:/sbin/:/usr/local/bin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/lib/mutt/:/usr/games:$HOME/kde3.1.4/bin:$HOME/garnome/bin:$HOME/crossover/bin:/usr/lib/j2se/1.4/bin:/usr/lib/jdk/1.1/bin
+
+  export CVIMSYN=/home/mika/.vim/   # for ~/.vim/dictionary/gerspchk.vim
+
+  export KDEDIR=/usr
+# export QTDIR=/usr/include/kde/:/usr/share/qt3
+  export QTDIR=/usr/share/qt3
+  export QMAKESPEC=linux-g++
+
+# export=QMAKESPEC=/usr/share/qt/mkspecs/linux-g++
+  export MAILDIR=~/mail
+  export UT_DATA_PATH=/usr/local/games/ut/System
+
+# -> /usr/lib/locale/ !
+# LANG=de
+# LANG=en_US
+# LANG=en_US.iso88591
+# LC_CTYPE=en_US
+# LC_CTYPE=iso_8859_1
+#
+# Information:
+# 
+#  LC_CTYPE=Character classification and case conversion.
+#  LC_COLLATE=Collation order.
+#  LC_TIME=Date and time formats.
+#  LC_NUMERIC=Non-monetary numeric formats.
+#  LC_MONETARY=Monetary formats.
+#  LC_MESSAGES=Formats of informative and diagnostic messages and interactive responses.
+
+# LANG=iso_8859_1
+
+#  LANG=de_AT@euro
+# LANG=de_DE
+# LC_CTYPE=""
+#  LC_CTYPE=iso_8859_15
+#  LC_NUMERIC=""
+#  LC_TIME=""
+#  LC_COLLATE=""
+#  LC_MONETARY=""
+#  LC_MESSAGES="en_US"
+# LC_ALL=de.iso885915
+#
+#  LANG=de_DE
+#  LC_CTYPE=ISO-8859-15
+#  LC_NUMERIC=""
+#  LC_TIME=""
+#  LC_COLLATE=""
+#  LC_MONETARY=""
+#  LC_MESSAGES="en_US"
+#  LC_MESSAGES="de_DE"
+
+# LANGUAGES=de_AT@euro
+#  export LC_MESSAGES=en_US
+# export TZ="Europe/Vienna"
+# LC_CTYPE=iso_8859_15
+#  export LC_CTYPE=de_AT
+#  export LC_NUMERIC=
+#  export LC_TIME=
+#  export LC_COLLATE=
+#  export LC_MONETARY=
+#  export LC_ALL=de_DE@euro
+# export LANG=de_AT@euro
+  export LANG=POSIX
+
+  alias _locale='echo LOCALE settings:;\
+  echo        LANG=$LANG; \
+  echo    LC_CTYPE=$LC_CTYPE; \
+  echo  LC_NUMERIC=$LC_NUMERIC; \
+  echo     LC_TIME=$LC_TIME; \
+  echo  LC_COLLATE=$LC_COLLATE; \
+  echo LC_MONETARY=$LC_MONETARY; \
+  echo LC_MESSAGES=$LC_MESSAGES; \
+  echo      LC_ALL=$LC_ALL'
+################ END OF FILE ###################################################

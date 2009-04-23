@@ -1,0 +1,20 @@
+# Filename: $HOME/.zsh/zsh_foo
+# Purpose:  some misc stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Son Apr 18 16:42:31 CEST 2004
+################################################################################
+# History:
+# 040418 initial version
+################################################################################
+
+# 'ls ~doc' -> 'ls /usr/share/doc'
+  hash -d doc=/usr/share/doc
+  hash -d functions=/usr/local/share/zsh/$ZSH_VERSION/functions
+  hash -d linux=/lib/modules/$(uname -r)/build/
+  hash -d log=/var/log
+# hash -d rfc=/usr/share/doc/RFC
+# hash -d functions=/usr/share/zsh/$ZSH_VERSION/functions
+# hash -d mirror=/var/local/debarchive
+
+# source file:
+  . ~/.zsh/dpkg-info

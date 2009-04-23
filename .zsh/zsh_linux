@@ -1,0 +1,916 @@
+# Filename: $HOME/.zsh/zsh_linux
+# Purpose:  linux-specific stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Die Aug 03 17:37:53 CEST 2004
+################################################################################
+# History:
+# 040803 modified DATADIR, added datereplacement + DATE, changed PAGER
+# 040725 modified slrn-configure (s/autoheader2.50/autoheader/)
+# 040715 added gcc-configure
+# 040615 added xterm-utf
+# 040604 use DATADIR for source directory; added getzsh and zsh-configure
+# 040604 updated 'myrename'
+# 040514 added vim-configure-x and ssed
+# 040425 changed 'TODO'-section
+# 040418 initial version
+################################################################################
+
+# set variables
+  #export DATADIR=${DATADIR:/data/Source}
+  if [ -d /data/Source ] ; then
+    export DATADIR='/data/Source'
+  elif [ -d /home/mika/Source ] ; then
+    export DATADIR='/home/mika/Source'
+  fi
+
+# 040803 in chroot-environment we don't have:
+# gnu date:
+# so use 'zmodload zsh/datetime' (see ~/.zshrc):
+  if [[ $ZSH_VERSION > '4.1' ]]; then
+  zmodload -i zsh/datetime && \
+  alias datereplacement='strftime "%Y-%m-%d" $EPOCHSECONDS' && \
+  alias logdate='strftime "%Y-%m-%V" $EPOCHSECONDS' && \
+  export DATE=`datereplacement` && \
+  export LOGDATE=`logdate`
+  fi
+
+# uname:
+# simple, stupid and non-perfect workaround:
+  if ! [ -x `which uname` ] ; then
+    alias uname='echo $HOST $DATE $OS $CPUTYPE'
+  fi
+
+# my* - stuff
+
+# 040319 portscan via netcat
+  alias mync="nc -vz $1 1-1024"
+
+# 040118 rss­reader for console
+  alias myrss="snownews"
+# alias myrss="raggle"
+
+  function mytorrent {
+    btdownloadcurses --url $1
+    --max_upload_rate 64
+  }
+
+  alias mysalearn="sa-learn --spam --mbox mail/sa-learn"
+
+# 031211 load prompt-themes (call "$ prompt -h" for help)
+  alias myprompt="autoload promptinit && promptinit"
+
+# euro-shell :-)
+  alias myshell='xterm -bg black -fg yellow -geometry 103x44+75+8 -fn \
+                 -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15 -ah -T mika'
+  alias myxterm='xterm -bg black -fg yellow -fn \
+                 -misc-fixed-medium-r-normal--14-140-75-75-c-90-iso8859-15 -ah'
+
+# nice font for programming
+  alias myfont='xterm -fn terminus-koi8-r-14'
+
+# 030817 shfs - mount (<URL:http://shfs.sourceforge.net/>)
+  alias mymount="shfsmount prokop@pluto.tugraz.at ~/mnt/pluto"
+
+# 030216 imagemagick - change pictures to a reasonable format such as PNG and 
+# scale them down to a viewable size.
+  alias myconvert='for i in `ls`; do convert -scale 580x394 $i `basename $i .tif`.png; done'
+
+# 030216 get [some] jpeg-headers (when was the picture taken?) and rename files:
+#  alias myrename="jhead -n%Y-%m-%d_%Hh%M_%f *.JPG"
+# 040604 update of above alias - check for version newer than 1.9 because old
+#        versions don't support option '%f' for filename.
+  function myrename() {
+    echo -n 'checking for jhead with version newer than 1.9: ';
+    jhead_version=`jhead -h | grep 'used by most Digital Cameras.  v.*' | awk '{print $6}' | tr -d v`
+    if [[ $jhead_version > '1.9' ]] ; then
+      echo 'success - running jhead'
+      jhead -n%Y-%m-%d_%Hh%M_%f *.JPG
+    else
+      echo 'failed - exiting';
+    fi
+  }
+
+# 030115 make :-)
+# for bash,...
+  alias mymake='make $* 2>&1 | less;'
+# for tcsh,...
+# alias mymake='make |& more'
+
+# 030518 stuff for Qt programming
+  alias myqt="qmake *.pro && make clean && (make || mymake)"
+
+# 030911 hping[2] (run as root!)
+  alias myping="hping2 -c 100 -2 -p 7 $1"
+  alias myping2="hping2 -d 500 -c 100 -2 -p 7 $1"
+
+# 030925 compare /proc with ps (against rootkits)
+  alias myps="su -c 'ls -d /proc/* |grep [0-9]|wc -l; ps ax |wc -l'"
+
+# 030913 echo "You are welcome" =>
+  alias mywelcome='vim -c ":%s/^/LbhTnerRjrypbzr/|:%s/[R-T]/ /Ig|:normal g?Gg?"'
+
+# start lynx with bookmark-collection
+  alias mylinks='$BROWSER bk.michael-prokop.at'
+
+# personal-stuff
+# 020816 Aliases for current projects
+  export TODO_LIST=~/.pal/todo-liste
+  alias  TODO1='echo -e "\e[31mtodo - priority: \e[32mhigh \e[0m" && cat $TODO_LIST'
+  alias  TODO2='echo -e "\e[31mtodo - priority: \e[32mmedium \e[0m" && cat $TODO_LIST-medium'
+  alias  TODO3='echo -e "\e[31mtodo - priority: \e[32mlow \e[0m" && cat $TODO_LIST-low'
+  #alias  TODO0='agrep -d  "^-- $" "Priority: 1"      $TODO_LIST'
+
+# shortcuts for the directory stack (
+  alias p='popd'
+  alias d='dirs -v'
+  alias 1='cd +1'
+  alias 2='cd +2'
+  alias 3='cd +3'
+  alias 4='cd +4'
+  alias 5='cd +5'
+  alias 6='cd +6'
+  alias 7='cd +7'
+
+# noglob stuff
+# info: Filename generation (globbing) is not performed on any of the words.
+  alias locate='noglob locate'
+  #alias globurl='noglob urlglobber'
+  alias lynx='globurl lynx'
+  alias w3m='noglob w3m'
+
+# global aliases (use aliases even if they are not the first word on the command line)
+  alias -g L="| less"
+  alias -g ED="export DISPLAY=:0.0"
+  alias -g D="DISPLAY=:0.0"
+
+# unclutter - hides the cursor in X after a period of inactivity
+  alias unclutter=" unclutter -idle 1 &"
+
+# get gpg-key from keyserver
+  alias getkey='gpg --keyserver blackhole.pca.dfn.de --recv-keys'
+
+  alias _locale='echo LOCALE settings:;\
+  echo        LANG=$LANG; \
+  echo    LC_CTYPE=$LC_CTYPE; \
+  echo  LC_NUMERIC=$LC_NUMERIC; \
+  echo     LC_TIME=$LC_TIME; \
+  echo  LC_COLLATE=$LC_COLLATE; \
+  echo LC_MONETARY=$LC_MONETARY; \
+  echo LC_MESSAGES=$LC_MESSAGES; \
+  echo      LC_ALL=$LC_ALL'
+
+## mutt-stuff
+  alias muttem='mutt -n -f /dev/null -F /dev/null'
+  alias mkmaildir="umask 0077 && mkdir -p $MAILDIR/$1/{cur,new,tmp}"
+  alias mailstat="procmailcount.pl -tn ~/Logs/procmail/log-$LOGDATE"
+# alias mkmaildir="umask 0077 && mkdir -p $MAILDIR/freunde-`date +%Y-%m`/{cur,new,tmp} && mkdir -p $MAILDIR/saved-messages-`date +%Y-%m`/{cur,new,tmp}"
+  alias mutt-nntp="$HOME/local/bin/mutt -g news.tugraz.at -F ~/.muttrc_nntp"
+  alias mutt-nntp-aco="$HOME/local/bin/mutt -g aconews.univie.ac.at -F ~/.muttrc_nntp"
+# alias m=' mutt -Z'
+
+# 030621 startx with window-manager
+  alias startx-wmaker="startx ~/.xinitrc_wmaker"
+  alias startx-gnome="startx ~/.xinitrc_gnome"
+  alias startx-ratpoison="startx ~/.xinitrc_ratpoison"
+  alias startx-kde="startx ~/.xinitrc_kde"
+  alias startx-fvwm2="startx ~/.xinitrc_fvwm2"
+  alias startx-enl="startx ~/.xinitrc_enlightment"
+  alias startx-pekwm="startx ~/.xinitrc_pekwm"
+  alias startx-ion="startx ~/.xinitrc_ion"
+
+# 030813 update cvs-source
+  alias cvs-update="cvs update -dP ."
+  alias cup='cvs -qz3 up -PAd'
+
+# configure
+  alias CO="./configure"
+  alias CH="./configure --help"
+
+# 030908 updatedb - $HOME
+  alias updb='updatedb --localpaths="$HOME" --output=$HOME/.locatedb'
+  alias lo="locate -d ~/.locatedb"
+
+# 030621 cd-ripping ;-)
+  alias cd-para='cdparanoia -B "1-"'
+  alias cd-lame="for i in *.wav; do lame -b 128 $i `basename $i .wav`.mp3; done"
+
+# xv is not available any more on debian-systems so use xzgv
+  alias xv="xzgv"
+
+# us-keyboard
+  alias us='setxkbmap us'
+
+# watch tv
+  alias tv="xawtv -device /dev/video0"
+
+# 030623 start file with appropriate tool
+  alias show='kfmclient exec'
+
+#       whois:  use "whois.thur.de" as meta query host
+  alias whoist='whois -h whois.thur.de'
+  alias whoisn='whois -h whois.nic.at'
+
+# dot files
+  alias dot="ls -d .*"
+
+# browser-stuff
+# 030331 heise-newsticker
+# alias heise="$BROWSER http://heise.de/newsticker/heise.rdf"
+  alias heise="$BROWSER http://www.heise.de/newsticker/pda/data/paket4.html"
+
+# 030608 orf-overview-webpage
+  alias orf="$BROWSER http://orf.at/uebersicht"
+
+# 030331 kernel-news
+  alias lkernel="$BROWSER http://kt.zork.net/kernel-traffic/latest.html"
+  alias fkernel="dog http://www.kernel.org/kdist/finger_banner"
+
+# 030402 get gnu-screen-mailinglist-archiv
+# alias ml-screen="wget http://wwwcip.informatik.uni-erlangen.de/~sithglan/yahoo/gnu-screen"
+
+# 020827 read kernel-mailing-list traffic by zork - download it but read it online
+#  alias lkernel="lynx --dump http://kt.zork.net/kernel-traffic/latest.html > ~mika/Aktuelles/Read/kernel-traffic_latest_`date +%Y-%V` && lynx http://kt.zork.net/kernel-traffic/latest.html"
+# 020827 read kernel-mailing-list traffic by zork - offline
+#  alias _lkernel="lynx ~mika/Aktuelles/Read/kernel-traffic_latest_`date +%Y-%V`"
+
+
+# 030608 some options for mplayer
+  alias mmplayer="mplayer -idx -vop scale -zoom -xy 640 --nosound"
+
+# 030503 dietlibc
+  alias diet-gcc="diet gcc -s -Os -pipe"
+
+# 030917 mmv -> großbuchstaben in kleinbuchstaben ändern
+  alias mmv-small='mmv "*" "#l1"'
+
+# 030708 use gcc 2.95 instead of 3.3 as standard compiler
+# alias gcc="/usr/bin/gcc"
+# alias g++="/usr/bin/g++"
+
+# 030721 watch dvd [language german]
+  alias dvd-german="mplayer -dvd 2 -zoom -fs -alang de"
+
+# 030817 get mbox-archive via gmane
+  function gmane-get {
+     wget http://download.gmane.org/gmane."$1"/1/100000
+  }
+
+# my servers
+  alias dmika='ssh mika'
+  alias dmika='ssh imika'
+  alias dmari='ssh mari'
+  alias dufo='ssh dufo'
+  alias dpluto='ssh pluto'
+  alias dglt='ssh glt'
+  alias dsf='ssh sf'
+  alias mssh='ssh mssh'
+
+# some xterm-profiles [check out my .Xresources where the
+# profiles [blind, local, remote,...] are defined]
+  alias shblind='xterm -T blind -name blind &'
+  alias shlocal='xterm -T local -name local &'
+  alias shremote='xterm -T remote -name remote &'
+  alias shsmall='xterm -T small -name small &'
+  alias shroot='xterm -T root -name root &'
+# 040615 xterm with unicode/utf-8
+  alias xterm-utf="LANG=de_DE.UTF-8@euro xterm -fn '-*-fixed-medium-r-*-*-13-*-*-*-*-70-iso10646-1'"
+
+# 030515 get latest source of slrn via CVS
+# http://sourceforge.net/cvs/?group_id=7768
+  alias getslrn="cd $DATADIR/slrn/ && (rmdir slrn-cvs-$DATE | mkdir slrn-cvs-$DATE ) && \
+                 cd slrn-cvs-$DATE && \
+                 cvs -d:pserver:anonymous@cvs.slrn.sourceforge.net:/cvsroot/slrn login && \
+                 cvs -z3 -d:pserver:anonymous@cvs.slrn.sourceforge.net:/cvsroot/slrn co manual slrn"
+
+# 030913 fix for compiling cvs-source with appropriate tool-versions
+# alias slrn-configure="autopoint -f && aclocal-1.7 -I autoconf && autoheader2.50 && \
+  alias slrn-configure="autopoint -f && aclocal-1.7 -I autoconf && autoheader && \
+                        automake-1.7 --foreign --add-missing && autoconf && ./configure"
+
+# 030613 get latest source of mutt via CVS
+# notice: CVS-password for mutt-server = "anonymous"
+# http://www.cs.hmc.edu/~me/mutt/
+  alias getmutt="cd $DATADIR/mutt/ && (rmdir mutt-cvs-$DATE | mkdir mutt-cvs-$DATE) && \
+                 cd mutt-cvs-$DATE && \
+                 cvs -d :pserver:anonymous@cvs.mutt.org:/home/roessler/cvs login && \
+                 cvs -z3 -d :pserver:anonymous@cvs.mutt.org:/home/roessler/cvs co mutt"
+
+# Svens mutt ./configure
+# alias mutt-configure="./configure --disable-nls --enable-buffy-size --enable-locales-fix \
+#                       --enable-pop --with-included-gettext --with-regex --without-wc-funcs \
+#                       --prefix=$HOME"
+  alias mutt-configure='./configure --with-regex --enable-imap --with-ssl=/usr/local/ssl -enable-buffy-size \
+                         --with-exec-shell=/bin/zsh --enable-hcache  --with-idn=/usr/local/lib/'
+
+# MUTT sending from command line (example):
+# echo body text | mutt -a file -s "the subject" address1 address2 -b BCC_address -c CC_address
+
+# 030614  get latest source of ratpoison via CVS
+# http://sourceforge.net/cvs/?group_id=10306
+  alias getratpoison="cd $DATADIR/ratpoison/ && (rmdir ratpoison-cvs-$DATE | mkdir ratpoison-cvs-$DATE) && \
+                 cd ratpoison-cvs-$DATE && \
+                 cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/ratpoison login && \
+                 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/ratpoison co ratpoison"
+
+# 030614 get latest source of vim via CVS
+# http://vim.sourceforge.net/cvsdocs/
+  alias getvim="cd $DATADIR/vim/ && (rmdir vim-cvs-$DATE | mkdir vim-cvs-$DATE) && \
+                cd vim-cvs-$DATE && \
+                cvs -d:pserver:anonymous@cvs.vim.org:/cvsroot/vim login && \
+                cvs -z3 -d:pserver:anonymous@cvs.vim.org:/cvsroot/vim co vim && \
+                cd vim/"
+
+# get latest patches:
+# for i in `seq -f 0%g 58 99`; do wget ftp://ftp.vim.org/pub/vim/patches/6.2.$i; done
+
+  alias vim-configure="export LDFLAGS='-static' && ./configure --with-compiledby='Michael Prokop <vim@michael-prokop.at>' --enable-gui=no --enable-cscope --without-x"
+  alias vim-configure-x="unset LDFLAGS ; ./configure --with-compiledby='Michael Prokop <vim@michael-prokop.at>' --with-features=big --enable-perlinterp --enable-cscope --enable-multibyte --enable-gui=auto"
+
+# 040604 get latest source of zsh via CVS
+# http://sourceforge.net/cvs/?group_id=4068
+# don't forget to install 'yodl' for compiling zsh!
+  alias getzsh="cd $DATADIR/zsh/ && (rmdir zsh-cvs-$DATE | mkdir zsh-cvs-$DATE) && \
+                cd zsh-cvs-$DATE && \
+                cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/zsh login && \
+                cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/zsh co zsh && \
+                cd zsh/"
+
+  alias zsh-configure="./configure --enable-pcre --enable-cap --enable-maildir-support \
+                --enable-max-jobtable-size=256 --enable-function-subdirs               \
+                --with-curses-terminfo"
+# static zsh
+  alias zsh-static-configure="./configure --enable-maildir-support --enable-max-jobtable-size=256 \
+                              --enable-function-subdirs --with-curses-terminfo --enable-cap       \
+                              --disable-dynamic --enable-ldflags=-static                          \
+                              --bindir=/home/jail/bin --prefix=/home/jail/usr                     \
+                              --mandir=/home/jail/usr/man                                         \
+                              --enable-site-fndir=/home/jail/usr/share/zsh/site-functions         \
+                              --enable-etcdir=/home/jail/etc/zsh"
+
+# set Makefile for chroot:
+# prefix          = /home/jail/usr
+# exec_prefix     = ${prefix}
+# bindir          = /home/jail/bin
+# libdir          = /home/jail/lib
+# MODDIR          = $(libdir)/$(tzsh)/$(VERSION)
+# infodir         = ${prefix}/info
+# mandir          = ${prefix}/man
+# datadir         = ${prefix}/share
+# fndir           = ${prefix}/share/zsh/${VERSION}/functions
+# sitefndir       = /home/jail/usr/share/zsh/site-functions
+# htmldir         = $(datadir)/$(tzsh)/htmldoc
+
+# 030614 get latest source of centericq
+  alias getcentericq="cd $DATADIR/centericq/ && \
+                      wget 'http://centericq.de/download.php?version=cvs&filetype=tar.gz'"
+#  alias getcicqcvs=""
+  alias cicq-configure="./configure --disable-msn --disable-yahoo --disable-aim"
+
+# 030806 get latest source of okle
+  alias getokle="cd $DATADIR/okle/ && (rmdir okle-cvs-$DATE | mkdir okle-cvs-$DATE) && \
+                cd okle-cvs-$DATE && \
+                cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/okle login && \
+                cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/okle co okle"
+  alias okle-configure="./configure --prefix=/usr"
+
+# 030830 sn-newsserver - http://infa.abo.fi/~patrik/sn/
+
+# 030813 ogle
+# alias ogle-configure="./configure --prefix=/usr --disable-alsa"
+  alias ogle-configure="./configure --prefix=/usr"
+
+# 030830 get latest source of dietlibc
+  alias getdietlibc="cd $DATADIR/dietlibc/ && (rmdir dietlibc-cvs-$DATE | mkdir dietlibc-cvs-$DATE) && \
+                    cd dietlibc-cvs-$DATE && \
+                    cvs -d :pserver:cvs@cvs.fefe.de:/cvs -z9 co dietlibc"
+
+# alias getscreen="wget ftp://ftp.uni-erlangen.de/pub/utilities/screen/"
+
+# 040715 configure gcc
+  alias gcc-configure='./configure --enable-languages="c,c++" --prefix=/opt/gcc/ --enable-version-specific-runtime-libs \
+                       --enable-threads=posix --enable-__cxa_atexit --program-suffix=341'
+
+# 031006 unreal-tournament
+# http://ut.abfackeln.com/asu.html?page=faq
+# alias myut-install="for i in `ls /usr/local/games/ut/Maps/*.uz`; do ucc decompress $i -nohomedir; done"
+
+# Out-of-date font cache. Fix by running fc-cache -f -v as root.
+# mkdir /tmp/.ICE-unix
+# chown root.root /tmp/.ICE-unix
+# chmod 1777 /tmp/.ICE-unix
+
+## slrn-stuff
+# Start slrn with these parameters:
+# -n    no_new_newsgroups       no search for new newsgroups"
+# -C    color                   colorize text
+# -k0   killzero                scoring without expensive scores
+  alias _slrn='slrn -n -C -k0'
+
+# another possibility for using more newsservers than 1 with slrn would be:
+# slrn  -h  news.cis.dfn.de  -f  $HOME/.jnewsrc  -create
+# export SLRN='/bin/sh -c "which slrn"'
+  export SLRN_SETUP="yes"           # for the "if elif else endif"-stuff in my ~/.slrnc
+  export SLRN='/usr/local/bin/slrn' # I use my own-compiled stuff ;-)
+# Important so my jnewsrc does not crash!
+# alias slrn='echo "Please use one alias! Otherwise the newsrc-file will get damaged! For aliases look into the ~/."$SHELL"rc - file! "'
+  alias slrn-tu='NNTPSERVER=news.tugraz.at $SLRN -f ~/.slrn/newsrc_tu'
+  alias slrn-tu2='NNTPSERVER=news.tugraz.at /usr/local/bin/slrn-telnet -f ~/.slrn/newsrc_tu'
+  alias slrn-be='NNTPSERVER=news.individual.de $SLRN'
+  alias slrn-ma='NNTPSERVER=forums.macromedia.com $SLRN'
+  alias slrn-aco='NNTPSERVER=aconews.univie.ac.at $SLRN'
+  alias slrn-lo='NNTPSERVER=localhost $SLRN'
+  alias slrn-ms='NNTPSERVER=msnews.microsoft.com $SLRN'
+  alias slrn-op='NNTPSERVER=news.opera.com $SLRN'
+  alias slrn-ga='NNTPSERVER=news.gmane.org $SLRN'
+  alias slrn-us='NNTPSERVER=news.uslinuxtraining.com $SLRN'
+  alias slrn-fh='NNTPSERVER=dmt.fh-joanneum.at $SLRN'
+  alias slrn-de='NNTPSERVER=luggage.rince.de $SLRN'
+  alias slrn-vc='NNTPSERVER=10.11.18.42 $SLRN'
+# news.sekd.com
+
+# Call slrn-skript-feature ;-)
+# alias links-sbox='i=`cat ~/.slrn/.slrn_sbox.output` && $BROWSER "$i"'
+
+# Start bitchx with my username "mikap"
+  alias bitchx='bitchx -b -r .ircservers -n mikap'
+  alias bitchx-sb='bitchx irc.campus-sbg.at.eu.org'
+
+# Show all apropos-entries:
+  alias apropos-all='apropos . | sort | less'
+
+# # Check mail all 600 seconds/60 = 10 minutes:
+  alias mailcheck='fetchmail -d 600 -s &'
+# function kmail { echo "are you crazy boy?! dont damage your system" }
+
+## listing-stuff
+  alias ..="cd .."
+  alias ...="cd ../.."
+  alias ....="cd ../../.."
+  alias e="emacs -nw"
+  alias eg="emacs -nw -f gnus"
+  alias px="ps afux"
+  alias d="dirs"
+  alias j="jobs -l"
+  alias a=alias
+  alias ua=unalias
+  alias wh='whence -a'
+
+#   030608 Alias for history of shell
+  alias h='fc -ldD -1024 | less --quit-at-eof +G'
+#   fc = zshbuiltin - select a range of commands from first to last 
+#        from the history list. (man zshbuiltins)
+#       l: look at (file)
+#       d: timestamps for each command
+#       D: print elapsed times
+#       -1024: range
+#   less:
+#       --quit-at-eof: quit at end of file ;-)
+#       +G: go to end of file
+#
+#   another possibility would be:
+#     alias h="history 50"
+
+  alias m='most'
+  alias l='ls -lF --color=auto'
+  alias ls='ls -F --color=auto'
+
+  if ls -hld > /dev/null 2>/dev/null
+    then
+      alias ll='ls -lFh --color=auto'
+    else
+      alias ll='ls -lF --color=auto'
+  fi
+
+  alias la='ls -alsF --color=auto'
+  alias dirs='dirs -v'
+  alias ducks='du -cksh * |sort -rn |head -11'
+
+  # List only file beginning with "."
+  #alias lsa='ls -a .*(.)'
+  alias lsa='ls -ld .*'
+
+  # List only directories and symbolic
+  # links that point to directories
+  alias lsd='ls -ld *(-/DN)'
+  #alias lsd='ls -d *(/)'
+
+  # List only directories beginning with "."
+  alias lad='ls -d .*(/)'
+
+# UNIX: ls
+#       del - "delete" (loeschen)
+  alias del=rm
+#       dir - "directory" (Verzeichnis ansehen)
+  alias dir='ls -lSrah'
+#       la - "list all (ie dot files)" -
+#       zeigt auch Dateien mit Punkt am Anfang an
+#  alias la='ls -a'
+#       lg - "list (with) group" - zeigt auch Information
+#       ueber die Gruppenzugehoerigkeit der Dateien
+  alias lg='ls -lag'
+#       ll - "List long" - zeigt Datein im "langen" Format
+  alias ll='ls -l'
+# alias ls='gls -CFG'
+
+#       lsd - "list directories" - shows subdirectories
+# alias lsd='ls -adCG *(/)'
+# alias lsd='gls --color -adCF *(/)'
+  alias lsd='ls -adCF *(/)'
+#       lsdir - same as "lsd"
+# alias lsdir=lsd
+
+#       lsf - "list files" - shows files *only*
+  alias lsf='ls --color -adCF *(.)'
+
+#       lsdots - "list dot files" - zeigt nur Dateien,
+#       die mit eienm Punkt beginnen
+  alias lsdots='ls -adCG .*(.)'
+#       lsbig   - "list big   files" - zeigt die zehn groessten Dateien an
+#      "lsbig   -20" - zeigt die 20 groessten Dateien an
+  alias lsbig='gls -lS *(.) | head'
+#       lssmall - "list small files" - zeigt die zehn kleinsten Dateien an
+#      "lssmall -20" - zeigt die 20 kleinsten Dateien an
+  alias lssmall='ls -Sl | tail'
+# alias lsnew='ls -tl | head'
+
+# function lsnew {ls -tl $* | head }
+# alias lsold='ls -tl | tail'
+
+  alias md='mkdir'
+# alias mv='gmv -i'
+  alias p='pushd'
+#       path: show the value of PATH
+  alias path='echo $PATH'
+  alias pd='popd'
+  alias rd='rmdir'
+#  alias rm='rm -i'
+#       _w: present a sorted view of 'who' is logged in
+#       and catches the output with the pager.
+  alias _w='w | sort | $PAGER'
+
+  function _D {export DISPLAY=$1}
+  alias __D='echo $DISPLAY'
+  alias __P='echo $PRINTER'
+  alias __T='echo $TERM'
+
+# Set the DISPLAY variable:
+#  alias    _Dful='export DISPLAY=hostname:0.0'
+
+  alias lsnew='ls -rtl *(.) | tail '
+
+#  function pid1 {
+#               `ps a | awk 'BEGIN {
+#                           prog=substr("'$1'",1,8);
+#                        }
+#                        {
+#                          psout=substr($4,1,8);
+#                          if (psout == prog)
+#                            print $1
+#                         }'`
+#               [ "$pid" != "" ] && echo $pid
+#   }
+#
+#  function pid2 { kill `ps ax | grep $1 | grep -v grep | awk '{print $1}'` }
+
+# 030504 call zsh with special acpi-setup
+  alias zacpi="source ~/.zshrc_acpi"
+
+# FIGLET:  http://st-www.cs.uiuc.edu/~chai/figlet.html
+  alias figlet-mini='figlet -f mini'
+  alias figlet-small='figlet -f small'
+
+# Tell "lpq" to work as if on a vt100 terminal.
+# Silly workaround as lpq segfaults on "TERM=screen".  :-(
+# alias lpq='TERM=vt100 lpq'
+
+  export BROWSER="w3m"
+  # export PAGER="less"
+  # if [ -x "$(which most)" ]; then export PAGER=most; else export PAGER=less ; fi
+  #if [ -x `which vim` ] ; then export PAGER='col -b | vim -c "set ft=man nomod" -'; fi
+
+# Quick access to editing your own setup file:
+  EDITOR=vim
+  alias __='$EDITOR ~/.zshrc'
+# Quick update of complete setup:
+  alias ___='TEST=foo;source ~/.zshrc;TEST='
+
+# LaTeX etc
+ # alias sho='xdvi -s 2 -expert -geometry 1010x900+30+1030'
+ # alias _dvishow='xdvi -s 3 -expert -geometry 990x990'
+
+  alias _timecheck='telnet time.fu-berlin.de 13; date'
+  alias _term='echo TERM=$TERM;echo TERMINFO=$TERMINFO'
+  alias _termupdate='eval `resize`'
+  alias _termfix='stty rows 24 columns 80'
+  alias _termfix2='stty rows 30 columns 80'
+
+#       _version: show the version number of the current zsh:
+  alias _version='echo VERSION=$VERSION; echo ZSH_VERSION=$ZSH_VERSION'
+
+  alias _xlock='xlock -mode blank -remote &'
+
+#       hilfe: let German users give a feeling of help
+#       which can expect with the local "experts":
+  alias hilfe='echo Hilfe\! HILFE\!'
+#       ok:    tell users that everything is OK (ha!)
+  alias OK\?='echo OK\!'
+#       n: tell user that he can quit giving "no" responses.  ;-)
+  alias n='echo No, definitely NO\!'
+#       y: tell user that he can quit giving "yes" responses.  ;-)
+  alias y='echo Yes, Sir\?'
+
+# "screen":
+# Give fast access to some commands that
+# you are likely to use often with screen:
+  alias GO='screen -O -R'
+  alias GOD='screen -D -O -r'
+  alias GOls='screen -ls'
+
+# List the twenty entries of the local lastlog file:
+  alias _L='last -20'
+
+# get external ip-adress
+  alias getip='vpnclient stat|grep "Client address:"|cut -d " " -f 3'
+
+# alias zless=zmore
+
+# WARNING: global aliases are evil.  Use with caution.
+# These do not have to be at the beginning of the command line.
+
+# For screwed up keyboards missing pipe
+  alias -g PIPE='|'
+
+# Paging with more / most / less / head / tail
+  alias -g M='|more'
+  alias -g MM='|most'
+  alias -g L='| less'
+  alias -g LS='| less -S'
+  alias -g EL='|& less'
+  alias -g ELS='|& less -S'
+
+  alias -g H='| head'
+  alias -g HL='| head -20'
+  alias -g EH='|& head'
+  alias -g HL='|& head -20'
+
+  alias -g T='| tail'
+  alias -g TL='| tail -20'
+  alias -g ET='|& tail'
+  alias -g ETL='|& tail -20'
+
+# Sorting / counting
+  alias -g C='| wc -l'
+  alias -g S='| sort'
+  alias -g US='| sort -u'
+  alias -g NS='| sort -n'
+  alias -g RNS='| sort -nr'
+
+# Common filenames
+  alias -g DN=/dev/null
+  alias -g VM=/var/log/messages
+
+# grep, xargs
+  alias -g G='| egrep'
+  alias -g EG='|& egrep'
+ # alias -g X='| xargs'
+  alias -g X0='| xargs -0'
+  alias -g XG='| xargs egrep'
+  alias -g X0G='| xargs -0 egrep'
+  alias -g _SVN='| grep -v svn'
+  alias -g NO='| grep -v'
+
+  alias utar="tar zxfv"
+  alias z='vim ~/.zshrc'
+  alias v='vim ~/.vimrc'
+
+  alias rw-='chmod 600'
+  alias rwx='chmod 700'
+  alias r--='chmod 644'
+  alias r-x='chmod 755'
+
+  alias _GIF='convert -verbose -interlace LINE'
+  alias _thumb='convert -geometry 100x100 -interlace LINE -verbose'
+  alias _thumb150='convert -geometry 150x150 -interlace LINE -verbose'
+  alias _thumb200='convert -geometry 200x200 -interlace LINE -verbose'
+
+# newsgroups
+  alias _ngs="sed -e 's/^\(.*\) .*/\1/' ~/.slrn/newsrc_* | grep : | sort | uniq"
+
+  alias UP2low='for i in *(.); mv $i ${i:l}'
+  alias low2UP='for i in *(.); mv $i ${i:u}'
+
+# own processes
+  alias mps='ps -ao user,pcpu,start,command'
+
+  alias H-slrn='less /usr/local/share/doc/slrn/manual.txt'
+  alias H-mutt='less /usr/share/doc/mutt/manual.txt.gz'
+
+# vcgraz-fileserver
+  alias vcgsmb="smbclient -L 10.16.16.16"
+  alias mountvcg="su -c 'mount -t smbfs //10.16.16.16/filme /smb'"
+# alias vcgsmb="smbclient -L 10.16.9.45"
+
+# 040201 some calculator-stuff
+  function calc () {
+   echo "$*" | bc -l;
+  }
+
+  function calc1 () {
+   echo "$*" | octave -q;
+  }
+
+  function calc2 () {
+   perl -l -e "print ($*);"
+  }
+
+# 040210 grep
+  alias g='find . -type f -print0 | xargs -0 grep'
+
+# 040319 send files via netcat
+# on sending side:
+#  send() {j=$*; tar cpz ${j/%${!#}/}|nc -w 1 ${!#} 51330;}
+#  send dir* $HOST
+# Info:
+#  ${!#} gibt den letzten Parameter (den Hostnamen) zurück,
+#  ${j/%${!#}/} die übrigen (Liste der Dateien oder Verzeichnisse).
+  alias receive='nc -vlp 51330 | tar xzvp'
+
+# 040410 funstuff
+  alias starwars='telnet towel.blinkenlights.nl 23'
+  alias excuse='telnet bofh.engr.wisc.edu 666'
+  alias insult='telnet insulthost.colorado.edu 1695'
+
+# 040326 
+  function showdays {
+    #BIRTHDAY="6 apr 1967" -> sven :)
+    BIRTHDAY="5 sep 1982"
+    DATE=${1:=$BIRTHDAY}
+    for offset in \
+    `echo 1111 2222 3333 4444 5555 6666 7777 8888 9999 11111 12345` \
+    `seq -w 1000 1000 20000`; do
+     echo -n "$DATE + $offset = "; date +%Y-%m-%d -d  "$DATE $offset days"
+    done
+  }
+
+# 040326 days since my birthday
+  function days () {
+    BIRTHDAY="5 sep 1982"
+    print $(( (`date +%s -d ${2:="now"}` - `date +%s -d ${1:=$BIRTHDAY}` )/60/60/24 ))
+  }
+
+# 040410 query ldap.tugraz.at
+  function tugquery {
+    ldapsearch -x -b "OU=Bedienstete,O=tug" -h ldap.tugraz.at sn=$1
+  }
+
+# 040515 sedsed - http://sedsed.sourceforge.net/
+  alias ssed="sedsed -d --hide=hold"
+
+# 040521 new page within opera
+  alias O='opera -newpage'
+
+# 040523 some console-stuff 
+  alias cmplayer='mplayer -vo fbdev'
+  alias ctwin='twin -hw=tty'
+
+# 040805 test cd
+# alias testcd='readcd -c2scan'
+
+################################################################################
+# unused stuff
+# don't add to history (HIST_IGNORE_SPACE)
+# alias cd=' cd'
+# alias fc=' fc'
+# alias bg=' bg'
+# alias rm=' rm'
+
+# misc. things
+#alias xr=' xawtv-remote bright 32768; xawtv-remote contrast 32768'
+#alias h=" aumix -v +5"
+#alias hh=" aumix -v +10"
+#alias l=" aumix -v -5"
+#alias ll=" aumix -v -10"
+#alias g=" emacs -f gnus -nw" 
+#alias einfo=' emacs -nw -f info'	# info-mode
+
+# -*- shell-script -*- 
+#alias ec=emacsclient
+#alias trn='trn -x -X -e -L -m=s'
+#alias trn='command trn -x -XDD -t -e -L -m=s'
+#alias -g icq='exec centericq'
+#alias feh="feh --wget"
+#alias querybts="BROWSER=lynx querybts -w"
+
+# 030612 fast access to ssh-agent and ssh-add
+#  alias slo="eval `ssh-agent` && ssh-add"
+
+#[[ $TERM == vt420 ]] && alias ls='ls -F' || alias ls='ls --color=auto'
+
+# If I want to find out which lines in a file are duplicated and want to print
+# them, the following awk script helps: 
+# awk 'seen[$0]++ == 1' <filename>
+
+# The following line opens the most recently changed file in the current
+# directory with vim: 
+# vim $(ls -lrtF | grep -v '^d' | tail -1 | awk '{print $8}')
+
+# The following command finds files whose executable bit for the owner is set: 
+# find . -perm -u=x -print
+
+# There's a directory containing subdirectories which in turn contain
+# subdirectories until a not specified depth. One directory is special in that it
+# is a copy of all the other directories and it's called say mysave. Now, one want
+# to operate on all say '*.html' files within this directory tree excepte on
+# mysave. On a Unix shell, the prefered command for this is find. 
+# But how do I tell find not to search mysave as well? 
+# Use prune like this: 
+#   $ find -name 'mysave' -prune -o -name '*.html' -print
+# This command means: find all files. If the name of the file (or directory) is
+# mysave, prune it (don't descend further in this subtree) OR if the name ends in
+# html print it.
+
+# -> how much diskspace do the subdirs consume
+# for dir in `find . -maxdepth 1 -type d`; do du -sh $dir; done
+
+# -> bestimmte filetypen in einem Verz. samt Unterverzechnissen unix2dos -en und unter
+# einem anderen Namen sichern
+# for file in `ls -al *.bat *.pl *.BAT .cfg| awk '{print $9}'`; do unix2dos $file > $file_; done
+#
+# -> bestimmten string in files samt unterverzechnissen finden
+# find . -type f -print | xargs grep -l -i -s "Welcome to"
+# andere möglichkeit (langsam!):
+# find . -exec grep -q "test" '{}' ; -print
+#
+# -> in /usr/src: All files that are of the form '*,v' and '.*,v' are excluded
+# find /usr/src -not ( -name "*,v" -o -name ".*,v" ) '{}' ; -print
+#
+# -> ls stuff:
+# for verz in `ls -l | awk '{ print $9 }'`; do du -sm $verz ; done 
+# 
+# -> ssh tunnel things
+# - tunnel a vnc (e.g. on wolf359) from remote to a local machine
+# ssh -L5902:wolf359:5902 geraldb@62.173.159.100
+# or:
+# ssh -L5917:big-linux:5917 big@212.186.136.113
+# - screen & tunnel -> home
+# screen -AmdS tunnel ssh -R4711:interner_rechner.name:22 bia@remote_rechner.name
+# wieder holen mit 'screen -r tunnel' 
+# 
+# -> ssh-port-forwarding
+# ssh -L 5912:62.99.236.170:5912 -C -g -l root 62.99.236.170
+# 
+# -> bestimmte filetypen in einem Verz. samt Unterverzechnissen unix2dos -en und unter
+# einem anderen Namen sichern
+# for file in `ls -al *.bat *.pl *.BAT .cfg| awk '{print $9}'`; do unix2dos $file > $file_; done
+#
+# -> owner richtigsetzen nach händischem uid change o.ä. (hier: nur auf ext2 volumes)
+# for file in `find / -fstype ext2 -uid 503`; do chown jive "$file"; done
+#
+# -> bestimmten string in files samt unterverzechnissen finden
+# find . -type f -print | xargs grep -l -i -s "Welcome to"
+# andere möglichkeit (langsam!):
+# find . -exec grep -q "test" '{}' ; -print
+#
+# -> in /usr/src: All files that are of the form '*,v' and '.*,v' are excluded
+# find /usr/src -not ( -name "*,v" -o -name ".*,v" ) '{}' ; -print
+#
+# -> alle files die seit 5*24 stunden nicht modified wurden:
+# find . -mtime +5 | { while read x; do ls -l $x . ; done };
+#
+# -> alle log.* files finden mit einem size >1kB
+# find . -name "log." -size +1k
+#
+# -> find and del all files ending with a ~
+# find -name '*~' -exec rm '{}' ';'.
+#
+# -> alle pl files auflisten:
+# find . -name "*.pl" -exec ls -l '{}' ';' 
+
+# 40tude dialog
+# alias 40tude='/home/mika/crossover/bin/wine.sh "C:/Program Files/40tude Dialog/dialog.exe"'
+
+#  alias hjem='ssh -X b189b.studby.ntnu.no'
+#  alias cpan='perl -MCPAN -e shell;'
+#  alias uke="date +'%A %d %B %k:%M:%S Uke %V'"
+#  alias adm='cd /home/homeb/admin/'
+#  alias ssh='ssh -A'
+#  alias aida='ssh -X 129.241.43.203'
+#  alias lyd='source /usr/dt/config/Xsession.d/0100.SUNWut'
+#  alias mp3='cd /home/homeg/admin/mp3/shane/'
+#  alias xmms='source /usr/dt/config/Xsession.d/0100.SUNWut; xmms &'
+#  alias mutt='LC_CTYPE=no_NO $HOME/bin/mutt-1.3.25i-nntp'
+#  alias p3='mpg123 -b 1024 http://radio.hiof.no:8000/nrk-petre-128'
+#  alias p2='mpg123 -b 1024 http://radio.hiof.no:8000/nrk-p2-128'    
+#  alias p1='mpg123 -b 1024 http://radio.hiof.no:8000/nrk-p1-128'    
+#  alias klassisk='mpg123 -b 1024 http://radio.hiof.no:8000/nrk-alltid-klassisk-128'    
+#  alias mpetre='mpg123 -b 1024 http://radio.hiof.no:8000/nrk-mpetre-128'
+#  alias mpg123='mpg123 -b 1024'
+#  alias rydd="find . -exec rename -v 's/\%20/_/g;s/ /_/g;s/\(|\)|\[|\]|\!|\?//g;s/å/aa/g;s/Ö/oe/g;s/Ä/aa/g;s/ö/oe/g;s/æ/ae/g;s/ø/oe/g;y/A-Z/a-z/' '{}' \;"    
+#  alias win='rdesktop -k no -N -P 95 hekla.stud.ntnu.no'
+#  alias thumb='igal -a -www -f -w 6 --xy 125'
+#  alias cta='cat'
+#  alias emacs="echo 'Guy, are you crazy?'"
+#  alias l='$PAGER'
+#  alias ls='ls --color=auto'
+#  alias la='ls -la --color=auto'
+################ END OF FILE ###################################################

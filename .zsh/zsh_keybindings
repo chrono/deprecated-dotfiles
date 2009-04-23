@@ -1,0 +1,211 @@
+# Filename: $HOME/.zsh/zsh_keybindings
+# Purpose:  keybindings for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Die Aug 03 18:18:35 CEST 2004
+################################################################################
+# History:
+# 040803 modified keybindings for menuselect
+# 040514 added klammer and quoteit
+# 040418 initial version
+################################################################################
+# Information:
+# More details via man zshzle 
+################################################################################
+
+# Movement
+# ========
+# 
+# backward-char      = ^B ESC-[D
+# backward-word      = ESC-B ESC-b
+# beginning-of-line  = ^A (problem if using screen so bound to ^Q)
+# end-of-line        = ^E
+# forward-char       = ^F ESC-[C
+# forward-word       = ESC-F ESC-f
+# 
+# History Control
+# ===============
+# 
+# beginning-of-buffer-or-history      = ESC-<
+# down-line-or-history                = ^N ESC-[B
+# end-of-buffer-or-history            = ESC->
+# history-incremental-search-backward = ^R ^Xr
+# history-incremental-search-forward  = ^S ^Xs
+# history-search-backward             = ESC-P ESC-p
+# history-search-forward              = ESC-N ESC-n
+# infer-next-history                  = ^X^N
+# insert-last-word                    = ESC-_ ESC-.
+# up-line-or-history                  = ^P ESC-[A
+# 
+# Modifying Text
+# ==============
+# 
+# backward-delete-char    = ^H ^?
+# backward-kill-word      = ^W ESC-^H ESC-^?
+# capitalize-word         = ESC-C ESC-c
+# copy-region-as-kill     = ESC-W ESC-w
+# copy-prev-word          = ESC-^_ (bound to "ESC-")
+# copy-prev-shell-word    = ESC-^_
+# down-case-word          = ESC-L ESC-l
+# kill-word               = ESC-D ESC-d
+# kill-line               = ^K
+# kill-buffer             = ^X^K
+# kill-whole-line         = ^U
+# overwrite-mode          = ^X^O
+# quoted-insert           = ^V
+# quote-line              = ESC-'
+# quote-region            = ESC-"
+# self-insert-unmeta      = ESC-^I ESC-^J ESC-^M
+# transpose-chars         = ^T
+# transpose-words         = ESC-T ESC-t
+# up-case-word            = ESC-U ESC-u
+# yank                    = ^Y
+# yank-pop                = ESC-y
+
+#########################
+# Some own definitions: #
+#########################
+# move back to a previous directory:  -
+# move forward again:                 +
+##############################################################################
+
+# output of "bindkey":
+#[...]
+
+# keybindings:
+#  bindkey '^Ze' edit-command-line
+#  bindkey '^Zg' run-with-noglob
+#  bindkey '^Zc' run-as-command
+#  bindkey '^Zb' run-as-builtin
+#  bindkey '^Zn' run-without-completion
+#  bindkey '^Zh' show-history
+#  bindkey '^Zd' show-dirstack
+#  bindkey '^Xd' delete-to-char
+#  bindkey '^Xz' zap-to-char
+#  bindkey '^Xi' lamatch
+#  bindkey '^Xl' lappr
+#  bindkey '^Xc' _correct_filename
+#  bindkey '^Xh' _complete_help
+#  bindkey '^X?' _complete_debug
+#  bindkey '^Q' push-line-or-edit
+## bindkey '^I' complete-word
+#  bindkey '^i' expand-or-complete-prefix
+#  bindkey '^X^Z' universal-argument ' ' magic-space
+#  bindkey ' ' magic-space    # also do history expansion on space
+#  
+#  bindkey "^Y"    yank                                   # <STRG>-Y
+#  bindkey "^[[3~" delete-char                            # <-- (Backspace)
+#  bindkey "^[[5~" up-line-or-history                     # PgUp
+#  bindkey "^[[6~" down-line-or-history                   # PgDown
+#  bindkey "^[[1~" beginning-of-line                      # Pos1
+#  bindkey "^[[4~" end-of-line                            # End
+#  bindkey "^E"    expand-cmd-path                        # <STRG>-E
+   bindkey "^[[A"  up-line-or-search                      # cursor up
+   bindkey "^[[B"  down-line-or-search                    # <ESC>-
+#  bindkey " "     magic-space                            # ' ' (Space>
+#  bindkey "^B"    backward-word                          # <STRG>-B
+#  bindkey "^N"    forward-word                           # <STRG>-N
+   bindkey "^R"    history-incremental-search-backward    # <STRG>-R
+#  bindkey "^P"    quote-line                             # <STRG>-P
+   bindkey "^K"    kill-line                              # <STRG>-K
+   bindkey "^U"    kill-whole-line                        # <STRG>-U
+   bindkey "^[h"   local-run-help                         # <ESC>-h
+#  bindkey "^Z"    which-command                          # <STRG>-Z
+   bindkey  "^[p"  history-beginning-search-backward      # <ESC>-p
+# bindkey -e                 # emacs key bindings
+# bindkey -v                 # vi key bindings
+
+# press F10 and calculate :)
+arith-eval-echo() {
+  LBUFFER="${LBUFFER}echo \$(( "
+  RBUFFER=" ))$RBUFFER"
+}
+# requires "zle -N arith-eval-echo"
+#  bindkey "^[[21~" arith-eval-echo
+
+## This allows incremental completion of a word.
+## After starting this command, a list of completion
+## choices can be shown after every character you
+## type, which you can delete with ^h or DEL.
+## RET will accept the completion so far.
+## You can hit TAB to do normal completion, ^g to            
+## abort back to the state when you started, and ^d to list the matches.
+#autoload -U incremental-complete-word
+#zle -N incremental-complete-word
+#bindkey "^Xi" incremental-complete-word ## C-x-i
+
+## This function allows you type a file pattern,
+## and see the results of the expansion at each step.
+## When you hit return, they will be inserted into the command line.
+#autoload -U insert-files
+#zle -N insert-files
+#bindkey "^Xf" insert-files ## C-x-f
+
+#if (( $+key )); then
+#    bindkey -r ${key[Up]}
+#    bindkey -r ${key[Down]}
+#    bindkey -r ${key[Left]}
+#    bindkey -r ${key[Right]}
+#fi
+
+# emacs keymap
+## bindkey -M emacs '^W' kill-region
+## bindkey -M emacs '' silly-calc
+#  bindkey -M emacs '%' zsh-query-replace
+#  bindkey -M emacs '^[r' run-as-root  # esc-r
+## bindkey -M emacs '^[S' run-as-root # alt+shift+s
+#  bindkey -M emacs '^[H' local-run-help
+#  bindkey -M emacs '\en' history-beginning-search-forward-end
+#  bindkey -M emacs '\ep' history-beginning-search-backward-end
+#  bindkey -M emacs '\e/' lhist
+#  
+## vicmd keymap
+  bindkey -M vicmd 'u' undo
+#  bindkey -M vicmd 'q' delete-to-char
+#  bindkey -M vicmd '^Q' zap-to-char
+#  bindkey -M vicmd '^[x' execute-named-cmd
+  bindkey -M vicmd '^R' redo
+#  bindkey -M vicmd '^[a' accept-and-hold
+#  bindkey -M vicmd 'Q' zsh-query-replace
+#  
+## viins keymap
+#  bindkey -M viins '^[x' execute-named-cmd
+  bindkey -M viins '^[.' insert-last-word                       # ESC .
+  bindkey -M vicmd v edit-command-line                          # run vim for editing cmdline
+#  bindkey -M viins '^[a' accept-and-hold
+#  bindkey -M viins '^P' up-line-or-history
+#  bindkey -M viins '^N' down-line-or-history
+#  bindkey -M viins '^I' complete-word
+#  bindkey -r '^Z'
+#  bindkey -r '^X'
+#  
+## menu selection
+#  bindkey '^Zm' menu-select
+#  bindkey -M menuselect '^P'  up-line-or-history
+#  bindkey -M menuselect '^N'  down-line-or-history
+#  bindkey -M menuselect '^B' backward-char
+#  bindkey -M menuselect '^F' forward-char
+#  bindkey -M menuselect '^O' accept-and-infer-next-history
+#  bindkey -M menuselect '^_' undo
+#  bindkey -M menuselect '^A' accept-and-menu-complete
+
+# FIXME
+bindkey -M menuselect '/' accept-and-infer-next-history \
+                      '^U' undo \
+                      '^@' accept-and-menu-complete \
+                      '^A' .beginning-of-line-hist \
+                      '^E' .end-of-line-hist \
+                      '^P' vi-forward-blank-word \
+                      '^N' vi-backward-blank-word \
+                      '\e<' beginning-of-history \
+                      '\e>' end-of-history
+
+# 040514 press ctrl-x and get a "${«cursor»}"
+  klammer() { LBUFFER="\${$LBUFFER" ; RBUFFER="}$RBUFFER" }
+  bindkey '^x' klammer
+  zle -N klammer
+
+# 040514 press esc-e and get a "'«cursor»'"
+  quoteit() { LBUFFER="$LBUFFER'"; RBUFFER="' $RBUFFER" }
+  bindkey "^[e" quoteit
+  zle -N quoteit
+################ END OF FILE ###################################################

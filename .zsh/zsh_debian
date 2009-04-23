@@ -1,0 +1,151 @@
+# Filename: $HOME/.zsh/zsh_debian
+# Purpose:  debian-specific stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Don Aug 05 13:37:16 CEST 2004
+################################################################################
+
+# stupid alias for creating debian-package(s)
+# call e.g.:
+# debcreate ../tal-1.9.tar.gz
+  debcreate() {
+    dh_make -e mika@grml.org -f $1
+    dpkg-buildpackage -rfakeroot
+    lintian *.deb
+    dpkg-scanpackages ./ /dev/null | gzip > Packages.gz
+  }
+
+# check existing debian-system for debian-tools
+  debcheck() {
+    echo "Essential tools:"
+    which dpkg
+    which apt-get
+    which apt-cache
+    echo ""
+    echo "Tools for packaging:"
+    which dh_make
+    which fakeroot
+    which dpkg-buildpackage
+    which dpkg-scanpackages
+    which lintian
+    echo ""
+    echo "Useful packages"
+    which auto-apt
+    which apt-file
+    which apt-listbugs
+    which apt-listchanges
+    which apt-show-versions
+    which apt-move
+    which apt-rdepends
+    which apt-show-source
+    which apt-show-versions
+    which aptconf
+    which aptitude
+    which synaptic
+    which dselect
+
+    echo ""
+    echo "Checking installed packages"
+    dpkg --get-selections | grep \
+      -e apt \
+      -e aptconf \
+      -e aptitude \
+      -e apt-build \
+      -e apt-cacher \
+      -e apt-doc \
+      -e apt-dpkg-ref \
+      -e apt-file \
+      -e apt-howto \
+      -e apt-listbugs \
+      -e apt-listchanges \
+      -e apt-move \
+      -e apt-proxy \
+      -e apt-rdepends \
+      -e apt-show-source \
+      -e apt-show-versions \
+      -e apt-spy \
+      -e apt-src \
+      -e apt-utils \
+      -e apt-watch \
+      -e apt-zip \
+      -e debwrap \
+      -e dpkg \
+      -e dselect \
+      -e fakeroot \
+      -e python-apt \
+      -e synaptic
+  }
+
+# 040410 Filename generation (globbing) is not performed
+# on any of the words.
+  alias apt-cache='noglob apt-cache'
+
+# type debian/rules <TAB> inside a source package:
+  _debian_rules() { words=(make -f debian/rules) _make }
+  compdef _debian_rules debian/rules
+
+# run debian update with upgrade
+  alias aptsu='su - -c "apt-get update; apt-get upgrade"'
+  alias debupd='sudo apt-get update; sudo apt-get upgrade'
+
+# clean up debian-system
+  alias debclean='sudo apt-get remove `deborphan`'
+  alias debcleanall="su - -c 'debforster'"
+
+# auto-apt update
+  alias debauto='sudo auto-apt update; sudo auto-apt updatedb; auto-apt update-local'
+  alias debfile='sudo apt-file update'
+
+# run overall update
+  alias deball='sudo apt-get update; sudo apt-get upgrade; sudo auto-apt update; \
+                sudo auto-apt updatedb; auto-apt update-local; sudo apt-file update'
+
+# debian-upgrades via cd
+# http://www.pro-linux.de/news/2004/6756.html 
+# apt-get --print-uris -y dist-upgrade | grep "^'" | awk '{ print $1 }' | sed "s/'//g" > get.lst
+
+# handling of bugs
+  deblistbugs() {
+    severities="-s critical,grave,serious,important,normal,wishlist,minor"
+
+    if test "x$1" != "x" ; then
+      severities="-s $1"
+    fi
+
+    echo "Listing outstanding and open bugs with $severities"
+    sudo apt-get -s upgrade | grep Inst | cut -d' ' -f2 | \
+    xargs apt-listbugs -S outstanding,open $severities list
+  }
+
+# list bugs of packages to be upgraded
+  debupdate() {
+    echo "Listing bugs of packages to be upgraded:"
+    sudo apt-get -s upgrade | grep Inst | cut -d' ' -f2 | \
+    xargs apt-listbugs -I -l -g list
+  }
+
+# list bugs of a specific debian-package
+  debpackbugs() {
+    set -e
+    severities="-s critical,grave,serious,important,normal,wishlist,minor"
+    if test "x$1" != "x"; then
+      severities="-s $1"
+    fi
+
+    grep -e ^Package:  < debian/control  | cut -d' ' -f2- | \
+    xargs apt-listbugs -S outstanding,open $severities list
+  }
+
+  rc2rss() {
+    num=`dpkg --get-selections | grep install | grep -v deinstall | awk -F' ' '{print $1;}' | wc -l`
+    dpkg --get-selections | grep install | grep -v deinstall | awk -F' ' '{print $1;}' | \
+    xargs -n $num apt-listbugs rss
+  }
+
+  debbug() {
+    $BROWSER "http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$1"
+  }
+
+# find updated files:
+# alias debtouch='touch /tmp/timestamp; apt-get upgrade; find / -newer /tmp/timestamp'
+
+################ END OF FILE ###################################################

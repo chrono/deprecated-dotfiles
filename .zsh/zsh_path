@@ -1,0 +1,90 @@
+# Filename: $HOME/.zsh/zsh_path
+# Purpose:  path stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Sam Jun 12 23:26:21 CEST 2004
+################################################################################
+# History:
+# 040612 improved locale-stuff
+# 040513 added $LFS
+# 040425 removed ~/garnome and ~/kde3.1.4 of PATH
+# 040418 initial version
+################################################################################
+
+  manpath=($X11HOME/man /usr/man /usr/lang/man /usr/local/man /usr/share/man)
+  export MANPATH
+  export PATH=$HOME/bin:/bin:/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/lib/mutt:/usr/games:$HOME/crossover/bin:/usr/lib/j2se/1.4/bin:/usr/lib/jdk/1.1/bin
+# $HOME/kde3.1.4/bin:$HOME/garnome/bin:
+
+  export CVIMSYN=/home/mika/.vim/   # for ~/.vim/dictionary/gerspchk.vim
+
+  export KDEDIR=/usr
+# export QTDIR=/usr/include/kde/:/usr/share/qt3
+  export QTDIR=/usr/share/qt3
+  export QMAKESPEC=linux-g++
+
+# 040513 LFS-stuff
+  export LFS=/lfs
+  export LFS_TOOLS=${LFS}/tools
+
+# export=QMAKESPEC=/usr/share/qt/mkspecs/linux-g++
+  export MAILDIR=~/mail
+  export UT_DATA_PATH=/usr/local/games/ut/System
+# obtain syntax-highlighting in psql. see:
+# http://vim.sourceforge.net/scripts/script.php?script_id=952
+  export PSQL_EDITOR="vim -c ':set ft=psql'"
+
+# Set locales:
+# ============
+# e.g. possible options on one of my debian-boxes:
+# C              de_AT.UTF-8@euro      de_DE              de_DE.iso885915@euro  en_US.UTF-8
+# POSIX          de_AT.iso88591        de_DE.UTF-8        de_DE@euro            en_US.iso88591
+# de_AT          de_AT.iso885915@euro  de_DE.UTF-8@euro   deutsch               en_US.iso885915
+# de_AT.UTF-8    de_AT@euro            de_DE.iso88591     en_US                 german
+#
+# Want to check wheter your system supports some specific locales?
+# run 'validlocale' - e.g. 'validlocale en_US'.
+# View current locales via running 'locale'.
+#
+# de     = ISO639
+# _AT    = ISO3166
+# .UTF-8 = use UTF instead of latin1
+# @euro  = optional parameter
+# 
+# LANGUAGES=de_AT@euro
+# export TZ="Europe/Vienna"
+  unset LC_ALL
+# export LC_ALL=de_DE@euro
+  export LANG=de_DE.UTF-8
+# POSIX-definitions:
+  export LC_COLLATE=de_DE.UTF-8   # Collation order.
+  export LC_CTYPE=de_DE.UTF-8     # Character classification and case conversion.
+  export LC_MESSAGES=de_DE        # Formats of informative and diagnostic messages and interactive responses.
+  export LC_MONETARY=de_DE.UTF-8  # Monetary formats.
+  export LC_NUMERIC=de_DE.UTF-8   # Non-monetary numeric formats.
+  export LC_TIME=de_DE.UTF-8      # Date and time formats.
+# glibc-extensions:
+  export LC_PAPER=de_DE.UTF-8          # Paper size format.
+  export LC_NAME=de_DE.UTF-8           # Define format of names (german: Namensbestandteile).
+  export LC_ADDRESS=de_DE.UTF-8        # Format of addresses.
+  export LC_TELEPHONE=de_DE.UTF-8      # Format of telephon numbers.
+  export LC_MEASUREMENT=de_DE.UTF-8    # Format of dimensions (german: Maﬂangaben).
+  export LC_IDENTIFICATION=de_DE.UTF-8 # Identify locale informations.
+
+  alias _locale='echo LOCALE settings:;\
+  echo        LANG=$LANG; \
+  echo    LC_CTYPE=$LC_CTYPE; \
+  echo  LC_NUMERIC=$LC_NUMERIC; \
+  echo     LC_TIME=$LC_TIME; \
+  echo  LC_COLLATE=$LC_COLLATE; \
+  echo LC_MONETARY=$LC_MONETARY; \
+  echo LC_MESSAGES=$LC_MESSAGES; \
+  echo      LC_ALL=$LC_ALL'
+
+# ====================================================================
+# set some OS-specific details
+  CC=gcc
+  OS=${OSTYPE%%[0-9.]*}
+  OSVERSION=${OSTYPE#$OS}
+  OSMAJOR=${OSVERSION%%.*}
+  export OS OSVERSION OSMAJOR HOST
+################ END OF FILE ###################################################

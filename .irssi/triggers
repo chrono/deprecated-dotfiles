@@ -1,0 +1,32 @@
+$VAR1 = [
+          {
+            'pubnotices' => 1,
+            'privmsgs' => 1,
+            'kicks' => 1,
+            'privnotices' => 1,
+            'replace' => 'Deppen',
+            'topics' => 1,
+            'privactions' => 1,
+            'regexp' => 'Weisseradler',
+            'quits' => 1,
+            'parts' => 1,
+            'pubactions' => 1,
+            'joins' => 1,
+            'publics' => 1
+          },
+          {
+            'pubnotices' => 1,
+            'privmsgs' => 1,
+            'kicks' => 1,
+            'privnotices' => 1,
+            'replace' => 'SCHWUCHTELN',
+            'topics' => 1,
+            'privactions' => 1,
+            'regexp' => 'befummel',
+            'quits' => 1,
+            'pubactions' => 1,
+            'parts' => 1,
+            'joins' => 1,
+            'publics' => 1
+          }
+        ];

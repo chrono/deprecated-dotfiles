@@ -1,0 +1,93 @@
+#!/usr/bin/env zsh
+# Filename: $HOME/.zsh/func/prompt_copypaste_setup
+# Purpose:  prompt theme for zsh - optimated for easy use
+#           with copy/paste of shell output
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Mon Jun 21 01:50:03 CEST 2004
+################################################################################
+# How to use this file:
+# - put this file in your $fpath (e.g. $ZSHDIR/func/ in my setup)
+# - run "autoload promptinit && promptinit" to initialise the prompt-feature
+# - see "prompt -h" for more information
+# 
+# Some notes:
+# I noticed a quite interesting behaviour of some prompt-themes.
+# Check it out on your own:
+# 
+# $ zsh -f                             # start up zsh without config-files
+# $ echo $PROMPT                       # print out value of $PROMPT
+# $ vared fpath                        # edit $fpath if necessary
+# $ autoload promptinit && promptinit  # now initialise the prompt-feature
+# $ prompt -p                          # print out preview of available prompts
+# $ echo $PROMPT                       # print out value of $PROMPT
+#
+# See what I mean?
+#
+# History:
+# 040620 initial version
+################################################################################
+
+setpromptcopypaste () {
+  unset PS1 PS2 PS3 PS4 PROMPT RPROMPT # try to fix strange behaviour
+                                       # (see header of this file)
+# define colors if not set by user
+
+  case $TERM in
+    xterm*)
+        local TITLEBAR='%{]0;%n@%m:%~%}'
+        ;;
+    *)
+        local TITLEBAR=""
+        ;;
+  esac
+
+  # define prompt
+  PROMPT="$ "
+}
+
+# pre-execute - useful for setting title of screen windows
+preexec () {
+    if [[ "$STY" != "" ]]; then
+        #local CMD=`echo $1 | sed 's/^sudo //; s/ .*//'`
+        echo -n "k$1\\"
+    fi
+}
+
+# print information when user runs 'prompt -h copypaste'
+prompt_copypaste_help () {
+  cat <<EOH
+This prompt is color-scheme-able.  You can invoke it thus:
+
+  prompt copypaste [<brackets> [<background> [<at> [<user> [<history> [<cwd>]]]]]]
+
+  defaults are \`red black red yellow blue yellow red'
+EOH
+}
+
+prompt_copypaste_setup () {
+  precmd () { setopt promptsubst; prompt_copypaste_precmd; setpromptcopypaste }
+# preexec () { }
+}
+
+prompt_copypaste_preview () {
+  if (( ! $#* )); then
+    prompt_preview_theme copypaste
+    print
+    prompt_preview_theme copypaste red blue red yellow blue yellow red
+  else
+    prompt_preview_theme copypaste "$@"
+  fi
+}
+
+prompt_copypaste_precmd () {
+  setopt noxtrace localoptions
+  local exitstatus=$?
+
+  [[ $exitstatus -ge 128 ]] && psvar[1]=" $signals[$exitstatus-127]" ||
+       psvar[1]=""
+
+  [[ -o interactive ]] && jobs -l
+}
+
+prompt_copypaste_setup "$@"
+######## END OF FILE ###########################################################

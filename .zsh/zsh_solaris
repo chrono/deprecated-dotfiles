@@ -1,0 +1,41 @@
+# Filename: zsh_solaris
+# Purpose:  solaris-specific stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at / www.grml.org
+# Latest change: Son Jun 20 13:32:05 CEST 2004
+################################################################################
+# History:
+# 040620 initial version
+################################################################################
+
+# Set the prompt to "[bold{user@host}]relative_working_directory$ "
+  PS1="[%B%n@%m%b]%~$ "
+
+# Use less as the default pager, and -X to stop clearing on exit in 
+# an xterm i.e. makes it nice for GNUplot help! The -M gives more 
+# verbose info.
+  PAGER='less -X -M'
+
+  export PATH="$PATH:/opt/csw/bin:/usr/local/bin:/usr/ucb:/usr/ccs/bin:/usr/openwin/bin:/usr/dt/bin:~/bin"
+  export LD_LIBRARY_PATH="/opt/csw/lib:/opt/sfw/lib:/usr/lib:/usr/local/lib:/usr/ccs/lib:/usr/openwin/lib:/usr/ucb/lib"
+  export MANPATH="$MANPATH:/opt/csw/man:/usr/man:/usr/share/man:/usr/local/man:/opt/sfw/man"
+  export TERM="xterm-color"
+  export NNTPSERVER="news.uibk.ac.at"
+
+  export PS1 PAGER EDITOR SAVEHIST HISTFILE HISTSIZE
+
+# Set up some useful aliases
+  alias ls='/bin/ls -F $LS_OPT2'
+  alias f=finger
+  alias xfig='xfig -metric -startgridmode 1'
+  alias less='less -X -M'
+  alias slrn="slrn -h sia.uibk.ac.at -f ~/.jnewsrc"
+
+# For ms-dos floppy tools I generally prefer to turn off 
+# file globbing (evaluation of *, ? etc). You can still 
+# use tab expansion of wildcards to effectively over-ride 
+# this option. The same is true for find.
+  alias mdir='noglob mdir'
+  alias mcopy='noglob mcopy'
+  alias mdel='noglob mdel'
+  alias find='noglob find'
+################ END OF FILE ###################################################

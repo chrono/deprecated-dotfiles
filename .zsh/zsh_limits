@@ -1,0 +1,49 @@
+# Filename: $HOME/.zsh/zsh_limits
+# Purpose:  limits stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Son Apr 18 16:53:34 CEST 2004
+################################################################################
+# History:
+# 040418 initial version
+################################################################################
+
+# set user limits {{{
+#  ,----
+#  | [dope@painless:~]% ulimit -<TAB>
+#  | -H  -- set hard limits
+#  | -S  -- set soft and hard limits (with -H)
+#  | -a  -- list all current resource limits
+#  | -c  -- core dump size limit
+#  | -d  -- maximum size of data segment
+#  | -f  -- size of largest file allowed
+#  | -l  -- maximum size of locked in memory
+#  | -m  -- maximum size of physical memory
+#  | -n  -- maximum no. of open file descriptors
+#  | -s  -- stack size limit
+#  | -t  -- maximum cpu time per process
+#  | -u  -- processes available to the user
+#  | -v  -- maximum size of virtual memory
+#  `----
+#
+# Note: This settings protect *not* against 'fork'-bombs like
+#  $ (){ :|:&};:
+#  $ perl -e 'while(1){ fork();}'
+# but i don't care a pap for it. Trust me. I know what I'm doing. See
+# zshbuiltins(1) /ulimit for details.
+  ulimit -c 50000   #   50 MB  core dump
+  ulimit -d 100000  #  100 MB  data segment
+# ulimit -f 500000  #  500 MB  file size
+  ulimit -f unlimited
+  ulimit -l unlimited   #   50 MB  locked memory
+  ulimit -n 1024    # 1024 open files
+  ulimit -s 8192    #    8 kb stack size
+# ulimit -t 2000    #  200 sec CPU time
+# ulimit -c unlimited
+# Use hard limits, except for a smaller stack and no core dumps
+# unlimit
+# limit stack 8192
+# limit core 0
+# limit -s
+# }}}
+
+################ END OF FILE ###################################################

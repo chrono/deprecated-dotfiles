@@ -1,0 +1,19 @@
+# Filename: $HOME/.zsh/zsh_bsd
+# Purpose:  BSD-specific stuff for zsh
+# Author:   Michael Prokop / www.michael-prokop.at
+# Latest change: Don Mär 25 23:42:42 CET 2004
+################################################################################
+# History:
+# 040325 initial version
+################################################################################
+
+# 040310
+  lookp() { ( cd /usr/ports; make search key=$1 | grep Path | grep -i $1; ); }
+
+# 040310
+  getnet() {
+    ifconfig -a | grep mtu | awk -F: '{if ($1 != "lo0"} print$1;}'
+  }
+
+# 040325
+# find /usr/ports/ -name "pkg-descr" | xargs grep "tcpdump" | cut -f 1 -d ":" | sort | uniq
