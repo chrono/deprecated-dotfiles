@@ -356,6 +356,27 @@ fi
   fi
 # }}}
 
+settitle() {
+    case $TERM in
+        xterm*)
+        echo -ne "\033]0;$1\007"
+        ;;
+        screen*)
+        echo -ne "\ek$1\e\\"
+        ;;
+    esac
+}
+
+precmd () {
+# set the screen title to "zsh" when sitting at a command prompt:
+  settitle "$HOST:zsh"
+}
+
+preexec() {
+  local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
+  settitle "$HOST:$CMD"
+}
+
 # some root-stuff {{{
   if (( EUID == 0 )); then
 # for root add sbin dirs to path

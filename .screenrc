@@ -2,30 +2,29 @@
 activity "activity in %n (%t)"
 autodetach on
 bell "bell in %n (%t)"
-caption splitonly "%2n %t"
 crlf off
 debug off
 defbce on
-defhstatus "screen: ^En (^Et)"
-deflogin off
+# deflogin off
 defmonitor off
 defscrollback 8192
 escape ^Aa
 fit
 hardcopy_append on
 hardcopydir ~/.screen
-hardstatus alwayslastline "%{=b}%{bw} %{.w}%D%{.c}%Y-%m-%d %{.y}%0c %{-b}%{ck} %-Lw%{+b}%{gw} %n%f* %t%? (%u)%? %{-}%{-b}%+Lw %{=b}%{bw} %= %{.w}%H %{.c}[%l] "
+defhstatus "^EH (^Et)"
+# hardstatus lastline "%2n %t"
+hardstatus off
+caption always "%{=b}%{bw} %{.w}%D%{.c}%Y-%m-%d %{.y}%0c %{-b}%{ck} %-Lw%{+b}%{gw} %n%f* %t%? (%u)%? %{-}%{-b}%+Lw %{=b}%{bw} %= %{.w}%H %{.c}[%l] "
 msgminwait 1
 msgwait 2
 pow_detach_msg "ALL YOUR SCREEN ARE BELONG TO US"
-# setenv PROMPT_COMMAND 'echo -n -e "\033k\033\134"'
-# shell -${SHELL}
 shell ${SHELL}
 #shelltitle '$ |bash:'
+#shelltitle '$|'
 silencewait 5
 sorendition =b ry
 startup_message off
-#termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
 vbell on
 vbell_msg " WHAT YOU SAY!! "
 vbellwait 1
@@ -63,6 +62,8 @@ bind U screen -t "merkur" 6 ssh -C -t sshproxy ssh merkur
 #bind Y screen -t "yafc" 5 yafc
 #term xterm-color
 ## show version on startup
-version
+#version
 #termcapinfo xterm* 'bc@:bs@'
-#termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007
+
+# tell screen we have a terminal which supports status lines
+termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007:ti@:te@
