@@ -171,12 +171,14 @@ if ! (( $+ZSH_VERSION_TYPE )); then
 fi
 
 if is4; then
-    autoload -U checkmail            # needed for my prompt
+#    autoload -U checkmail            # needed for my prompt
     autoload -U colors && colors     # make ${f,b}g{,_{,no_}bold} available
     autoload -U compinit && compinit # load new completion system
     autoload -U edit-command-line    # later bound to C-z e or v in vi-cmd-mode
     autoload -U zed                  # what, your shell can't edit files? ["zed -f function"]
     autoload -U zmv                  # who needs mmv or rename? ["zmv '(*).lis' '\$1.txt"]
+    autoload -Uz vcs_info
+    zstyle ':vcs_info:*' disable bzr cdv darcs mtn svk tla
     bindkey -v                       # force keybindings no matter what $VISUAL and $EDITOR say
     zmodload -i zsh/complist         # e.g. menu-select widget, list-colors [color specifications]
     #zmodload -i zsh/stat
@@ -298,6 +300,8 @@ fi
         source $ZSHDIR/zsh_alias
         source $ZSHDIR/zsh_keybindings
         source $ZSHDIR/zsh_bsd
+        source $ZSHDIR/zsh_func
+        source $ZSHDIR/zsh_completition
       fi
     ;;
     nto-qnx)
@@ -341,7 +345,8 @@ fi
 # is4 &&  source $ZSHDIR/zsh_prompt || PROMPT='%n@%m %40<...<%B%~%b%<< $ '
   if (( EUID != 0 )); then
     if is4; then
-       autoload -U promptinit && promptinit && prompt smart # load my prompt-theme
+       #setopt prompt_subst
+       autoload -U promptinit && promptinit && prompt clint # load my prompt-theme
     else
       if [[ -f $ZSHDIR/zsh_prompt_small ]] && is4; then
         source $ZSHDIR/zsh_prompt_small
@@ -356,6 +361,8 @@ fi
   fi
 # }}}
 
+PROMPT_HOST=$(print -P "%m")
+
 settitle() {
     case $TERM in
         xterm*)
@@ -369,12 +376,12 @@ settitle() {
 
 precmd () {
 # set the screen title to "zsh" when sitting at a command prompt:
-  settitle "$HOST:zsh"
+  settitle "$PROMPT_HOST:zsh"
 }
 
 preexec() {
   local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
-  settitle "$HOST:$CMD"
+  settitle "$PROMPT_HOST:$CMD"
 }
 
 # some root-stuff {{{
@@ -616,6 +623,8 @@ if [[ $VERSION == 4.1* ]]; then setopt auto_continue; fi
 #  WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
   autoload _history_complete_word
   autoload history-search-end
+  autoload -U url-quote-magic
+  zle -N self-insert url-quote-magic
   zle -N edit-command-line
   zle -N local-run-help
   zle -N run-as-root
