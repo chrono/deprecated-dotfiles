@@ -1,0 +1,8 @@
+" menubar, toolbar, bookmarkbar
+set guioptions+=mTB
+" complete keywords and searchengines, then location bar entries
+set complete=slS
+" automatically show completions while typing
+set wildoptions=auto
+" some webapps where i want their keymapping
+autocmd LocationChange .* :js modes.passAllKeys = /(www\.google\.com\/reader|mail\.google\.com)/.test(buffer.URL)
