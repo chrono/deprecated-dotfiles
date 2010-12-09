@@ -2,7 +2,21 @@
 " au BufRead /tmp/mutt-* :g/^> --.*/,/^$/-1d
 autocmd BufRead /tmp/mutt* source ~/.vim/mail.vim
 autocmd BufRead *.php source ~/.vim/PEAR.vim
-autocmd BufRead *.as set filetype=actionscript
+autocmd BufRead *.as setl filetype=actionscript
+autocmd FileType smarty setl matchpairs+=<:> " we want to jump around those xml tags using %
+autocmd FileType gitlog setl keywordprg=git\ show\ --pretty=raw
+
+autocmd BufNewFile,BufRead *.git/COMMIT_EDITMSG    setf gitcommit
+autocmd BufNewFile,BufRead *.git/config,.gitconfig setf gitconfig
+autocmd BufNewFile,BufRead git-rebase-todo         setf gitrebase
+autocmd BufNewFile,BufRead .msg.[0-9]*
+	\ if getline(1) =~ '^From.*# This line is ignored.$' |
+	\   setf gitsendemail |
+	\ endif
+autocmd BufNewFile,BufRead *.git/**
+	\ if getline(1) =~ '^\x\{40\}\>\|^ref: ' |
+	\   setf git |
+	\ endif
 
 autocmd BufRead /etc/apache2/* set syntax=apache
 autocmd BufRead *svn-commit.tmp startinsert!
