@@ -65,5 +65,6 @@ bind U screen -t "merkur" 6 ssh -C -t sshproxy ssh merkur
 #version
 #termcapinfo xterm* 'bc@:bs@'
 
-# tell screen we have a terminal which supports status lines
-termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007:ti@:te@
+# tell screen we have a terminal which supports status lines and fancy colors
+termcapinfo xterm*|rxvt*|kterm*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\007:ti@:te@:Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm
+attrcolor b ".I"
