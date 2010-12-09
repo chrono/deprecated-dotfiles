@@ -71,7 +71,7 @@ let s:TRUE = 1
 let s:FALSE = 0
 let s:MODE_CREATE_FOLDS = 1
 let s:MODE_REMEMBER_FOLD_SETTINGS = 2
-let s:FOLD_WITH_PHPDOC = 1
+let s:FOLD_WITH_PHPDOC = 0
 let s:FOLD_WITHOUT_PHPDOC = 2
 let s:SEARCH_PAIR_START_FIRST = 1
 let s:SEARCH_PAIR_IMMEDIATELY = 2
@@ -152,7 +152,7 @@ function! s:PHPCustomFolds() " {{{
 	call s:PHPFoldProperties('^\s*var\s\$', ";", s:FOLD_WITH_PHPDOC, 1, 1)
 
 	" Fold class without PhpDoc (class foo {})
-	call s:PHPFoldPureBlock('^\s*\(abstract\s*\)\?class', s:FOLD_WITH_PHPDOC)
+	" call s:PHPFoldPureBlock('^\s*\(abstract\s*\)\?class', s:FOLD_WITH_PHPDOC)
 	
 	" Fold define()'s with their PhpDoc
 	call s:PHPFoldProperties('^\s*define\s*(', ";", s:FOLD_WITH_PHPDOC)

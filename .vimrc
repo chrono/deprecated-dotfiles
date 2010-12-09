@@ -35,7 +35,6 @@ let spell_update_time = 2000
 let spell_language_list = "german,english"
 ab mfg Mit freundlichen Grüßen
 let mapleader = "\\"
-let Tlist_Ctags_Cmd = "/usr/bin/ctags-exuberant"
 let Tlist_Process_File_Always = 1
 set vb
 " I find myself typing ":wq" in insert-mode many a time.

@@ -111,7 +111,6 @@ endfunction
 " Remap the tab key to select action with InsertTabWrapper
 inoremap <buffer> <tab> <c-r>=InsertTabWrapper()<cr>
 
-setl keywordprg=~/bin/phpdoc.sh
 " }}} Autocompletion using the TAB key
 
 " taglist
@@ -138,3 +137,30 @@ nnoremap <buffer> ;; /%%%<CR>c3l
 inoremap <buffer> ;fo <C-O>mzfor (%%%;%%%;%%%) {<CR>}<C-O>O%%%<C-O>'z<C-O>/%%%<CR><C-O>c3l
 inoremap <buffer> ;fe <C-O>mzforeach (%%% as %%% => %%%<ESC>A{%%%<C-O>'z;;
 inoremap <buffer> ;i <C-O>mzif (%%%<ESC>A{%%%<C-O>'z;;
+
+fun! OpenPhpFunction (keyword, split)
+    " let proc_keyword = substitute(a:keyword , '_', '-', 'g')
+    let proc_keyword = a:keyword
+    if a:split
+        exe 'split'
+        exe 'enew'
+        exe "set buftype=nofile"
+    else
+        exe 'norm gg'
+        exe 'silent norm dG'
+    endif
+    " exe 'silent r!lynx -dump -nolist http://www.php.net/manual/en/print/function.'.proc_keyword.'.php'
+    exe 'silent r!lynx -dump -nolist http://www.php.net/'.proc_keyword
+    exe 'norm gg'
+    exe 'call search ("^' . a:keyword .'")'
+    exe 'silent norm dgg'
+    exe 'call search("User Contributed Notes")'
+    exe 'silent norm dGgg'
+    map <buffer> K :call OpenPhpFunction('<c-r><c-w>', 0)<CR>
+endfun
+map <buffer> K :call OpenPhpFunction('<c-r><c-w>', 1)<CR>
+" setl keywordprg=~/bin/phpdoc.sh
+
+" map <buffer> <F5> <Esc>:EnableFastPHPFolds<Cr>
+" map <buffer> <F6> <Esc>:EnablePHPFolds<Cr>
+" map <buffer> <F7> <Esc>:DisablePHPFolds<Cr>
