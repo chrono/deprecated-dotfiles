@@ -1,71 +1,4 @@
-# var/home/rasmus/php51/Zend/zend_API.c
-# static zend_function_entry disabled_function[] =  {
-display_disabled_function
-# static zend_function_entry disabled_class_new[] =  {
-
-# var/home/rasmus/php51/Zend/zend_builtin_functions.c
-# static zend_function_entry builtin_functions[] = {
-class_exists
-crash
-create_function
-debug_backtrace
-debug_print_backtrace
-define
-defined
-each
-error_reporting
-extension_loaded
-func_get_arg
-func_get_args
-func_num_args
-function_exists
-get_class
-get_class_methods
-get_class_vars
-get_declared_classes
-get_declared_interfaces
-get_defined_constants
-get_defined_functions
-get_defined_vars
-get_extension_funcs
-get_included_files
-get_loaded_extensions
-get_object_vars
-get_parent_class
-get_required_files
-get_resource_type
-interface_exists
-is_a
-is_subclass_of
-leak
-method_exists
-property_exists
-restore_error_handler
-restore_exception_handler
-set_error_handler
-set_exception_handler
-strcasecmp
-strcmp
-strlen
-strncasecmp
-strncmp
-trigger_error
-user_error
-zend_test_func
-zend_thread_id
-zend_version
-
-# var/home/rasmus/php51/Zend/zend_exceptions.c
-# static zend_function_entry default_exception_functions[] = {
-# static zend_function_entry error_exception_functions[] = {
-
-# var/home/rasmus/php51/Zend/zend_interfaces.c
-# zend_function_entry zend_funcs_aggregate[] = {
-# zend_function_entry zend_funcs_iterator[] = {
-# zend_function_entry zend_funcs_arrayaccess[] = {
-# zend_function_entry zend_funcs_serializable[] = {
-
-# var/home/rasmus/php51/ext/bcmath/bcmath.c
+# php-src/ext/bcmath/bcmath.c
 # zend_function_entry bcmath_functions[] = {
 bcadd
 bccomp
@@ -78,8 +11,8 @@ bcscale
 bcsqrt
 bcsub
 
-# var/home/rasmus/php51/ext/bz2/bz2.c
-# zend_function_entry bz2_functions[] = {
+# php-src/ext/bz2/bz2.c
+# static zend_function_entry bz2_functions[] = {
 bzclose
 bzcompress
 bzdecompress
@@ -91,7 +24,7 @@ bzopen
 bzread
 bzwrite
 
-# var/home/rasmus/php51/ext/calendar/calendar.c
+# php-src/ext/calendar/calendar.c
 # zend_function_entry calendar_functions[] = {
 cal_days_in_month
 cal_from_jd
@@ -112,7 +45,7 @@ jewishtojd
 juliantojd
 unixtojd
 
-# var/home/rasmus/php51/ext/com_dotnet/com_extension.c
+# php-src/ext/com_dotnet/com_extension.c
 # zend_function_entry com_dotnet_functions[] = {
 com_create_guid
 com_event_sink
@@ -147,11 +80,11 @@ variant_set_type
 variant_sub
 variant_xor
 
-# var/home/rasmus/php51/ext/com_dotnet/com_persist.c
+# php-src/ext/com_dotnet/com_persist.c
 # static zend_function_entry com_persist_helper_methods[] = {
 
-# var/home/rasmus/php51/ext/ctype/ctype.c
-# zend_function_entry ctype_functions[] = {
+# php-src/ext/ctype/ctype.c
+# static zend_function_entry ctype_functions[] = {
 ctype_alnum
 ctype_alpha
 ctype_cntrl
@@ -164,7 +97,7 @@ ctype_space
 ctype_upper
 ctype_xdigit
 
-# var/home/rasmus/php51/ext/curl/interface.c
+# php-src/ext/curl/interface.c
 # zend_function_entry curl_functions[] = {
 curl_close
 curl_copy_handle
@@ -185,7 +118,7 @@ curl_setopt
 curl_setopt_array
 curl_version
 
-# var/home/rasmus/php51/ext/date/php_date.c
+# php-src/ext/date/php_date.c
 # zend_function_entry date_functions[] = {
 checkdate
 date
@@ -194,9 +127,11 @@ date_date_set
 date_default_timezone_get
 date_default_timezone_set
 date_format
+date_format_locale
 date_isodate_set
 date_modify
 date_offset_get
+date_parse
 date_sun_info
 date_sunrise
 date_sunset
@@ -215,25 +150,15 @@ strtotime
 time
 timezone_abbreviations_list
 timezone_identifiers_list
+timezone_name_from_abbr
 timezone_name_get
 timezone_offset_get
 timezone_open
-timezone_transistions_get
+timezone_transitions_get
 # zend_function_entry date_funcs_date[] = {
-format
-getOffset
-getTimezone
-modify
-setDate
-setISODate
-setTime
-setTimezone
 # zend_function_entry date_funcs_timezone[] = {
-getName
-getOffset
-getTransistions
 
-# var/home/rasmus/php51/ext/dba/dba.c
+# php-src/ext/dba/dba.c
 # zend_function_entry dba_functions[] = {
 dba_close
 dba_delete
@@ -251,7 +176,7 @@ dba_popen
 dba_replace
 dba_sync
 
-# var/home/rasmus/php51/ext/dbase/dbase.c
+# php-src/ext/dbase/dbase.c
 # zend_function_entry dbase_functions[] = {
 dbase_add_record
 dbase_close
@@ -266,11 +191,21 @@ dbase_open
 dbase_pack
 dbase_replace_record
 
-# var/home/rasmus/php51/ext/dom/php_dom.c
+# php-src/ext/dom/php_dom.c
 # static zend_function_entry dom_functions[] = {
 dom_import_simplexml
 
-# var/home/rasmus/php51/ext/exif/exif.c
+# php-src/ext/ereg/ereg.c
+# zend_function_entry ereg_functions[] = {
+ereg
+ereg_replace
+eregi
+eregi_replace
+split
+spliti
+sql_regcase
+
+# php-src/ext/exif/exif.c
 # zend_function_entry exif_functions[] = {
 exif_imagetype
 exif_read_data
@@ -278,7 +213,7 @@ exif_tagname
 exif_thumbnail
 read_exif_data
 
-# var/home/rasmus/php51/ext/fbsql/php_fbsql.c
+# php-src/ext/fbsql/php_fbsql.c
 # zend_function_entry fbsql_functions[] = {
 fbsql
 fbsql_affected_rows
@@ -341,7 +276,7 @@ fbsql_tablename
 fbsql_username
 fbsql_warnings
 
-# var/home/rasmus/php51/ext/fdf/fdf.c
+# php-src/ext/fdf/fdf.c
 # zend_function_entry fdf_functions[] = {
 fdf_add_doc_javascript
 fdf_add_template
@@ -379,17 +314,17 @@ fdf_set_target_frame
 fdf_set_value
 fdf_set_version
 
-# var/home/rasmus/php51/ext/filepro/filepro.c
-# zend_function_entry filepro_functions[] = {
-filepro
-filepro_fieldcount
-filepro_fieldname
-filepro_fieldtype
-filepro_fieldwidth
-filepro_retrieve
-filepro_rowcount
+# php-src/ext/filter/filter.c
+# zend_function_entry filter_functions[] = {
+filter_has_var
+filter_id
+filter_input
+filter_input_array
+filter_list
+filter_var
+filter_var_array
 
-# var/home/rasmus/php51/ext/ftp/php_ftp.c
+# php-src/ext/ftp/php_ftp.c
 # zend_function_entry php_ftp_functions[] = {
 ftp_alloc
 ftp_cdup
@@ -426,7 +361,7 @@ ftp_size
 ftp_ssl_connect
 ftp_systype
 
-# var/home/rasmus/php51/ext/gd/gd.c
+# php-src/ext/gd/gd.c
 # zend_function_entry gd_functions[] = {
 gd_info
 image2wbmp
@@ -487,6 +422,8 @@ imagegammacorrect
 imagegd
 imagegd2
 imagegif
+imagegrabscreen
+imagegrabwindow
 imageinterlace
 imageistruecolor
 imagejpeg
@@ -525,7 +462,7 @@ imagexbm
 jpeg2wbmp
 png2wbmp
 
-# var/home/rasmus/php51/ext/gettext/gettext.c
+# php-src/ext/gettext/gettext.c
 # zend_function_entry php_gettext_functions[] = {
 _
 bind_textdomain_codeset
@@ -538,7 +475,7 @@ gettext
 ngettext
 textdomain
 
-# var/home/rasmus/php51/ext/gmp/gmp.c
+# php-src/ext/gmp/gmp.c
 # zend_function_entry gmp_functions[] = {
 gmp_abs
 gmp_add
@@ -563,6 +500,7 @@ gmp_legendre
 gmp_mod
 gmp_mul
 gmp_neg
+gmp_nextprime
 gmp_or
 gmp_perfect_square
 gmp_popcount
@@ -578,9 +516,10 @@ gmp_sqrt
 gmp_sqrtrem
 gmp_strval
 gmp_sub
+gmp_testbit
 gmp_xor
 
-# var/home/rasmus/php51/ext/hash/hash.c
+# php-src/ext/hash/hash.c
 # zend_function_entry hash_functions[] = {
 hash
 hash_algos
@@ -592,48 +531,9 @@ hash_init
 hash_update
 hash_update_file
 hash_update_stream
-md5
-md5_file
-sha1
-sha1_file
 
-# var/home/rasmus/php51/ext/hwapi/hwapi.cpp
-# zend_function_entry hwapi_functions[] = {
-hwapi_attribute_key
-hwapi_attribute_langdepvalue
-hwapi_attribute_new
-hwapi_attribute_value
-hwapi_attribute_values
-hwapi_children
-hwapi_content
-hwapi_content_new
-hwapi_copy
-hwapi_dummy
-hwapi_find
-hwapi_hgcsp
-hwapi_identify
-hwapi_init
-hwapi_link
-hwapi_lock
-hwapi_move
-hwapi_object
-hwapi_object_assign
-hwapi_object_attreditable
-hwapi_object_attribute
-hwapi_object_count
-hwapi_object_insert
-hwapi_object_new
-hwapi_object_remove
-hwapi_object_title
-hwapi_object_value
-hwapi_parents
-hwapi_remove
-hwapi_replace
-hwapi_unlock
-
-# var/home/rasmus/php51/ext/iconv/iconv.c
+# php-src/ext/iconv/iconv.c
 # zend_function_entry iconv_functions[] = {
-iconv
 iconv_get_encoding
 iconv_mime_decode
 iconv_mime_decode_headers
@@ -643,9 +543,8 @@ iconv_strlen
 iconv_strpos
 iconv_strrpos
 iconv_substr
-ob_iconv_handler
 
-# var/home/rasmus/php51/ext/imap/php_imap.c
+# php-src/ext/imap/php_imap.c
 # zend_function_entry imap_functions[] = {
 imap_8bit
 imap_alerts
@@ -718,48 +617,7 @@ imap_utf7_decode
 imap_utf7_encode
 imap_utf8
 
-# var/home/rasmus/php51/ext/informix/ifx.ec
-# zend_function_entry ifx_functions[] = {
-ifx_affected_rows
-ifx_blobinfile_mode
-ifx_byteasvarchar
-ifx_close
-ifx_connect
-ifx_copy_blob
-ifx_create_blob
-ifx_create_char
-ifx_do
-ifx_error
-ifx_errormsg
-ifx_fetch_row
-ifx_fieldproperties
-ifx_fieldtypes
-ifx_free_blob
-ifx_free_char
-ifx_free_result
-ifx_get_blob
-ifx_get_char
-ifx_getsqlca
-ifx_htmltbl_result
-ifx_nullformat
-ifx_num_fields
-ifx_num_rows
-ifx_pconnect
-ifx_prepare
-ifx_query
-ifx_textasvarchar
-ifx_update_blob
-ifx_update_char
-ifxus_close_slob
-ifxus_create_slob
-ifxus_free_slob
-ifxus_open_slob
-ifxus_read_slob
-ifxus_seek_slob
-ifxus_tell_slob
-ifxus_write_slob
-
-# var/home/rasmus/php51/ext/interbase/interbase.c
+# php-src/ext/interbase/interbase.c
 # zend_function_entry ibase_functions[] = {
 fbird_add_user
 fbird_affected_rows
@@ -860,7 +718,12 @@ ibase_set_event_handler
 ibase_trans
 ibase_wait_event
 
-# var/home/rasmus/php51/ext/ldap/ldap.c
+# php-src/ext/json/json.c
+# function_entry json_functions[] = {
+json_decode
+json_encode
+
+# php-src/ext/ldap/ldap.c
 # zend_function_entry ldap_functions[] = {
 ldap_8859_to_t61
 ldap_add
@@ -906,16 +769,17 @@ ldap_start_tls
 ldap_t61_to_8859
 ldap_unbind
 
-# var/home/rasmus/php51/ext/libxml/libxml.c
-# zend_function_entry libxml_functions[] = {
+# php-src/ext/libxml/libxml.c
+# static zend_function_entry libxml_functions[] = {
 libxml_clear_errors
 libxml_get_errors
 libxml_get_last_error
 libxml_set_streams_context
 libxml_use_internal_errors
 
-# var/home/rasmus/php51/ext/mbstring/mbstring.c
+# php-src/ext/mbstring/mbstring.c
 # zend_function_entry mbstring_functions[] = {
+mb_check_encoding
 mb_convert_case
 mb_convert_encoding
 mb_convert_kana
@@ -932,15 +796,23 @@ mb_http_output
 mb_internal_encoding
 mb_language
 mb_list_encodings
+mb_list_encodings_alias_names
+mb_list_mime_names
 mb_output_handler
 mb_parse_str
 mb_preferred_mime_name
 mb_send_mail
 mb_strcut
 mb_strimwidth
+mb_stripos
+mb_stristr
 mb_strlen
 mb_strpos
+mb_strrchr
+mb_strrichr
+mb_strripos
 mb_strrpos
+mb_strstr
 mb_strtolower
 mb_strtoupper
 mb_strwidth
@@ -948,8 +820,8 @@ mb_substitute_character
 mb_substr
 mb_substr_count
 
-# var/home/rasmus/php51/ext/mcrypt/mcrypt.c
-# zend_function_entry mcrypt_functions[] = {
+# php-src/ext/mcrypt/mcrypt.c
+# zend_function_entry mcrypt_functions[] = { 
 mcrypt_cbc
 mcrypt_cfb
 mcrypt_create_iv
@@ -968,7 +840,6 @@ mcrypt_enc_self_test
 mcrypt_encrypt
 mcrypt_generic
 mcrypt_generic_deinit
-mcrypt_generic_end
 mcrypt_generic_init
 mcrypt_get_block_size
 mcrypt_get_cipher_name
@@ -988,23 +859,31 @@ mcrypt_module_self_test
 mcrypt_ofb
 mdecrypt_generic
 
-# var/home/rasmus/php51/ext/mhash/mhash.c
+# php-src/ext/mhash/mhash.c
 # zend_function_entry mhash_functions[] = {
 mhash
 mhash_count
 mhash_get_block_size
 mhash_get_hash_name
+mhash_get_keygen_name
+mhash_get_keygen_salt_size
+mhash_keygen
+mhash_keygen_count
 mhash_keygen_s2k
+mhash_keygen_uses_count
+mhash_keygen_uses_hash
+mhash_keygen_uses_salt
 
-# var/home/rasmus/php51/ext/mime_magic/mime_magic.c
+# php-src/ext/mime_magic/mime_magic.c
 # zend_function_entry mime_magic_functions[] = {
 mime_content_type
 
-# var/home/rasmus/php51/ext/ming/ming.c
+# php-src/ext/ming/ming.c
 # static zend_function_entry ming_functions[] = {
 ming_keypress
 ming_setcubicthreshold
 ming_setscale
+ming_setswfcompression
 ming_useconstants
 ming_useswfversion
 # static zend_function_entry swfaction_functions[] = {
@@ -1026,7 +905,7 @@ ming_useswfversion
 # static zend_function_entry swftext_functions[] = {
 # static zend_function_entry swftextfield_functions[] = {
 
-# var/home/rasmus/php51/ext/msql/php_msql.c
+# php-src/ext/msql/php_msql.c
 # zend_function_entry msql_functions[] = {
 msql
 msql_affected_rows
@@ -1075,7 +954,7 @@ msql_select_db
 msql_selectdb
 msql_tablename
 
-# var/home/rasmus/php51/ext/mssql/php_mssql.c
+# php-src/ext/mssql/php_mssql.c
 # zend_function_entry mssql_functions[] = {
 mssql_bind
 mssql_close
@@ -1108,21 +987,17 @@ mssql_result
 mssql_rows_affected
 mssql_select_db
 
-# var/home/rasmus/php51/ext/mysql/php_mysql.c
+# php-src/ext/mysql/php_mysql.c
 # zend_function_entry mysql_functions[] = {
 mysql
 mysql_affected_rows
 mysql_client_encoding
 mysql_close
 mysql_connect
-mysql_create_db
-mysql_createdb
 mysql_data_seek
 mysql_db_name
 mysql_db_query
 mysql_dbname
-mysql_drop_db
-mysql_dropdb
 mysql_errno
 mysql_error
 mysql_escape_string
@@ -1154,10 +1029,8 @@ mysql_insert_id
 mysql_list_dbs
 mysql_list_fields
 mysql_list_processes
-mysql_list_tables
 mysql_listdbs
 mysql_listfields
-mysql_listtables
 mysql_num_fields
 mysql_num_rows
 mysql_numfields
@@ -1169,21 +1042,22 @@ mysql_real_escape_string
 mysql_result
 mysql_select_db
 mysql_selectdb
+mysql_set_charset
 mysql_stat
 mysql_table_name
 mysql_tablename
 mysql_thread_id
 mysql_unbuffered_query
 
-# var/home/rasmus/php51/ext/mysqli/mysqli_driver.c
+# php-src/ext/mysqli/mysqli_driver.c
 # zend_function_entry mysqli_driver_methods[] = {
 embedded_server_end
 embedded_server_start
 
-# var/home/rasmus/php51/ext/mysqli/mysqli_exception.c
+# php-src/ext/mysqli/mysqli_exception.c
 # zend_function_entry mysqli_exception_methods[] = {
 
-# var/home/rasmus/php51/ext/mysqli/mysqli_fe.c
+# php-src/ext/mysqli/mysqli_fe.c
 # zend_function_entry mysqli_functions[] = {
 mysqli_affected_rows
 mysqli_autocommit
@@ -1211,6 +1085,7 @@ mysqli_error
 mysqli_escape_string
 mysqli_execute
 mysqli_fetch
+mysqli_fetch_all
 mysqli_fetch_array
 mysqli_fetch_assoc
 mysqli_fetch_field
@@ -1223,9 +1098,12 @@ mysqli_field_count
 mysqli_field_seek
 mysqli_field_tell
 mysqli_free_result
+mysqli_get_cache_stats
 mysqli_get_charset
 mysqli_get_client_info
+mysqli_get_client_stats
 mysqli_get_client_version
+mysqli_get_connection_stats
 mysqli_get_host_info
 mysqli_get_metadata
 mysqli_get_proto_info
@@ -1279,6 +1157,7 @@ mysqli_stmt_execute
 mysqli_stmt_fetch
 mysqli_stmt_field_count
 mysqli_stmt_free_result
+mysqli_stmt_get_result
 mysqli_stmt_get_warnings
 mysqli_stmt_init
 mysqli_stmt_insert_id
@@ -1312,6 +1191,7 @@ enable_rpl_parse
 escape_string
 get_charset
 get_client_info
+get_connection_stats
 get_server_info
 get_warnings
 init
@@ -1345,8 +1225,10 @@ store_result
 thread_safe
 use_result
 # zend_function_entry mysqli_result_methods[] = {
+__construct
 close
 data_seek
+fetch_all
 fetch_array
 fetch_assoc
 fetch_field
@@ -1354,12 +1236,11 @@ fetch_field_direct
 fetch_fields
 fetch_object
 fetch_row
-field_count
 field_seek
 free
 free_result
-mysqli_result
 # zend_function_entry mysqli_stmt_methods[] = {
+__construct
 attr_get
 attr_set
 bind_param
@@ -1369,8 +1250,8 @@ data_seek
 execute
 fetch
 free_result
+get_result
 get_warnings
-mysqli_stmt
 num_rows
 prepare
 reset
@@ -1379,172 +1260,13 @@ send_long_data
 stmt
 store_result
 
-# var/home/rasmus/php51/ext/mysqli/mysqli_warning.c
+# php-src/ext/mysqli/mysqli_warning.c
 # zend_function_entry mysqli_warning_methods[] = {
 
-# var/home/rasmus/php51/ext/ncurses/ncurses_fe.c
-# zend_function_entry ncurses_functions[] = {
-ncurses_addch
-ncurses_addchnstr
-ncurses_addchstr
-ncurses_addnstr
-ncurses_addstr
-ncurses_assume_default_colors
-ncurses_attroff
-ncurses_attron
-ncurses_attrset
-ncurses_baudrate
-ncurses_beep
-ncurses_bkgd
-ncurses_bkgdset
-ncurses_border
-ncurses_bottom_panel
-ncurses_can_change_color
-ncurses_cbreak
-ncurses_clear
-ncurses_clrtobot
-ncurses_clrtoeol
-ncurses_color_content
-ncurses_color_set
-ncurses_curs_set
-ncurses_def_prog_mode
-ncurses_def_shell_mode
-ncurses_define_key
-ncurses_del_panel
-ncurses_delay_output
-ncurses_delch
-ncurses_deleteln
-ncurses_delwin
-ncurses_doupdate
-ncurses_echo
-ncurses_echochar
-ncurses_end
-ncurses_erase
-ncurses_erasechar
-ncurses_filter
-ncurses_flash
-ncurses_flushinp
-ncurses_getch
-ncurses_getmaxyx
-ncurses_getmouse
-ncurses_getyx
-ncurses_halfdelay
-ncurses_has_colors
-ncurses_has_ic
-ncurses_has_il
-ncurses_has_key
-ncurses_hide_panel
-ncurses_hline
-ncurses_inch
-ncurses_init
-ncurses_init_color
-ncurses_init_pair
-ncurses_insch
-ncurses_insdelln
-ncurses_insertln
-ncurses_insstr
-ncurses_instr
-ncurses_isendwin
-ncurses_keyok
-ncurses_keypad
-ncurses_killchar
-ncurses_longname
-ncurses_meta
-ncurses_mouse_trafo
-ncurses_mouseinterval
-ncurses_mousemask
-ncurses_move
-ncurses_move_panel
-ncurses_mvaddch
-ncurses_mvaddchnstr
-ncurses_mvaddchstr
-ncurses_mvaddnstr
-ncurses_mvaddstr
-ncurses_mvcur
-ncurses_mvdelch
-ncurses_mvgetch
-ncurses_mvhline
-ncurses_mvinch
-ncurses_mvwaddstr
-ncurses_napms
-ncurses_new_panel
-ncurses_newpad
-ncurses_newwin
-ncurses_nl
-ncurses_nocbreak
-ncurses_noecho
-ncurses_nonl
-ncurses_noqiflush
-ncurses_noraw
-ncurses_pair_content
-ncurses_panel_above
-ncurses_panel_below
-ncurses_panel_window
-ncurses_pnoutrefresh
-ncurses_prefresh
-ncurses_putp
-ncurses_qiflush
-ncurses_raw
-ncurses_refresh
-ncurses_replace_panel
-ncurses_reset_prog_mode
-ncurses_reset_shell_mode
-ncurses_resetty
-ncurses_savetty
-ncurses_scr_dump
-ncurses_scr_init
-ncurses_scr_restore
-ncurses_scr_set
-ncurses_scrl
-ncurses_show_panel
-ncurses_slk_attr
-ncurses_slk_attroff
-ncurses_slk_attron
-ncurses_slk_attrset
-ncurses_slk_clear
-ncurses_slk_color
-ncurses_slk_init
-ncurses_slk_noutrefresh
-ncurses_slk_refresh
-ncurses_slk_restore
-ncurses_slk_set
-ncurses_slk_touch
-ncurses_standend
-ncurses_standout
-ncurses_start_color
-ncurses_termattrs
-ncurses_termname
-ncurses_timeout
-ncurses_top_panel
-ncurses_typeahead
-ncurses_ungetch
-ncurses_ungetmouse
-ncurses_update_panels
-ncurses_use_default_colors
-ncurses_use_env
-ncurses_use_extended_names
-ncurses_vidattr
-ncurses_vline
-ncurses_waddch
-ncurses_waddstr
-ncurses_wattroff
-ncurses_wattron
-ncurses_wattrset
-ncurses_wborder
-ncurses_wclear
-ncurses_wcolor_set
-ncurses_werase
-ncurses_wgetch
-ncurses_whline
-ncurses_wmouse_trafo
-ncurses_wmove
-ncurses_wnoutrefresh
-ncurses_wrefresh
-ncurses_wstandend
-ncurses_wstandout
-ncurses_wvline
+# php-src/ext/mysqlnd/mysqlnd.c
+# static zend_function_entry mysqlnd_functions[] = {
 
-# var/home/rasmus/php51/ext/oci8/oci8.c
+# php-src/ext/oci8/oci8.c
 # static zend_function_entry php_oci_functions[] = {
 oci_bind_array_by_name
 oci_bind_by_name
@@ -1592,6 +1314,7 @@ oci_lob_load
 oci_lob_read
 oci_lob_rewind
 oci_lob_save
+oci_lob_seek
 oci_lob_size
 oci_lob_tell
 oci_lob_truncate
@@ -1660,7 +1383,7 @@ ocisetprefetch
 ocistatementtype
 ociwritelobtofile
 
-# var/home/rasmus/php51/ext/odbc/birdstep.c
+# php-src/ext/odbc/birdstep.c
 # zend_function_entry birdstep_functions[] = {
 birdstep_autocommit
 birdstep_close
@@ -1687,7 +1410,7 @@ velocis_off_autocommit
 velocis_result
 velocis_rollback
 
-# var/home/rasmus/php51/ext/odbc/php_odbc.c
+# php-src/ext/odbc/php_odbc.c
 # zend_function_entry odbc_functions[] = {
 odbc_autocommit
 odbc_binmode
@@ -1735,17 +1458,28 @@ odbc_statistics
 odbc_tableprivileges
 odbc_tables
 
-# var/home/rasmus/php51/ext/openssl/openssl.c
+# php-src/ext/openssl/openssl.c
 # zend_function_entry openssl_functions[] = {
 openssl_csr_export
 openssl_csr_export_to_file
+openssl_csr_get_public_key
+openssl_csr_get_subject
 openssl_csr_new
 openssl_csr_sign
+openssl_decrypt
+openssl_dh_compute_key
+openssl_digest
+openssl_encrypt
 openssl_error_string
 openssl_free_key
+openssl_get_cipher_methods
+openssl_get_md_methods
 openssl_get_privatekey
 openssl_get_publickey
 openssl_open
+openssl_pkcs12_export
+openssl_pkcs12_export_to_file
+openssl_pkcs12_read
 openssl_pkcs7_decrypt
 openssl_pkcs7_encrypt
 openssl_pkcs7_sign
@@ -1753,6 +1487,7 @@ openssl_pkcs7_verify
 openssl_pkey_export
 openssl_pkey_export_to_file
 openssl_pkey_free
+openssl_pkey_get_details
 openssl_pkey_get_private
 openssl_pkey_get_public
 openssl_pkey_new
@@ -1771,7 +1506,7 @@ openssl_x509_free
 openssl_x509_parse
 openssl_x509_read
 
-# var/home/rasmus/php51/ext/pcntl/pcntl.c
+# php-src/ext/pcntl/pcntl.c
 # zend_function_entry pcntl_functions[] = {
 pcntl_alarm
 pcntl_exec
@@ -1788,9 +1523,10 @@ pcntl_wifstopped
 pcntl_wstopsig
 pcntl_wtermsig
 
-# var/home/rasmus/php51/ext/pcre/php_pcre.c
+# php-src/ext/pcre/php_pcre.c
 # zend_function_entry pcre_functions[] = {
 preg_grep
+preg_last_error
 preg_match
 preg_match_all
 preg_quote
@@ -1798,45 +1534,42 @@ preg_replace
 preg_replace_callback
 preg_split
 
-# var/home/rasmus/php51/ext/pdo/pdo.c
+# php-src/ext/pdo/pdo.c
 # zend_function_entry pdo_functions[] = {
 pdo_drivers
 
-# var/home/rasmus/php51/ext/pdo/pdo_dbh.c
+# php-src/ext/pdo/pdo_dbh.c
 # zend_function_entry pdo_dbh_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo/pdo_stmt.c
+# php-src/ext/pdo/pdo_stmt.c
 # zend_function_entry pdo_dbstmt_functions[] = {
 # zend_function_entry pdo_row_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_dblib/pdo_dblib.c
+# php-src/ext/pdo_dblib/pdo_dblib.c
 # zend_function_entry pdo_dblib_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_firebird/pdo_firebird.c
-# zend_function_entry pdo_firebird_functions[] = { /* {{{ */
+# php-src/ext/pdo_firebird/pdo_firebird.c
+# zend_function_entry pdo_firebird_functions[] = { 
 
-# var/home/rasmus/php51/ext/pdo_mysql/pdo_mysql.c
+# php-src/ext/pdo_mysql/pdo_mysql.c
 # zend_function_entry pdo_mysql_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_oci/pdo_oci.c
+# php-src/ext/pdo_oci/pdo_oci.c
 # zend_function_entry pdo_oci_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_odbc/pdo_odbc.c
+# php-src/ext/pdo_odbc/pdo_odbc.c
 # function_entry pdo_odbc_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_pgsql/pdo_pgsql.c
+# php-src/ext/pdo_pgsql/pdo_pgsql.c
 # zend_function_entry pdo_pgsql_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_pgsql/pgsql_driver.c
-# static zend_function_entry dbh_methods[] = {
-
-# var/home/rasmus/php51/ext/pdo_sqlite/pdo_sqlite.c
+# php-src/ext/pdo_sqlite/pdo_sqlite.c
 # zend_function_entry pdo_sqlite_functions[] = {
 
-# var/home/rasmus/php51/ext/pdo_sqlite/sqlite_driver.c
+# php-src/ext/pdo_sqlite/sqlite_driver.c
 # static zend_function_entry dbh_methods[] = {
 
-# var/home/rasmus/php51/ext/pgsql/pgsql.c
+# php-src/ext/pgsql/pgsql.c
 # zend_function_entry pgsql_functions[] = {
 pg_affected_rows
 pg_cancel_query
@@ -1871,6 +1604,7 @@ pg_field_name
 pg_field_num
 pg_field_prtlen
 pg_field_size
+pg_field_table
 pg_field_type
 pg_field_type_oid
 pg_fieldisnull
@@ -1945,7 +1679,7 @@ pg_untrace
 pg_update
 pg_version
 
-# var/home/rasmus/php51/ext/posix/posix.c
+# php-src/ext/posix/posix.c
 # zend_function_entry posix_functions[] = {
 posix_access
 posix_ctermid
@@ -1968,6 +1702,7 @@ posix_getpwuid
 posix_getrlimit
 posix_getsid
 posix_getuid
+posix_initgroups
 posix_isatty
 posix_kill
 posix_mkfifo
@@ -1983,7 +1718,7 @@ posix_times
 posix_ttyname
 posix_uname
 
-# var/home/rasmus/php51/ext/pspell/pspell.c
+# php-src/ext/pspell/pspell.c
 # zend_function_entry pspell_functions[] = {
 pspell_add_to_personal
 pspell_add_to_session
@@ -2005,7 +1740,7 @@ pspell_save_wordlist
 pspell_store_replacement
 pspell_suggest
 
-# var/home/rasmus/php51/ext/readline/readline.c
+# php-src/ext/readline/readline.c
 # static zend_function_entry php_readline_functions[] = {
 readline
 readline_add_history
@@ -2021,26 +1756,27 @@ readline_read_history
 readline_redisplay
 readline_write_history
 
-# var/home/rasmus/php51/ext/recode/recode.c
+# php-src/ext/recode/recode.c
 # static zend_function_entry php_recode_functions[] = {
 recode
 recode_file
 recode_string
 
-# var/home/rasmus/php51/ext/reflection/php_reflection.c
+# php-src/ext/reflection/php_reflection.c
 # static zend_function_entry reflection_exception_functions[] = {
 # static zend_function_entry reflection_functions[] = {
 # static zend_function_entry reflector_functions[] = {
+# static zend_function_entry reflection_function_abstract_functions[] = {
 # static zend_function_entry reflection_function_functions[] = {
 # static zend_function_entry reflection_method_functions[] = {
 # static zend_function_entry reflection_object_functions[] = {
 # static zend_function_entry reflection_property_functions[] = {
 # static zend_function_entry reflection_parameter_functions[] = {
 # static zend_function_entry reflection_extension_functions[] = {
-# zend_function_entry reflection_ext_functions[] = { /* {{{ */
+# zend_function_entry reflection_ext_functions[] = { 
 
-# var/home/rasmus/php51/ext/session/session.c
-# zend_function_entry session_functions[] = {
+# php-src/ext/session/session.c
+# static zend_function_entry session_functions[] = {
 session_cache_expire
 session_cache_limiter
 session_commit
@@ -2049,20 +1785,17 @@ session_destroy
 session_encode
 session_get_cookie_params
 session_id
-session_is_registered
 session_module_name
 session_name
 session_regenerate_id
-session_register
 session_save_path
 session_set_cookie_params
 session_set_save_handler
 session_start
-session_unregister
 session_unset
 session_write_close
 
-# var/home/rasmus/php51/ext/shmop/shmop.c
+# php-src/ext/shmop/shmop.c
 # zend_function_entry shmop_functions[] = {
 shmop_close
 shmop_delete
@@ -2071,18 +1804,18 @@ shmop_read
 shmop_size
 shmop_write
 
-# var/home/rasmus/php51/ext/simplexml/simplexml.c
+# php-src/ext/simplexml/simplexml.c
 # zend_function_entry simplexml_functions[] = {
 simplexml_import_dom
 simplexml_load_file
 simplexml_load_string
 # static zend_function_entry sxe_functions[] = {
 
-# var/home/rasmus/php51/ext/skeleton/skeleton.c
+# php-src/ext/skeleton/skeleton.c
 # zend_function_entry extname_functions[] = {
 confirm_extname_compiled
 
-# var/home/rasmus/php51/ext/snmp/snmp.c
+# php-src/ext/snmp/snmp.c
 # zend_function_entry snmp_functions[] = {
 snmp2_get
 snmp2_getnext
@@ -2099,6 +1832,7 @@ snmp_get_valueretrieval
 snmp_read_mib
 snmp_set_enum_print
 snmp_set_oid_numeric_print
+snmp_set_oid_output_format
 snmp_set_quick_print
 snmp_set_valueretrieval
 snmpget
@@ -2108,26 +1842,23 @@ snmpset
 snmpwalk
 snmpwalkoid
 
-# var/home/rasmus/php51/ext/snmp/winsnmp.c
+# php-src/ext/snmp/winsnmp.c
 # zend_function_entry snmp_functions[] = {
 snmpget
 snmpwalk
 
-# var/home/rasmus/php51/ext/soap/soap.c
+# php-src/ext/soap/soap.c
 # static zend_function_entry soap_functions[] = {
 is_soap_fault
-soap_encode_to_xml
-soap_encode_to_zval
 use_soap_error_handler
 # static zend_function_entry soap_fault_functions[] = {
 # static zend_function_entry soap_server_functions[] = {
 # static zend_function_entry soap_client_functions[] = {
-__soapCall
 # static zend_function_entry soap_var_functions[] = {
 # static zend_function_entry soap_param_functions[] = {
 # static zend_function_entry soap_header_functions[] = {
 
-# var/home/rasmus/php51/ext/sockets/sockets.c
+# php-src/ext/sockets/sockets.c
 # zend_function_entry sockets_functions[] = {
 socket_accept
 socket_bind
@@ -2157,11 +1888,12 @@ socket_shutdown
 socket_strerror
 socket_write
 
-# var/home/rasmus/php51/ext/spl/php_spl.c
+# php-src/ext/spl/php_spl.c
 # zend_function_entry spl_functions_none[] = {
 # zend_function_entry spl_functions[] = {
 class_implements
 class_parents
+iterator_apply
 iterator_count
 iterator_to_array
 spl_autoload
@@ -2171,26 +1903,28 @@ spl_autoload_functions
 spl_autoload_register
 spl_autoload_unregister
 spl_classes
+spl_object_hash
 
-# var/home/rasmus/php51/ext/spl/spl_array.c
+# php-src/ext/spl/spl_array.c
 # static zend_function_entry spl_funcs_ArrayObject[] = {
 # static zend_function_entry spl_funcs_ArrayIterator[] = {
 # static zend_function_entry spl_funcs_RecursiveArrayIterator[] = {
-# static zend_function_entry spl_funcs_Countable[] = {
 
-# var/home/rasmus/php51/ext/spl/spl_directory.c
+# php-src/ext/spl/spl_directory.c
 # static zend_function_entry spl_SplFileInfo_functions[] = {
 # static zend_function_entry spl_DirectoryIterator_functions[] = {
 # static zend_function_entry spl_RecursiveDirectoryIterator_functions[] = {
 # static zend_function_entry spl_SplFileObject_functions[] = {
 # static zend_function_entry spl_SplTempFileObject_functions[] = {
 
-# var/home/rasmus/php51/ext/spl/spl_iterators.c
+# php-src/ext/spl/spl_iterators.c
 # zend_function_entry spl_funcs_RecursiveIterator[] = {
 # static zend_function_entry spl_funcs_RecursiveIteratorIterator[] = {
 # static zend_function_entry spl_funcs_FilterIterator[] = {
 # static zend_function_entry spl_funcs_RecursiveFilterIterator[] = {
 # static zend_function_entry spl_funcs_ParentIterator[] = {
+# static zend_function_entry spl_funcs_RegexIterator[] = {
+# static zend_function_entry spl_funcs_RecursiveRegexIterator[] = {
 # static zend_function_entry spl_funcs_SeekableIterator[] = {
 # static zend_function_entry spl_funcs_LimitIterator[] = {
 # static zend_function_entry spl_funcs_CachingIterator[] = {
@@ -2201,20 +1935,21 @@ spl_classes
 # static zend_function_entry spl_funcs_EmptyIterator[] = {
 # static zend_function_entry spl_funcs_AppendIterator[] = {
 # static zend_function_entry spl_funcs_OuterIterator[] = {
+# static zend_function_entry spl_funcs_Countable[] = {
 
-# var/home/rasmus/php51/ext/spl/spl_observer.c
+# php-src/ext/spl/spl_observer.c
 # static zend_function_entry spl_funcs_SplObserver[] = {
 # static zend_function_entry spl_funcs_SplSubject[] = {
 # static zend_function_entry spl_funcs_SplObjectStorage[] = {
 
-# var/home/rasmus/php51/ext/spl/spl_sxe.c
+# php-src/ext/spl/spl_sxe.c
 # static zend_function_entry spl_funcs_SimpleXMLIterator[] = {
 
-# var/home/rasmus/php51/ext/sqlite/pdo_sqlite2.c
+# php-src/ext/sqlite/pdo_sqlite2.c
 # static zend_function_entry dbh_methods[] = {
 sqlite2_create_function
 
-# var/home/rasmus/php51/ext/sqlite/sqlite.c
+# php-src/ext/sqlite/sqlite.c
 # zend_function_entry sqlite_functions[] = {
 sqlite_array_query
 sqlite_busy_timeout
@@ -2260,8 +1995,8 @@ sqlite_valid
 # zend_function_entry sqlite_funcs_ub_query[] = {
 # zend_function_entry sqlite_funcs_exception[] = {
 
-# var/home/rasmus/php51/ext/standard/basic_functions.c
-# zend_function_entry basic_functions[] = {
+# php-src/ext/standard/basic_functions.c
+# zend_function_entry basic_functions[] = { 
 abs
 acos
 acosh
@@ -2277,6 +2012,7 @@ array_diff_key
 array_diff_uassoc
 array_diff_ukey
 array_fill
+array_fill_keys
 array_filter
 array_flip
 array_intersect
@@ -2330,8 +2066,6 @@ bin2hex
 bindec
 call_user_func
 call_user_func_array
-call_user_method
-call_user_method_array
 ceil
 chdir
 checkdnsrr
@@ -2371,16 +2105,12 @@ dirname
 disk_free_space
 disk_total_space
 diskfreespace
-dl
 dns_check_record
 dns_get_mx
 dns_get_record
 doubleval
 end
-ereg
-ereg_replace
-eregi
-eregi_replace
+error_get_last
 error_log
 escapeshellarg
 escapeshellcmd
@@ -2436,8 +2166,6 @@ get_current_user
 get_headers
 get_html_translation_table
 get_include_path
-get_magic_quotes_gpc
-get_magic_quotes_runtime
 get_meta_tags
 getcwd
 getenv
@@ -2476,12 +2204,11 @@ htmlspecialchars_decode
 http_build_query
 hypot
 ignore_user_abort
+image_type_to_extension
 image_type_to_mime_type
 implode
 import_request_variables
 in_array
-inet_ntop
-inet_pton
 ini_alter
 ini_get
 ini_get_all
@@ -2492,7 +2219,9 @@ ip2long
 iptcembed
 iptcparse
 is_array
+is_binary
 is_bool
+is_buffer
 is_callable
 is_dir
 is_double
@@ -2514,6 +2243,7 @@ is_real
 is_resource
 is_scalar
 is_string
+is_unicode
 is_uploaded_file
 is_writable
 is_writeable
@@ -2535,11 +2265,11 @@ log1p
 long2ip
 lstat
 ltrim
-magic_quotes_runtime
 mail
 max
 md5
 md5_file
+memory_get_peak_usage
 memory_get_usage
 metaphone
 microtime
@@ -2584,6 +2314,7 @@ pathinfo
 pclose
 pfsockopen
 php_egg_logo_guid
+php_ini_loaded_file
 php_ini_scanned_files
 php_logo_guid
 php_real_logo_guid
@@ -2632,8 +2363,6 @@ scandir
 serialize
 set_file_buffer
 set_include_path
-set_magic_quotes_runtime
-set_socket_blocking
 set_time_limit
 setcookie
 setlocale
@@ -2654,14 +2383,12 @@ socket_set_blocking
 socket_set_timeout
 sort
 soundex
-split
-spliti
 sprintf
-sql_regcase
 sqrt
 srand
 sscanf
 stat
+str_getcsv
 str_ireplace
 str_pad
 str_repeat
@@ -2683,6 +2410,7 @@ stream_context_get_options
 stream_context_set_option
 stream_context_set_params
 stream_copy_to_stream
+stream_encoding
 stream_filter_append
 stream_filter_prepend
 stream_filter_register
@@ -2693,7 +2421,9 @@ stream_get_line
 stream_get_meta_data
 stream_get_transports
 stream_get_wrappers
+stream_is_local
 stream_register_wrapper
+stream_resolve_include_path
 stream_select
 stream_set_blocking
 stream_set_timeout
@@ -2706,6 +2436,7 @@ stream_socket_pair
 stream_socket_recvfrom
 stream_socket_sendto
 stream_socket_server
+stream_socket_shutdown
 stream_wrapper_register
 stream_wrapper_restore
 stream_wrapper_unregister
@@ -2727,6 +2458,7 @@ strspn
 strstr
 strtok
 strtolower
+strtotitle
 strtoupper
 strtr
 strval
@@ -2735,6 +2467,7 @@ substr_compare
 substr_count
 substr_replace
 symlink
+sys_get_temp_dir
 sys_getloadavg
 syslog
 system
@@ -2762,6 +2495,7 @@ usleep
 usort
 var_dump
 var_export
+var_inspect
 version_compare
 vfprintf
 vprintf
@@ -2769,13 +2503,13 @@ vsprintf
 wordwrap
 zend_logo_guid
 
-# var/home/rasmus/php51/ext/standard/user_filters.c
+# php-src/ext/standard/user_filters.c
 # static zend_function_entry user_filter_class_funcs[] = {
 filter
 onClose
 onCreate
 
-# var/home/rasmus/php51/ext/sybase/php_sybase_db.c
+# php-src/ext/sybase/php_sybase_db.c
 # zend_function_entry sybase_functions[] = {
 mssql_affected_rows
 mssql_close
@@ -2816,7 +2550,7 @@ sybase_query
 sybase_result
 sybase_select_db
 
-# var/home/rasmus/php51/ext/sybase_ct/php_sybase_ct.c
+# php-src/ext/sybase_ct/php_sybase_ct.c
 # zend_function_entry sybase_functions[] = {
 mssql_affected_rows
 mssql_close
@@ -2865,7 +2599,7 @@ sybase_select_db
 sybase_set_message_handler
 sybase_unbuffered_query
 
-# var/home/rasmus/php51/ext/sysvmsg/sysvmsg.c
+# php-src/ext/sysvmsg/sysvmsg.c
 # zend_function_entry sysvmsg_functions[] = {
 msg_get_queue
 msg_receive
@@ -2874,25 +2608,25 @@ msg_send
 msg_set_queue
 msg_stat_queue
 
-# var/home/rasmus/php51/ext/sysvsem/sysvsem.c
+# php-src/ext/sysvsem/sysvsem.c
 # zend_function_entry sysvsem_functions[] = {
 sem_acquire
 sem_get
 sem_release
 sem_remove
 
-# var/home/rasmus/php51/ext/sysvshm/sysvshm.c
+# php-src/ext/sysvshm/sysvshm.c
 # zend_function_entry sysvshm_functions[] = {
 shm_attach
 shm_detach
 shm_get_var
+shm_has_var
 shm_put_var
 shm_remove
 shm_remove_var
 
-# var/home/rasmus/php51/ext/tidy/tidy.c
-# zend_function_entry tidy_functions[] = {
-ob_tidyhandler
+# php-src/ext/tidy/tidy.c
+# static zend_function_entry tidy_functions[] = {
 tidy_access_count
 tidy_clean_repair
 tidy_config_count
@@ -2917,16 +2651,91 @@ tidy_parse_string
 tidy_repair_file
 tidy_repair_string
 tidy_warning_count
-# zend_function_entry tidy_funcs_doc[] = {
-# zend_function_entry tidy_funcs_node[] = {
-# zend_function_entry tidy_funcs_exception[] = {
+# static zend_function_entry tidy_funcs_doc[] = {
+# static zend_function_entry tidy_funcs_node[] = {
 
-# var/home/rasmus/php51/ext/tokenizer/tokenizer.c
+# php-src/ext/tokenizer/tokenizer.c
 # zend_function_entry tokenizer_functions[] = {
 token_get_all
 token_name
 
-# var/home/rasmus/php51/ext/wddx/wddx.c
+# php-src/ext/unicode/collator.c
+# zend_function_entry collator_funcs_collator[] = {
+compare
+getAttribute
+getStrength
+setAttribute
+setStrength
+sort
+
+# php-src/ext/unicode/unicode.c
+# zend_function_entry unicode_functions[] = {
+char_enum_names
+char_enum_types
+char_from_digit
+char_from_name
+char_get_age
+char_get_combining_class
+char_get_digit_value
+char_get_direction
+char_get_mirrored
+char_get_name
+char_get_numeric_value
+char_get_property_from_name
+char_get_property_max_value
+char_get_property_min_value
+char_get_property_name
+char_get_property_value
+char_get_property_value_from_name
+char_get_property_value_name
+char_get_type
+char_has_binary_property
+char_is_alnum
+char_is_alpha
+char_is_alphabetic
+char_is_base
+char_is_blank
+char_is_cntrl
+char_is_defined
+char_is_digit
+char_is_graph
+char_is_id_ignorable
+char_is_id_part
+char_is_id_start
+char_is_iso_control
+char_is_lower
+char_is_lowercase
+char_is_mirrored
+char_is_print
+char_is_punct
+char_is_space
+char_is_titlecase
+char_is_upper
+char_is_uppercase
+char_is_valid
+char_is_whitespace
+char_is_xdigit
+collator_compare
+collator_create
+collator_get_default
+collator_set_default
+locale_get_default
+locale_set_default
+str_transliterate
+unicode_decode
+unicode_encode
+unicode_get_error_mode
+unicode_get_subst_char
+unicode_restore_error_handler
+unicode_semantics
+unicode_set_error_handler
+unicode_set_error_mode
+unicode_set_subst_char
+
+# php-src/ext/unicode/unicode_iterators.c
+# static zend_function_entry text_iterator_funcs[] = {
+
+# php-src/ext/wddx/wddx.c
 # zend_function_entry wddx_functions[] = {
 wddx_add_vars
 wddx_deserialize
@@ -2934,8 +2743,9 @@ wddx_packet_end
 wddx_packet_start
 wddx_serialize_value
 wddx_serialize_vars
+wddx_unserialize
 
-# var/home/rasmus/php51/ext/xml/xml.c
+# php-src/ext/xml/xml.c
 # zend_function_entry xml_functions[] = {
 utf8_decode
 utf8_encode
@@ -2962,10 +2772,10 @@ xml_set_processing_instruction_handler
 xml_set_start_namespace_decl_handler
 xml_set_unparsed_entity_decl_handler
 
-# var/home/rasmus/php51/ext/xmlreader/php_xmlreader.c
+# php-src/ext/xmlreader/php_xmlreader.c
 # static zend_function_entry xmlreader_functions[] = {
 
-# var/home/rasmus/php51/ext/xmlrpc/xmlrpc-epi-php.c
+# php-src/ext/xmlrpc/xmlrpc-epi-php.c
 # zend_function_entry xmlrpc_functions[] = {
 xmlrpc_decode
 xmlrpc_decode_request
@@ -2982,7 +2792,7 @@ xmlrpc_server_register_introspection_callback
 xmlrpc_server_register_method
 xmlrpc_set_type
 
-# var/home/rasmus/php51/ext/xmlwriter/php_xmlwriter.c
+# php-src/ext/xmlwriter/php_xmlwriter.c
 # static zend_function_entry xmlwriter_functions[] = {
 xmlwriter_end_attribute
 xmlwriter_end_cdata
@@ -2991,9 +2801,11 @@ xmlwriter_end_document
 xmlwriter_end_dtd
 xmlwriter_end_dtd_attlist
 xmlwriter_end_dtd_element
+xmlwriter_end_dtd_entity
 xmlwriter_end_element
 xmlwriter_end_pi
 xmlwriter_flush
+xmlwriter_full_end_element
 xmlwriter_open_memory
 xmlwriter_open_uri
 xmlwriter_output_memory
@@ -3007,6 +2819,7 @@ xmlwriter_start_document
 xmlwriter_start_dtd
 xmlwriter_start_dtd_attlist
 xmlwriter_start_dtd_element
+xmlwriter_start_dtd_entity
 xmlwriter_start_element
 xmlwriter_start_element_ns
 xmlwriter_start_pi
@@ -3018,17 +2831,33 @@ xmlwriter_write_comment
 xmlwriter_write_dtd
 xmlwriter_write_dtd_attlist
 xmlwriter_write_dtd_element
+xmlwriter_write_dtd_entity
 xmlwriter_write_element
 xmlwriter_write_element_ns
 xmlwriter_write_pi
+xmlwriter_write_raw
 
-# var/home/rasmus/php51/ext/xsl/php_xsl.c
+# php-src/ext/xsl/php_xsl.c
 # zend_function_entry xsl_functions[] = {
 
-# var/home/rasmus/php51/ext/zlib/zlib.c
+# php-src/ext/zip/php_zip.c
+# static zend_function_entry zip_functions[] = {
+zip_close
+zip_entry_close
+zip_entry_compressedsize
+zip_entry_compressionmethod
+zip_entry_filesize
+zip_entry_name
+zip_entry_open
+zip_entry_read
+zip_open
+zip_read
+
+# php-src/ext/zlib/zlib.c
 # zend_function_entry php_zlib_functions[] = {
 gzclose
 gzcompress
+gzdecode
 gzdeflate
 gzencode
 gzeof
@@ -3046,15 +2875,16 @@ gzseek
 gztell
 gzuncompress
 gzwrite
-ob_gzhandler
 readgzfile
+zlib_decode
+zlib_encode
 zlib_get_coding_type
 
-# var/home/rasmus/php51/sapi/aolserver/aolserver.c
+# php-src/sapi/aolserver/aolserver.c
 # static zend_function_entry aolserver_functions[] = {
 getallheaders
 
-# var/home/rasmus/php51/sapi/apache/php_apache.c
+# php-src/sapi/apache/php_apache.c
 # zend_function_entry apache_functions[] = {
 apache_child_terminate
 apache_get_modules
@@ -3067,7 +2897,7 @@ apache_setenv
 getallheaders
 virtual
 
-# var/home/rasmus/php51/sapi/apache2filter/php_functions.c
+# php-src/sapi/apache2filter/php_functions.c
 # static zend_function_entry apache_functions[] = {
 apache_get_modules
 apache_get_version
@@ -3080,7 +2910,7 @@ apache_setenv
 getallheaders
 virtual
 
-# var/home/rasmus/php51/sapi/apache2handler/php_functions.c
+# php-src/sapi/apache2handler/php_functions.c
 # static zend_function_entry apache_functions[] = {
 apache_get_modules
 apache_get_version
@@ -3093,7 +2923,7 @@ apache_setenv
 getallheaders
 virtual
 
-# var/home/rasmus/php51/sapi/apache_hooks/php_apache.c
+# php-src/sapi/apache_hooks/php_apache.c
 # zend_function_entry apache_functions[] = {
 apache_child_terminate
 apache_get_modules
@@ -3106,10 +2936,22 @@ apache_setenv
 getallheaders
 virtual
 
-# var/home/rasmus/php51/sapi/continuity/capi.c
+# php-src/sapi/cgi/cgi_main.c
+# static zend_function_entry additional_functions[] = {
+dl
+
+# php-src/sapi/cli/php_cli.c
+# static zend_function_entry additional_functions[] = {
+dl
+
+# php-src/sapi/continuity/capi.c
 # zend_function_entry continuity_functions[] = {
 
-# var/home/rasmus/php51/sapi/milter/php_milter.c
+# php-src/sapi/embed/php_embed.c
+# static zend_function_entry additional_functions[] = {
+dl
+
+# php-src/sapi/milter/php_milter.c
 # static zend_function_entry milter_functions[] = {
 smfi_addheader
 smfi_addrcpt
@@ -3121,7 +2963,7 @@ smfi_setflags
 smfi_setreply
 smfi_settimeout
 
-# var/home/rasmus/php51/sapi/nsapi/nsapi.c
+# php-src/sapi/nsapi/nsapi.c
 # zend_function_entry nsapi_functions[] = {
 apache_request_headers
 apache_response_headers
