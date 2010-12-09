@@ -1,3 +1,12 @@
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
+filetype plugin on
+filetype indent on
+
+let HOST = substitute ( hostname(), '\..*$', '', 'g' )
+let DOMAIN   = substitute ( hostname(), '^[^\.]*\.\([^\.]*\)\..*$', '\1', '' )
+
 " /tmp/mutt* are emails, set tw and start in insertmode
 " au BufRead /tmp/mutt-* :g/^> --.*/,/^$/-1d
 autocmd BufRead /tmp/mutt* source ~/.vim/mail.vim
@@ -80,8 +89,7 @@ imap <S-space> <esc>
 map <S-space> i
 imap <C-space> <C-N>
 set switchbuf=useopen
-" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
-filetype plugin on
+
 " IMPORTANT: grep will sometimes skip displaying the file name if you
 " search in a singe file. This will confuse latex-suite. Set your grep
 " program to alway generate a file-name.
@@ -121,13 +129,13 @@ function s:Cursor_Moved()
 endfunction
 
 autocmd CursorMoved,CursorMovedI * call s:Cursor_Moved()
-let g:last_pos=0   
+let g:last_pos=0
 
 " Remap the tab key to select action with InsertTabWrapper
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 set list
 set listchars=tab:>-,trail:-
-set ignorecase                  " caseinsensitive searches
+set smartcase                   " caseinsensitive searches as long as no upper case chars present
 set showmode                    " always show command or insert mode
 set whichwrap=b,s,<,>,[,]
 
@@ -136,3 +144,57 @@ set background=dark
 if has("gui_macvim")
   let macvim_hig_shift_movement = 1
 endif
+
+if HOST == 'blue' " on this host we have some special rules which differ from my std setup
+  autocmd FileType php setl expandtab
+  autocmd FileType smarty setl expandtab ts=4 sw=4
+  autocmd FileType python setl expandtab ts=4 sw=4
+  autocmd BufRead *Controller.php setl path+=./templates/
+  autocmd BufRead *Controller.php setl sua+=.tpl
+  " autocmd BufRead *Controller.php setl inex=substitute(v:fname,'.*/','','g')
+  autocmd BufRead *.tpl setl sua+=.tpl
+  autocmd BufRead templates/*/*.tpl setl path+=templates/
+  let g:CommandTMaxFiles=20000
+  let g:CommandTMaxMatchWindowAtTop=1
+  set wildignore+=*.o,*.obj,*.min.js,smarty/**,vendor/rails/**,vendor/plugins/**,vendor/gems/**,.git,.hg,.svn,.sass-cache,log,tmp,build,_TESTS
+endif
+
+if $USER == 'martin'
+endif
+
+if &diff
+  setl wrap
+endif
+
+func GitGrep(...)
+  let save = &grepprg
+  set grepprg=git\ grep\ --cached\ -n\ $*
+  let s = 'grep'
+  for i in a:000
+    let s = s . ' ' . i
+  endfor
+  exe s
+  let &grepprg = save
+endfun
+command -nargs=? G call GitGrep(<f-args>)
+
+func GitGrepWord()
+  normal! "zyiw
+  call GitGrep('-w -e ', getreg('z'))
+endf
+nmap <C-x>G :call GitGrepWord()<CR>
+
+if $TERM =~ '^xterm'
+  set t_Co=256 
+elseif $TERM =~ '^screen-bce'
+  set t_Co=256            " just guessing
+endif
+
+" if any search/make/grep returns a result, open the quickfix window
+autocmd QuickFixCmdPost * botright cwindow 5
+
+" Remap keys for auto-completion
+" inoremap <expr> <esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+" inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+" inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+" inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
