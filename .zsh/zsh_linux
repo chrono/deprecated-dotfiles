@@ -615,25 +615,10 @@
 #       y: tell user that he can quit giving "yes" responses.  ;-)
   alias y='echo Yes, Sir\?'
 
-# "screen":
-# Give fast access to some commands that
-# you are likely to use often with screen:
-  alias GO='screen -O -R'
-  alias GOD='screen -D -O -r'
-  alias GOls='screen -ls'
-
-# List the twenty entries of the local lastlog file:
-  alias _L='last -20'
-
 # get external ip-adress
   alias getip='vpnclient stat|grep "Client address:"|cut -d " " -f 3'
 
 # alias zless=zmore
-
-  alias rw-='chmod 600'
-  alias rwx='chmod 700'
-  alias r--='chmod 644'
-  alias r-x='chmod 755'
 
   alias _GIF='convert -verbose -interlace LINE'
   alias _thumb='convert -geometry 100x100 -interlace LINE -verbose'

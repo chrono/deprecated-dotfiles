@@ -10,6 +10,7 @@ let DOMAIN   = substitute ( hostname(), '^[^\.]*\.\([^\.]*\)\..*$', '\1', '' )
 " /tmp/mutt* are emails, set tw and start in insertmode
 " au BufRead /tmp/mutt-* :g/^> --.*/,/^$/-1d
 autocmd BufRead /tmp/mutt* source ~/.vim/mail.vim
+autocmd BufRead /tmp/psql* setl filetype=sql
 autocmd BufRead *.php source ~/.vim/PEAR.vim
 autocmd BufRead *.as setl filetype=actionscript
 autocmd FileType smarty setl matchpairs+=<:> " we want to jump around those xml tags using %
@@ -27,8 +28,9 @@ autocmd BufNewFile,BufRead *.git/**
 	\   setf git |
 	\ endif
 
-autocmd BufRead /etc/apache2/* set syntax=apache
+autocmd BufRead /etc/apache2/* setl syntax=apache
 autocmd BufRead *svn-commit.tmp startinsert!
+autocmd BufRead COMMIT_EDITMSG startinsert!
 
 set nocompatible    " Use Vim defaults (much better!)
 set backspace=2     " allow backspacing over everything in insert mode
@@ -44,12 +46,13 @@ if &term =~ "^screen"
   set t_fs=\
 endif
 set title
+
 set laststatus=2
 set directory-=. " do not litter my working directory with swap files
 
 " mutt config files
-autocmd BufRead *muttrc set syntax=muttrc
-autocmd BufRead *.mutt set syntax=muttrc
+autocmd BufRead *muttrc setl syntax=muttrc
+autocmd BufRead *.mutt setl syntax=muttrc
 syntax on
 
 let loaded_vimspell = 0

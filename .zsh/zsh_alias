@@ -68,7 +68,6 @@
 
   alias utar="tar zxfv"
   alias z='vim ~/.zshrc'
-  alias s='vim ~/.slrnrc'
   alias v='vim ~/.vimrc'
 
 # 040701 fix permissions for subversion-repositories
