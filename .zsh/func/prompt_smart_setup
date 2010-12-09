@@ -55,6 +55,18 @@ setpromptsmart () {
   local BRACKET_L='['
   local BRACKET_R=']'
   local EXITCODE="%(?..%?%1v )"
+  local VCSINFO="$vcs_info_msg_0_"
+
+              RED=$'%{\e[31m%}'
+              GR=$'%{\e[32m%}'
+              MA=$'%{\e[35m%}'
+              YE=$'%{\e[33m%}'
+              NC=$'%{\e[0m%}'
+              zstyle ':vcs_info:*' actionformats \
+                  "${MA}(${NC}%s${MA})${YE}-${MA}[${GR}%b${YE}|${RED}%a${MA}]${NC} "
+              zstyle ':vcs_info:*' formats       \
+                  " ${MA}(${NC}%s${MA})${Y}-${MA}[${GR}%b${MA}]${NC}%} "
+              zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat "%b${RED}:${YE}%r"
 
   case $TERM in
     xterm*)
@@ -67,7 +79,7 @@ setpromptsmart () {
 
   # define prompt
   if [[ "$TERM" != "dumb" ]]; then
-    PROMPT="$SCREENTITLE$TITLEBAR$C_EXIT$EXITCODE$C_BRACKETS$BRACKET_L$C_USER%n$C_AT@$C_HOST%m$C_HISTORY(%!): $C_CWD%~$C_BRACKETS$BRACKET_R$C_RESET$ "
+    PROMPT="$SCREENTITLE$TITLEBAR$C_EXIT$EXITCODE$C_BRACKETS$BRACKET_L$C_USER%n$C_AT@$C_HOST%m$C_HISTORY(%!): $C_CWD%~$C_BRACKETS$BRACKET_R$C_RESET"'${vcs_info_msg_0_}'"$ "
     # right side of prompt - shows :( if echo $? is not 0:
     RPROMPT="%(?..:()%"
   else
@@ -98,13 +110,13 @@ preexec () {
 # and program options."
 #   -- http://aperiodic.net/phil/prompt/
 
-    if [[ "$TERM" == "screen" ]]; then
+    if [[ "$TERM" == "screen-bce" ]]; then
         local CMD=${1[(wr)^(*=*|sudo|ssh|-*)]}
         echo -ne "\ek$CMD\e\\"
     fi
 
 # set the screen title to "zsh" when sitting at a command prompt:
-    if [[ "$TERM" == "screen" ]]; then
+    if [[ "$TERM" == "screen-bce" ]]; then
          SCREENTITLE=$'%{\ekzsh\e\\%}'
     else
          SCREENTITLE=''
@@ -139,10 +151,11 @@ prompt_smart_preview () {
 
 prompt_smart_precmd () {
   setopt noxtrace localoptions
+  vcs_info
   local exitstatus=$?
 
-  [[ $exitstatus -ge 128 ]] && psvar[1]=" $signals[$exitstatus-127]" ||
-       psvar[1]=""
+  [[ $exitstatus -ge 128 ]] && psvar[1]=" $signals[$exitstatus-127]" || psvar[1]=""
+
 
   [[ -o interactive ]] && jobs -l
 }
